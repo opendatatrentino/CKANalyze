@@ -1,6 +1,6 @@
 package eu.trentorise.opendata.ckanalyze.analyzers.resources;
 
-import java.io.File;
+import java.io.File; 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.trentorise.nlprise.identifiers.date.DateIdentifier;
+import eu.trentorise.opendata.nlprise.identifiers.date.DateIdentifier;
 import eu.trentorise.opendata.ckanalyze.exceptions.CKAnalyzeException;
 
 import au.com.bytecode.opencsv.CSVReader;
