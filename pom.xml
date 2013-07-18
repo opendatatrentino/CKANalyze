@@ -24,15 +24,15 @@
   </repositories>
 	
 	<dependencies>
+		<dependency>
+      <groupId>eu.trentorise.opendata.deps</groupId>
+      <artifactId>ckanclient-j</artifactId>
+      <version>1.0</version>
+    </dependency>
 	<dependency>
       <groupId>eu.trentorise.opendata.deps</groupId>
       <artifactId>nlprise</artifactId>
       <version>0.1</version>
-    </dependency>
-	<dependency>
-      <groupId>eu.trentorise.opendata.deps</groupId>
-      <artifactId>ckanclientj</artifactId>
-      <version>1.0</version>
     </dependency>
 		<dependency>
 			<groupId>junit</groupId>
