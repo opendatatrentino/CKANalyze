@@ -39,7 +39,8 @@ public class CatalogAnalyzer {
 		Session ss = PersistencyManager.getSessionFactory().openSession();
 		String hql = "select new CatalogStringDistribution(length,sum(freq)) from ResourceStringDistribution group by length";
 		Query q = ss.createQuery(hql);
-		List<CatalogStringDistribution> clist = (List<CatalogStringDistribution>)q.list();
+		@SuppressWarnings("unchecked")
+		List<CatalogStringDistribution> clist = q.list();
 		ss.close();
 		catalogStringDistribution = clist;
 	}

@@ -40,6 +40,7 @@ public class Datatype {
 		Session ss = PersistencyManager.getSessionFactory().openSession();
 		Query query = ss.createQuery(hql);
 		query.setParameter("name", name);
+		@SuppressWarnings("unchecked")
 		List<Datatype> results = (List<Datatype>) query.list();
 		if (results.isEmpty()) {
 			ss.close();
