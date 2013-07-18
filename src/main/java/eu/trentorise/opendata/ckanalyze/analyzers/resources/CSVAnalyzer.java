@@ -21,7 +21,7 @@ import au.com.bytecode.opencsv.CSVReader;
  * This class performs analysis of CSV files. You can use the analyze() method
  * to start the analysis
  * 
- * @author a.zanella
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
  * @since Last modified by azanella On 17/lug/2013
  */
 public class CSVAnalyzer {
@@ -30,7 +30,7 @@ public class CSVAnalyzer {
 	/**
 	 * Defines supported data types
 	 * 
-	 * @author a.zanella Last modified by azanella On 11/lug/2013
+	 * @author Alberto Zanella <a.zanella@trentorise.eu> Last modified by azanella On 11/lug/2013
 	 */
 	public enum Datatype {
 		INT, FLOAT, DATE, STRING, GEOJSON, EMPTY;
@@ -340,7 +340,7 @@ public class CSVAnalyzer {
 	/**
 	 * This class represent a Column in type identification.
 	 * 
-	 * @author a.zanella
+	 * @author Alberto Zanella <a.zanella@trentorise.eu>
 	 * 
 	 */
 	class ColumnType {

@@ -12,7 +12,7 @@ import org.hibernate.service.ServiceRegistryBuilder;
 
 
 /**
- * @author a.zanella
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
  * @since Last modified by azanella On 17/lug/2013
  */
 public class ConfigurationManager {

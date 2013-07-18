@@ -19,7 +19,7 @@ import eu.trentorise.opendata.ckanalyze.services.PluralNamingStrategy;
 
 /**
  * Provide access to the database
- * @author a.zanella
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
  * Last modified by azanella On 12/lug/2013
  */
 public class PersistencyManager {

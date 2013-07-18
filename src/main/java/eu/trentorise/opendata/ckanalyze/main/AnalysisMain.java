@@ -26,7 +26,7 @@ import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
 /**
  * This main class performs the analysis of a catalog specified into the "configuration" table
  * on DB.
- * @author a.zanella
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
  * @since Last modified by azanella On 17/lug/2013
  */
 public class AnalysisMain {

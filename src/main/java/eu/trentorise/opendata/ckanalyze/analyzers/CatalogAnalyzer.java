@@ -13,7 +13,7 @@ import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
 /**
  * This class extracts statistics of the entire catalog and its analyze() method should be called after
  * all resources are already added to the database
- * @author a.zanella
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
  * Last modified by azanella On 17/lug/2013
  *
  */

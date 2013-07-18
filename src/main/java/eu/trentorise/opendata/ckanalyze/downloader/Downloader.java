@@ -11,7 +11,7 @@ import java.net.URLConnection;
  * resume functionality. It could be used as a standard class (creating an
  * instance) or using the singleton pattern (using the getInstance method).
  * 
- * @author a.zanella
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
  * 
  */
 

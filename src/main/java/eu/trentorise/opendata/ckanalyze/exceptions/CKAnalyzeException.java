@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Represents an error in processing the analysis, 
- *@author a.zanella
+ *@author Alberto Zanella <a.zanella@trentorise.eu>
  *Last modified by azanella On 15/lug/2013
  */
 
