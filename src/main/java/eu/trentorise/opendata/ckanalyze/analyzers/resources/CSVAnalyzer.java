@@ -102,6 +102,9 @@ public class CSVAnalyzer {
 			// Analyze the file field by field
 			for (String[] row : retval) {
 				for (int i = 0; i < row.length; i++) {
+					try
+					{
+					if(i>=columnCount) throw new IndexOutOfBoundsException();
 					String field = row[i];
 					// If type of column was not guessed by headers
 					if (!colsTypes.get(i).isGuessByHeader()) {
@@ -148,6 +151,11 @@ public class CSVAnalyzer {
 														+ toadd);
 							}
 						}
+					}
+					
+					}catch(IndexOutOfBoundsException e)
+					{
+						logger.warn("Malformed CSV file");
 					}
 				}
 			}
@@ -241,7 +249,7 @@ public class CSVAnalyzer {
 			Datatype retval = null;
 			for (Datatype d : hashMap.keySet()) {
 				int value = hashMap.get(d);
-				logger.info(d + ": \t" + value);
+				logger.debug(d + ": \t" + value);
 				if (value > max) {
 					max = value;
 					retval = d;
@@ -251,7 +259,7 @@ public class CSVAnalyzer {
 					retval = d;
 				}
 			}
-			logger.info("%%%%%%%%%%%");
+			logger.debug("%%%%%%%%%%%");
 			if (retval.equals(Datatype.STRING))
 				strPos.add(i);
 			if (!colsPerType.containsKey(retval))
