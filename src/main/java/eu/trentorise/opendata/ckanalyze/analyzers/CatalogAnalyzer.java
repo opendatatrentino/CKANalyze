@@ -51,9 +51,11 @@ public class CatalogAnalyzer {
 		long numString = 0;
 		for (CatalogStringDistribution csd : catalogStringDistribution) {
 			sum = sum + (csd.getLength()*csd.getFreq());
-			numString = numString + csd.getFreq();
-			avgStringLength = sum / numString; 
+			numString = numString + csd.getFreq(); 
 		}
+		avgStringLength = sum / numString;
+		System.out.println(catalogStringDistribution.size());
+		System.out.println(avgStringLength);
 		
 	}
 	

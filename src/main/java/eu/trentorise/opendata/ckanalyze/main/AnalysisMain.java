@@ -42,12 +42,12 @@ public class AnalysisMain {
 		return client;
 	}
 
-	private static void catalogAnalysis(String hostname) throws CKANException,
+	public static void catalogAnalysis(String hostname,List<String> dss) throws CKANException,
 			CKAnalyzeException {
 		Catalog catSave = new Catalog();
 		catSave.setUrl(hostname);
 		Client c = getCkanClient(hostname);
-		List<String> dsList = c.getDatasetList().result;
+		List<String> dsList = dss;
 		catSave.setTotalDatasetsCount(dsList.size());
 		catSave.setTotalResourcesCount(0);
 		catSave.setTotalFileSizeCount(0);
@@ -161,7 +161,7 @@ public class AnalysisMain {
 		try {
 			tempDirConfig();
 			for (String catHostname : ConfigurationManager.readCatalogsList()) {
-				catalogAnalysis(catHostname);
+				catalogAnalysis(catHostname,getCkanClient(catHostname).getDatasetList().result);
 			}
 		} catch (Exception e) {
 			logger.error("failed  ",e);
