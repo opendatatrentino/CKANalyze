@@ -33,6 +33,7 @@ public class TestCatalogAnalyzer {
 			appender.setThreshold(org.apache.log4j.Level.WARN);
 			List<String> dstest = new ArrayList<>();
 			dstest.add("rendiconto-del-2005");
+			AnalysisMain.tempDirConfig();
 			AnalysisMain.catalogAnalysis("http://dati.trentino.it", dstest);
 			assertTrue(toCheck.toString().isEmpty());
 			Session ss = PersistencyManager.getSessionFactory().openSession();
@@ -67,9 +68,7 @@ public class TestCatalogAnalyzer {
 			assertTrue(avgRowCount == c.getAvgRowCount());
 			assertTrue(avgStringLength == c.getAvgStringLength());
 			ss.close();
-		} catch (CKANException e) {
-			assertTrue(false);
-		} catch (CKAnalyzeException e) {
+		} catch (Exception e) {
 			assertTrue(false);
 		}		
 

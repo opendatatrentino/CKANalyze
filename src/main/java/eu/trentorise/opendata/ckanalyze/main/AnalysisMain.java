@@ -33,7 +33,7 @@ public class AnalysisMain {
 	private static Logger logger = LoggerFactory.getLogger("ckanalyze");
 	private static Connection connection = null;
 	private static Client client = null;
-	private static String tempdir = null;
+	private static String tempdir = ".";
 
 	public static synchronized Client getCkanClient(String hostname) {
 		if (client == null)
@@ -139,7 +139,7 @@ public class AnalysisMain {
 		}
 	}
 
-	private static void tempDirConfig() throws Exception
+	public static void tempDirConfig() throws Exception
 	{
 		Properties prop = new Properties();
 		prop.load(ClassLoader.getSystemResourceAsStream("ckanalyze.properties"));
@@ -153,6 +153,7 @@ public class AnalysisMain {
 				 	logger.error("No temporary directory configured! Please configure it using the -D option and the tmpdir=dirname property or the ckanalyze.property file");
 				 	System.exit(1);
 			}
+			tempdir = tempdir + "/"; 
 		}
 		new File(tempdir).mkdirs();
 	}

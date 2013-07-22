@@ -297,11 +297,23 @@ public class CSVAnalyzer {
 
 	private boolean checkFloat(String str) {
 		try {
+			if(str.contains(".")&&(str.contains(",")))
+			{
+				if(str.lastIndexOf(",")<str.lastIndexOf("."))
+					{
+						str = str.replace(",", "");
+					}
+			}
 			Double.parseDouble(str);
 			return true;
 		} catch (NumberFormatException e) {
 			return false;
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			return false;
 		}
+		
 	}
 
 	private boolean checkDate(String str) {
