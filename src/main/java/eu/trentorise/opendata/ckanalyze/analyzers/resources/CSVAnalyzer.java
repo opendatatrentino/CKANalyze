@@ -180,7 +180,7 @@ public class CSVAnalyzer {
 	private void computeStringMetrics(List<String[]> file,
 			HashSet<Integer> strPos) {
 		int numOfStrings = 0;
-		long sum = 0;
+		double sum = 0;
 		for (String[] row : file) {
 			for (int i = 0; i < row.length; i++) {
 				// Column recognized to be a String column
@@ -202,7 +202,6 @@ public class CSVAnalyzer {
 			stringLengthAvg = sum / numOfStrings;
 		else
 			stringLengthAvg = 0;
-
 	}
 
 	/**

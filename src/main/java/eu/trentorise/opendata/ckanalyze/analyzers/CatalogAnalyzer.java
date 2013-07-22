@@ -47,15 +47,13 @@ public class CatalogAnalyzer {
 	
 	private void computeAvgStringLength()
 	{
-		long sum = 0;
-		long numString = 0;
+		double sum = 0;
+		double numString = 0;
 		for (CatalogStringDistribution csd : catalogStringDistribution) {
-			sum = sum + (csd.getLength()*csd.getFreq());
-			numString = numString + csd.getFreq(); 
+			numString = (numString + csd.getFreq());
+			sum = sum + ((csd.getLength()*csd.getFreq()));
 		}
 		avgStringLength = sum / numString;
-		System.out.println(catalogStringDistribution.size());
-		System.out.println(avgStringLength);
 		
 	}
 	
