@@ -1,6 +1,7 @@
 package eu.trentorise.opendata.ckanalyze.managers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -26,6 +27,12 @@ public class PersistencyManager {
 	private static SessionFactory sf = null;
 	private static ServiceRegistry sr = null;
 	
+	
+	private PersistencyManager() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * Obtain the instance of configured sessionFactory to perform Hibernate query on DB
 	 * @return instance of sessionFactory
@@ -59,8 +66,7 @@ public class PersistencyManager {
 	
 	public static void insert(Object o)
 	{
-		SessionFactory sf = PersistencyManager.getSessionFactory();
-		Session ss=sf.openSession();
+		Session ss=PersistencyManager.getSessionFactory().openSession();
 		ss.beginTransaction();
 		ss.persist(o);
 		ss.getTransaction().commit();
@@ -69,8 +75,7 @@ public class PersistencyManager {
 
 	public static void update(Object o)
 	{
-		SessionFactory sf = PersistencyManager.getSessionFactory();
-		Session ss=sf.openSession();
+		Session ss=PersistencyManager.getSessionFactory().openSession();
 		ss.beginTransaction();
 		ss.update(o);
 		ss.getTransaction().commit();

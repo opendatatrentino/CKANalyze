@@ -1,6 +1,7 @@
 package eu.trentorise.opendata.ckanalyze.managers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -19,6 +20,13 @@ public class ConfigurationManager {
 	private static SessionFactory sf = null;
 	private static ServiceRegistry sr = null;
 	
+	
+	
+	private ConfigurationManager() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * Obtain the instance of configured sessionFactory to perform Hibernate query on DB
 	 * @return instance of sessionFactory
@@ -45,10 +53,9 @@ public class ConfigurationManager {
 		return configuration;
 	}
 	
-	public static ArrayList<String> readCatalogsList()
+	public static List<String> readCatalogsList()
 	{
-		SessionFactory sf = ConfigurationManager.getSessionFactory();
-		Session ss=sf.openSession();
+		Session ss=ConfigurationManager.getSessionFactory().openSession();
 		Query q = ss.createQuery("FROM Configuration");
 		ArrayList<String> retval = new ArrayList<String>();
 		for (Object o : q.list()) {
@@ -63,8 +70,7 @@ public class ConfigurationManager {
 	{
 		eu.trentorise.opendata.ckanalyze.jpa.Configuration c = new eu.trentorise.opendata.ckanalyze.jpa.Configuration();
 		c.setCatalogHostName(catalogHostName);
-		SessionFactory sf = ConfigurationManager.getSessionFactory();
-		Session ss=sf.openSession();
+		Session ss=ConfigurationManager.getSessionFactory().openSession();
 		ss.beginTransaction();
 		ss.saveOrUpdate(c);
 		ss.getTransaction().commit();

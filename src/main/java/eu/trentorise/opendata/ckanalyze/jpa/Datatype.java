@@ -16,15 +16,15 @@ import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
 public class Datatype {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	int DatatypeId;
+	int datatypeId;
 	String name;
 
 	public int getDatatypeId() {
-		return DatatypeId;
+		return datatypeId;
 	}
 
 	public void setDatatypeId(int datatypeId) {
-		DatatypeId = datatypeId;
+		this.datatypeId = datatypeId;
 	}
 
 	public String getName() {

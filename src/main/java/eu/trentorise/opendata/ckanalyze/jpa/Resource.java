@@ -14,7 +14,7 @@ import javax.persistence.OneToMany;
 public class Resource {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE)
-	private long ResourceId;
+	private long resourceId;
 	@Column
 	private String ckanId;
 	@ManyToOne
@@ -76,10 +76,10 @@ public class Resource {
 		
 	
 	public long getResourceId() {
-		return ResourceId;
+		return resourceId;
 	}
 	public void setResourceId(long resourceId) {
-		ResourceId = resourceId;
+		this.resourceId = resourceId;
 	}
 
 	

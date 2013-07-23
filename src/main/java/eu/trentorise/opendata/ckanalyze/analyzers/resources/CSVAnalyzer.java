@@ -1,6 +1,6 @@
 package eu.trentorise.opendata.ckanalyze.analyzers.resources;
 
-import java.io.File; 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,20 +32,21 @@ public class CSVAnalyzer {
 	/**
 	 * Defines supported data types
 	 * 
-	 * @author Alberto Zanella <a.zanella@trentorise.eu> Last modified by azanella On 11/lug/2013
+	 * @author Alberto Zanella <a.zanella@trentorise.eu> Last modified by
+	 *         azanella On 11/lug/2013
 	 */
 	public enum Datatype {
 		INT, FLOAT, DATE, STRING, GEOJSON, EMPTY;
 	}
 
-	private HashMap<Long, Long> stringLengthDistribution;
+	private Map<Long, Long> stringLengthDistribution;
 	private File file;
 	private String id;
 	private double stringLengthAvg;
-	private ArrayList<Character> alternativeSeparators;
+	private List<Character> alternativeSeparators;
 	private int rowCount = 0;
 	private int columnCount = 0;
-	private HashMap<Datatype, Integer> colsPerType;
+	private Map<Datatype, Integer> colsPerType;
 
 	/**
 	 * 
@@ -62,8 +65,9 @@ public class CSVAnalyzer {
 		colsPerType = new HashMap<CSVAnalyzer.Datatype, Integer>();
 		this.file = new File(filename);
 		try {
-			if (!file.exists())
+			if (!file.exists()) {
 				throw new FileNotFoundException();
+			}
 		} catch (FileNotFoundException e) {
 			logger.error("CSVAnalyzer :: Initialization error : File not Found");
 		}
@@ -79,8 +83,7 @@ public class CSVAnalyzer {
 			reader = new CSVReader(new FileReader(file));
 			List<String[]> retval = reader.readAll();
 			ArrayList<ColumnType> colsTypes = new ArrayList<ColumnType>();
-			if ((retval.size()) <= 1)
-			{
+			if ((retval.size()) <= 1) {
 				reader.close();
 				throw new CKAnalyzeException("Empty resource");
 			}
@@ -97,65 +100,15 @@ public class CSVAnalyzer {
 			}
 			// Extract rows and columns number (without heading line)
 			rowCount = retval.size();
-			columnCount = retval.get(0).length;
-
+			columnCount = colsTypes.size();
 			// Analyze the file field by field
 			for (String[] row : retval) {
 				for (int i = 0; i < row.length; i++) {
-					try
-					{
-					if(i>=columnCount) throw new IndexOutOfBoundsException();
-					String field = row[i];
-					// If type of column was not guessed by headers
-					if (!colsTypes.get(i).isGuessByHeader()) {
-						Datatype cellVal = parse(field);
-						if (!colsTypes.get(i).getConfidenceTypes()
-								.containsKey(cellVal)) {
-							colsTypes.get(i).getConfidenceTypes()
-									.put(cellVal, 1);
-						}
-						// Treat multiple EMPTY types differently. If a column
-						// is totally empty value 1 is sufficient. If it is not
-						// completely empty the desired type is not EMPTY
-						else if (!cellVal.equals(Datatype.EMPTY)) {
-							colsTypes
-									.get(i)
-									.getConfidenceTypes()
-									.put(cellVal,
-											colsTypes.get(i)
-													.getConfidenceTypes()
-													.get(cellVal) + 1);
-						}
-					} else if (colsTypes.get(i).getConfidenceTypes()
-							.containsKey(Datatype.DATE)) {
-						// Convention: DATE = 2 guessedbyHeader means date
-						// identification not sure.
-						if (colsTypes.get(i).getConfidenceTypes()
-								.get(Datatype.DATE) > 1) {
-							Datatype cellVal = parse(field);
-							int toadd = 1;
-							if (cellVal.equals(Datatype.DATE))
-								toadd = 2;
-							if (!colsTypes.get(i).getConfidenceTypes()
-									.containsKey(cellVal)) {
-								colsTypes.get(i).getConfidenceTypes()
-										.put(cellVal, 1);
-							} else {
-								colsTypes
-										.get(i)
-										.getConfidenceTypes()
-										.put(cellVal,
-												colsTypes.get(i)
-														.getConfidenceTypes()
-														.get(cellVal)
-														+ toadd);
-							}
-						}
-					}
-					
-					}catch(IndexOutOfBoundsException e)
-					{
+					if (i >= columnCount) {
 						logger.warn("Malformed CSV file");
+					} else {
+						String field = row[i];
+						analyzeCell(field, i, colsTypes);
 					}
 				}
 			}
@@ -171,14 +124,75 @@ public class CSVAnalyzer {
 		} catch (IndexOutOfBoundsException e) {
 			try {
 				reader.close();
-			} catch (IOException e1) { }
+			} catch (IOException e1) {
+			}
+			e.printStackTrace();
 			throw new CKAnalyzeException("Malformed CSV file");
 		}
 
 	}
 
+	private void analyzeCell(String field, int cellIndex,
+			List<ColumnType> colsTypes) {
+		if (!colsTypes.get(cellIndex).isGuessByHeader()) {
+			processColsWhithoutHeader(field, cellIndex, colsTypes, 1);
+		} else {
+			processColsWithHeaders(field, cellIndex, colsTypes);
+		}
+
+	}
+	/**
+	 * Process columns where type is not inferred by header analysis.
+	 * @param field
+	 * @param cellIndex
+	 * @param colsTypes
+	 * @param toAdd
+	 */
+	private void processColsWhithoutHeader(String field, int cellIndex,
+			List<ColumnType> colsTypes, int toAdd) {
+		Datatype cellVal = parse(field);
+		if (!colsTypes.get(cellIndex).getConfidenceTypes().containsKey(cellVal)) {
+			colsTypes.get(cellIndex).getConfidenceTypes().put(cellVal, 1);
+		}
+		// Treat multiple EMPTY types differently. If a column
+		// is totally empty value 1 is sufficient. If it is not
+		// completely empty the desired type is not EMPTY
+		else if (!cellVal.equals(Datatype.EMPTY)) {
+			colsTypes
+					.get(cellIndex)
+					.getConfidenceTypes()
+					.put(cellVal,
+							colsTypes.get(cellIndex).getConfidenceTypes()
+									.get(cellVal)
+									+ toAdd);
+		}
+	}
+	/**
+	 * Process column where a type was inferred by the header analysis
+	 * @param field
+	 * @param cellIndex
+	 * @param colsTypes
+	 */
+	private void processColsWithHeaders(String field, int cellIndex,
+			List<ColumnType> colsTypes) {
+		if (colsTypes.get(cellIndex).getConfidenceTypes()
+				.containsKey(Datatype.DATE)) {
+			// Convention: DATE = 2 guessedbyHeader means date
+			// identification not sure.
+			if (colsTypes.get(cellIndex).getConfidenceTypes()
+					.get(Datatype.DATE) > 1) {
+				Datatype cellVal = parse(field);
+				int toadd = 1;
+				if (cellVal.equals(Datatype.DATE)) {
+					toadd = 2;
+				}
+				processColsWhithoutHeader(field, cellIndex, colsTypes, toadd);
+			}
+		}
+	}
+	
 	private void computeStringMetrics(List<String[]> file,
-			HashSet<Integer> strPos) {
+			Set<Integer> strPos) {
 		int numOfStrings = 0;
 		double sum = 0;
 		for (String[] row : file) {
@@ -187,21 +201,23 @@ public class CSVAnalyzer {
 				if (strPos.contains(i)) {
 					numOfStrings = numOfStrings + 1;
 					long length = row[i].length();
-					if (!stringLengthDistribution.containsKey(length))
+					if (!stringLengthDistribution.containsKey(length)) {
 						stringLengthDistribution.put(length, new Long(1));
-					else
+					} else {
 						stringLengthDistribution.put(length,
 								stringLengthDistribution.get(length) + 1);
+					}
 				}
 			}
 		}
 		for (Long length : stringLengthDistribution.keySet()) {
 			sum = sum + (length * stringLengthDistribution.get(length));
 		}
-		if (!stringLengthDistribution.isEmpty())
+		if (!stringLengthDistribution.isEmpty()) {
 			stringLengthAvg = sum / numOfStrings;
-		else
+		} else {
 			stringLengthAvg = 0;
+		}
 	}
 
 	/**
@@ -212,14 +228,14 @@ public class CSVAnalyzer {
 	 * @param cols
 	 *            ArrayList of ColumnType
 	 */
-	private void processHeader(String[] headers, ArrayList<ColumnType> cols) {
+	private void processHeader(String[] headers, List<ColumnType> cols) {
 		for (String hd : headers) {
 			ColumnType ct = new ColumnType();
 			String tp = hd.toLowerCase().trim();
 			// different heuristics for sure date identification
 			if ((tp.equals("anno")) || (tp.equals("anni"))
 					|| (tp.contains("year")) || (tp.equals("mese"))
-					| (tp.equals("mesi")) || (tp.contains("month"))) {
+					|| (tp.equals("mesi")) || (tp.contains("month"))) {
 				ct.setGuessByHeader(true);
 				ct.getConfidenceTypes().put(Datatype.DATE, 1);
 			}
@@ -240,10 +256,10 @@ public class CSVAnalyzer {
 
 	// Compute the colsPerType variable
 	private void computeTypeOfColumn(ArrayList<ColumnType> metrics,
-			HashSet<Integer> strPos) {
+			Set<Integer> strPos) {
 		for (int i = 0; i < metrics.size(); i++) {
 			ColumnType ct = metrics.get(i);
-			HashMap<Datatype, Integer> hashMap = ct.getConfidenceTypes();
+			Map<Datatype, Integer> hashMap = ct.getConfidenceTypes();
 			int max = 0;
 			Datatype retval = null;
 			for (Datatype d : hashMap.keySet()) {
@@ -259,25 +275,31 @@ public class CSVAnalyzer {
 				}
 			}
 			logger.debug("%%%%%%%%%%%");
-			if (retval.equals(Datatype.STRING))
+			if (retval.equals(Datatype.STRING)) {
 				strPos.add(i);
-			if (!colsPerType.containsKey(retval))
+			}
+			if (!colsPerType.containsKey(retval)) {
 				colsPerType.put(retval, 1);
-			else
+			} else {
 				colsPerType.put(retval, colsPerType.get(retval) + 1);
+			}
 		}
 	}
 
 	// Try to parse the field and returns a Datatype value
 	private Datatype parse(String str) {
-		if (checkEmpty(str))
+		if (checkEmpty(str)) {
 			return Datatype.EMPTY;
-		if (checkInt(str))
+		}
+		if (checkInt(str)) {
 			return Datatype.INT;
-		if (checkFloat(str))
+		}
+		if (checkFloat(str)) {
 			return Datatype.FLOAT;
-		if (checkDate(str))
+		}
+		if (checkDate(str)) {
 			return Datatype.DATE;
+		}
 		return Datatype.STRING;
 	}
 
@@ -297,28 +319,25 @@ public class CSVAnalyzer {
 
 	private boolean checkFloat(String str) {
 		try {
-			if(str.contains(".")&&(str.contains(",")))
-			{
-				if(str.lastIndexOf(",")<str.lastIndexOf("."))
-					{
-						str = str.replace(",", "");
-					}
+			if (str.contains(".") && (str.contains(","))) {
+				if (str.lastIndexOf(",") < str.lastIndexOf(".")) {
+					str = str.replace(",", "");
+				}
 			}
 			Double.parseDouble(str);
 			return true;
 		} catch (NumberFormatException e) {
 			return false;
-		} catch (Exception e)
-		{
-			e.printStackTrace();
+		} catch (Exception e) {
 			return false;
 		}
-		
+
 	}
 
 	private boolean checkDate(String str) {
-		if (str.length() > 30)
+		if (str.length() > 30) {
 			return false;
+		}
 		str = str.replaceAll("[^\\w\\s]", "");
 		return (DateIdentifier.isADate(str).getResult());
 	}
@@ -344,11 +363,11 @@ public class CSVAnalyzer {
 		return columnCount;
 	}
 
-	public HashMap<Datatype, Integer> getColsPerType() {
+	public Map<Datatype, Integer> getColsPerType() {
 		return colsPerType;
 	}
 
-	public HashMap<Long, Long> getStringLengthDistribution() {
+	public Map<Long, Long> getStringLengthDistribution() {
 		return stringLengthDistribution;
 	}
 
@@ -379,11 +398,11 @@ public class CSVAnalyzer {
 		/**
 		 * Indicates if the type was guessed also by header line alaysis
 		 */
-		public HashMap<Datatype, Integer> getConfidenceTypes() {
+		public Map<Datatype, Integer> getConfidenceTypes() {
 			return confidenceTypes;
 		}
 
-		private HashMap<Datatype, Integer> confidenceTypes;
+		private Map<Datatype, Integer> confidenceTypes;
 		private boolean guessByHeader;
 
 		public ColumnType() {

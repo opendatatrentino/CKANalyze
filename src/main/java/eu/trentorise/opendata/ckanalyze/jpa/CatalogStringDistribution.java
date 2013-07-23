@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 public class CatalogStringDistribution {
 	@Id
 	@GeneratedValue
-	private long CatalogStringDistributionId;
+	private long catalogStringDistributionId;
 	@ManyToOne
 	@JoinColumn(name="catalogId")
 	private Catalog catalog;
@@ -35,10 +35,10 @@ public class CatalogStringDistribution {
 	
 	
 	public long getCatalogStringDistributionId() {
-		return CatalogStringDistributionId;
+		return catalogStringDistributionId;
 	}
 	public void setCatalogStringDistributionId(long catalogStringDistributionId) {
-		CatalogStringDistributionId = catalogStringDistributionId;
+		this.catalogStringDistributionId = catalogStringDistributionId;
 	}
 	public long getLength() {
 		return length;

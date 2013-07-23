@@ -169,16 +169,15 @@ public class Downloader {
 			}
 			instance.size = new File(filepath).length();
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
+		} catch (Exception e) {		} 
+		finally {
 			try {
 				if (fos != null)
 					fos.close();
 				if (in != null)
 					in.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 package eu.trentorise.opendata.ckanalyze.exceptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents an error in processing the analysis, 
@@ -13,7 +14,7 @@ public class CKAnalyzeException extends Exception {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-		private ArrayList<String> messages = new ArrayList<String>();
+		private List<String> messages = new ArrayList<String>();
 
 	    public CKAnalyzeException( String message ) {
 	        messages.add( message );
@@ -23,7 +24,7 @@ public class CKAnalyzeException extends Exception {
 	        messages.add( error );
 	    }
 
-	    public ArrayList<String> getErrorMessages() {
+	    public List<String> getErrorMessages() {
 	        return messages;
 	    }
 

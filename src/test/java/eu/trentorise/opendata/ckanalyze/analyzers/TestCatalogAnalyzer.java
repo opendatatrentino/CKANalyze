@@ -8,13 +8,11 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.WriterAppender;
-import org.ckan.CKANException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import eu.trentorise.opendata.ckanalyze.exceptions.CKAnalyzeException;
 import eu.trentorise.opendata.ckanalyze.jpa.Catalog;
 import eu.trentorise.opendata.ckanalyze.jpa.Resource;
 import eu.trentorise.opendata.ckanalyze.jpa.ResourceStringDistribution;
@@ -69,7 +67,9 @@ public class TestCatalogAnalyzer {
 			assertTrue(avgStringLength == c.getAvgStringLength());
 			ss.close();
 		} catch (Exception e) {
+			e.printStackTrace();
 			assertTrue(false);
+			
 		}		
 
 	}

@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 public class ResourceDatatypesCount {
 	@Id
 	@GeneratedValue
-	private long ResourceDatatypesCountId;
+	private long resourceDatatypesCountId;
 	@ManyToOne
 	@JoinColumn(name="resourceId")
 	private Resource resource;
@@ -21,11 +21,11 @@ public class ResourceDatatypesCount {
 	private int freq;
 
 	public long getResourceDatatypesCountId() {
-		return ResourceDatatypesCountId;
+		return resourceDatatypesCountId;
 	}
 
 	public void setResourceDatatypesCountId(long resourceDatatypesCountId) {
-		ResourceDatatypesCountId = resourceDatatypesCountId;
+		this.resourceDatatypesCountId = resourceDatatypesCountId;
 	}
 
 	public Datatype getDatatype() {

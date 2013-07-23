@@ -13,7 +13,7 @@ import javax.persistence.OneToMany;
 public class Catalog {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE)
-	private long CatalogId;
+	private long catalogId;
 	@OneToMany(mappedBy="catalog")
 	private Set<Resource> catalogResources;
 	@OneToMany(mappedBy="catalog",cascade=CascadeType.ALL)
@@ -52,10 +52,10 @@ public class Catalog {
 	}
 	
 	public long getCatalogId() {
-		return CatalogId;
+		return catalogId;
 	}
 	public void setCatalogId(long catalogId) {
-		CatalogId = catalogId;
+		this.catalogId = catalogId;
 	}
 
 	@Column

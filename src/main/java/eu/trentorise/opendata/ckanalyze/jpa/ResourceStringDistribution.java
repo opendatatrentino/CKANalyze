@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 public class ResourceStringDistribution {
 	@Id
 	@GeneratedValue
-	private long ResourceStringDistributionId;
+	private long resourceStringDistributionId;
 	@ManyToOne
 	@JoinColumn(name="resourceId")
 	private Resource resource;
@@ -20,10 +20,10 @@ public class ResourceStringDistribution {
 	private long freq;
 
 	public long getResourceStringDistributionId() {
-		return ResourceStringDistributionId;
+		return resourceStringDistributionId;
 	}
 	public void setResourceStringDistributionId(long resourceStringDistributionId) {
-		ResourceStringDistributionId = resourceStringDistributionId;
+		this.resourceStringDistributionId = resourceStringDistributionId;
 	}
 	public Resource getResource() {
 		return resource;
