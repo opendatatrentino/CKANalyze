@@ -229,7 +229,14 @@ public class CSVAnalyzer {
 		for (String hd : headers) {
 			ColumnType ct = new ColumnType();
 			String tp = hd.toLowerCase().trim();
+			boolean check = (tp.equals("anno"));
+			check = check ||(tp.equals("anni"));
+			check = check || (tp.contains("year"));
+			check = check || (tp.equals("mese"));
+			check = check	|| (tp.equals("mesi"));
+			check = check || (tp.contains("month"));
 			// different heuristics for sure date identification
+<<<<<<< HEAD
 			boolean condition = (tp.equals("anno"));
 			condition = condition || (tp.equals("anni"));
 			condition = condition	|| (tp.contains("year"));
@@ -237,6 +244,9 @@ public class CSVAnalyzer {
 			condition = condition	|| (tp.equals("mesi"));
 			condition = condition || (tp.contains("month"));
 			if (condition) {
+=======
+			if (check) {
+>>>>>>> origin
 				ct.setGuessByHeader(true);
 				ct.getConfidenceTypes().put(Datatype.DATE, 1);
 			}

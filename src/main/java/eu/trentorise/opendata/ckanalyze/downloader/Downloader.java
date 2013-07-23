@@ -17,6 +17,9 @@ import java.net.URLConnection;
  */
 
 public class Downloader {
+	private URLConnection connection = null;
+	private BufferedInputStream in = null;
+	private FileOutputStream fos = null;
 	private String url;
 	private URLConnection connection = null;
 	private BufferedInputStream in = null;
@@ -172,7 +175,10 @@ public class Downloader {
 	}
 	
 	public void download(String url, String filepath) {
+<<<<<<< HEAD
 		
+=======
+>>>>>>> origin
 		try {
 			URL urlo = new URL(url);
 			connection = urlo.openConnection();
