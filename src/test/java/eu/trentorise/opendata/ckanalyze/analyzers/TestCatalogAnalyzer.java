@@ -27,7 +27,7 @@ public class TestCatalogAnalyzer {
 			WriterAppender appender = new WriterAppender(new PatternLayout(
 					"%d{ISO8601} %p - %m%n"), toCheck);
 			appender.setName("LOGGER_APPENDER");
-			Logger.getRootLogger().addAppender(appender);
+			Logger.getLogger("ckanalyze").addAppender(appender);
 			appender.setThreshold(org.apache.log4j.Level.WARN);
 			List<String> dstest = new ArrayList<>();
 			dstest.add("rendiconto-del-2005");

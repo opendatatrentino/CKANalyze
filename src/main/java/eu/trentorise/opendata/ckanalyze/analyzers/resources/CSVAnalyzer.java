@@ -27,7 +27,7 @@ import au.com.bytecode.opencsv.CSVReader;
  * @since Last modified by azanella On 17/lug/2013
  */
 public class CSVAnalyzer {
-	private static Logger logger = LoggerFactory.getLogger(CSVAnalyzer.class);
+	private static Logger logger = LoggerFactory.getLogger("ckanalyze");
 	private static final int MAX_DATE_SIZE = 30; 
 	/**
 	 * Defines supported data types
