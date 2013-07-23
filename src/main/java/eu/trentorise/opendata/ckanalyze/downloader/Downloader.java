@@ -17,6 +17,9 @@ import java.net.URLConnection;
  */
 
 public class Downloader {
+	private URLConnection connection = null;
+	private BufferedInputStream in = null;
+	private FileOutputStream fos = null;
 	private String url;
 	private String filepath;
 	private String filename;
@@ -119,7 +122,7 @@ public class Downloader {
 		return retval;
 	}
 	
-	private void performDownload(URLConnection connection, BufferedInputStream in, FileOutputStream fos, File fcheck,URL urlo) throws IOException
+	private void performDownload(File fcheck,URL urlo) throws IOException
 	{
 		boolean redownload = false;
 		String destination = fcheck.getAbsolutePath();
@@ -154,7 +157,7 @@ public class Downloader {
 		}
 	}
 	
-	private void closeConnections(BufferedInputStream in, FileOutputStream fos)
+	private void closeConnections()
 	{
 		try {
 			if (fos != null) {
@@ -167,8 +170,6 @@ public class Downloader {
 	}
 	
 	public void download(String url, String filepath) {
-		BufferedInputStream in = null;
-		FileOutputStream fos = null;
 		try {
 			URL urlo = new URL(url);
 			URLConnection connection = null;
@@ -189,13 +190,13 @@ public class Downloader {
 						"Bytes=" + (fcheck.length()) + "-");
 			}
 			if (!skip) {
-				performDownload(connection, in, fos, fcheck, urlo);
+				performDownload(fcheck, urlo);
 			}
 			this.size = new File(destination).length();
 
 		} catch (Exception e) {
 		} finally {
-			closeConnections(in, fos);
+			closeConnections();
 		}
 	}
 }
