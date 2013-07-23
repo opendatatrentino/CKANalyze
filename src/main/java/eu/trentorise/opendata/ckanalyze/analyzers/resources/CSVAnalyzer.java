@@ -28,7 +28,7 @@ import au.com.bytecode.opencsv.CSVReader;
  */
 public class CSVAnalyzer {
 	private static Logger logger = LoggerFactory.getLogger(CSVAnalyzer.class);
-	private static final int maxDateSize = 30; 
+	private static final int MAX_DATE_SIZE = 30; 
 	/**
 	 * Defines supported data types
 	 * 
@@ -318,7 +318,7 @@ public class CSVAnalyzer {
 		try {
 			String toCheck = str;
 			if (toCheck.contains(".") && (toCheck.contains(","))
-					&& (toCheck.lastIndexOf(",") < toCheck.lastIndexOf("."))) {
+					&& (toCheck.lastIndexOf(',') < toCheck.lastIndexOf('.'))) {
 				{
 					toCheck = toCheck.replace(",", "");
 				}
@@ -334,7 +334,7 @@ public class CSVAnalyzer {
 	}
 
 	private boolean checkDate(String str) {
-		if (str.length() > maxDateSize) {
+		if (str.length() > MAX_DATE_SIZE) {
 			return false;
 		}
 		String toCheck = str.replaceAll("[^\\w\\s]", "");

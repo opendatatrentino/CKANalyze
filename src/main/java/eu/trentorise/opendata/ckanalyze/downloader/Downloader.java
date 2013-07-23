@@ -2,6 +2,7 @@ package eu.trentorise.opendata.ckanalyze.downloader;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -20,7 +21,7 @@ public class Downloader {
 	private String filepath;
 	private String filename;
 	private long size;
-	private static final int maxByteSize = 1024;
+	private static final int MAX_BYTE_SIZE = 1024;
 	private static Downloader instance = null;
 
 	public String getFilename() {
@@ -91,35 +92,93 @@ public class Downloader {
 	 *            - The path of the file (requires "/" char at the end)
 	 */
 
+	private String extractRealFilename(URLConnection connection, URL urlo)
+	{
+		String retval = null;
+		String rawFn = connection.getHeaderField("Content-Disposition");
+		if (rawFn != null && rawFn.contains("attachment")) {
+			rawFn = rawFn.replace("attachment; filename=\"", "");
+			rawFn = rawFn.replaceAll("\"", "");
+			retval = rawFn;
+		} else {
+			retval = urlo.getPath().substring(
+					urlo.getPath().lastIndexOf("/") + 1);
+		}
+		return retval;
+	}
+	
+	private long extractRemoteSize(URLConnection connection)
+	{
+		long retval = -1;
+		if ((connection.getHeaderFields().get("Content-Length") != null)
+				&& (!connection.getHeaderFields().get("Content-Length")
+						.isEmpty())) {
+			retval = Long.parseLong(connection.getHeaderFields()
+					.get("Content-Length").get(0));
+		}
+		return retval;
+	}
+	
+	private void performDownload(URLConnection connection, BufferedInputStream in, FileOutputStream fos, File fcheck,URL urlo) throws IOException
+	{
+		boolean redownload = false;
+		String destination = fcheck.getAbsolutePath();
+		connection.setDoInput(true);
+		connection.setDoOutput(true);
+		try {
+			in = new BufferedInputStream(connection.getInputStream());
+		} catch (IOException e) {
+			connection = urlo.openConnection();
+			in = new BufferedInputStream(connection.getInputStream());
+			redownload = true;
+		}
+
+		if (fcheck.exists()) {
+			if ((!redownload)
+					|| (connection.getHeaderField("Accept-Ranges") != null && connection
+							.getHeaderField("Accept-Ranges").equals(
+									"bytes"))) {
+				fos = new java.io.FileOutputStream(destination, true);
+			} else {
+				fos = new java.io.FileOutputStream(destination);
+			}
+		} else {
+			fcheck.createNewFile();
+			fos = new java.io.FileOutputStream(destination);
+		}
+
+		byte data[] = new byte[MAX_BYTE_SIZE];
+		int count;
+		while ((count = in.read(data, 0, MAX_BYTE_SIZE)) != -1) {
+			fos.write(data, 0, count);
+		}
+	}
+	
+	private void closeConnections(BufferedInputStream in, FileOutputStream fos)
+	{
+		try {
+			if (fos != null) {
+				fos.close();
+			}
+			if (in != null) {
+				in.close();
+			}
+		} catch (IOException e) {	}
+	}
+	
 	public void download(String url, String filepath) {
 		BufferedInputStream in = null;
-		java.io.FileOutputStream fos = null;
-		long remoteSize = -1;
+		FileOutputStream fos = null;
 		try {
 			URL urlo = new URL(url);
 			URLConnection connection = null;
 			connection = urlo.openConnection();
 			// Get real filename in dynamic urls
-			String rawFn = connection.getHeaderField("Content-Disposition");
-			if (rawFn != null && rawFn.contains("attachment")) {
-				rawFn = rawFn.replace("attachment; filename=\"", "");
-				rawFn = rawFn.replaceAll("\"", "");
-				filename = rawFn;
-			} else {
-				filename = urlo.getPath().substring(
-						urlo.getPath().lastIndexOf("/") + 1);
-			}
+			filename = extractRealFilename(connection, urlo);
 			String destination = filepath + filename;
 			boolean skip = false;
 			File fcheck = new File(destination);
-
-			if ((connection.getHeaderFields().get("Content-Length") != null)
-					&& (!connection.getHeaderFields().get("Content-Length")
-							.isEmpty())) {
-				remoteSize = Long.parseLong(connection.getHeaderFields()
-						.get("Content-Length").get(0));
-			}
-
+			long remoteSize = extractRemoteSize(connection);
 			long localSize = fcheck.length();
 			if (fcheck.exists() && remoteSize > 0) {
 				skip = remoteSize == localSize;
@@ -129,54 +188,14 @@ public class Downloader {
 				connection.setRequestProperty("Range",
 						"Bytes=" + (fcheck.length()) + "-");
 			}
-
-			boolean redownload = false;
-
 			if (!skip) {
-				connection.setDoInput(true);
-				connection.setDoOutput(true);
-				try {
-					in = new BufferedInputStream(connection.getInputStream());
-				} catch (IOException e) {
-					connection = urlo.openConnection();
-					in = new BufferedInputStream(connection.getInputStream());
-					redownload = true;
-				}
-
-				if (fcheck.exists()) {
-					if ((!redownload)
-							|| (connection.getHeaderField("Accept-Ranges") != null && connection
-									.getHeaderField("Accept-Ranges").equals(
-											"bytes"))) {
-						fos = new java.io.FileOutputStream(destination, true);
-					} else {
-						fos = new java.io.FileOutputStream(destination);
-					}
-				} else {
-					fcheck.createNewFile();
-					fos = new java.io.FileOutputStream(destination);
-				}
-
-				byte data[] = new byte[maxByteSize];
-				int count;
-				while ((count = in.read(data, 0, maxByteSize)) != -1) {
-					fos.write(data, 0, count);
-				}
+				performDownload(connection, in, fos, fcheck, urlo);
 			}
-			instance.size = new File(destination).length();
+			this.size = new File(destination).length();
 
 		} catch (Exception e) {
 		} finally {
-			try {
-				if (fos != null) {
-					fos.close();
-				}
-				if (in != null) {
-					in.close();
-				}
-			} catch (IOException e) {
-
-			}
+			closeConnections(in, fos);
 		}
 	}
 }

@@ -65,7 +65,9 @@ public class CatalogAnalyzer {
 		hql = "select avg(columnCount) from Resource";
 		q = ss.createQuery(hql);
 		if (!q.list().isEmpty())
+		{
 			avgColumnCount = (Double) q.list().get(0);
+		}
 		ss.close();
 	}
 
