@@ -18,6 +18,9 @@ import java.net.URLConnection;
 
 public class Downloader {
 	private String url;
+	private URLConnection connection = null;
+	private BufferedInputStream in = null;
+	private FileOutputStream fos = null;
 	private String filepath;
 	private String filename;
 	private long size;
@@ -92,7 +95,7 @@ public class Downloader {
 	 *            - The path of the file (requires "/" char at the end)
 	 */
 
-	private String extractRealFilename(URLConnection connection, URL urlo)
+	private String extractRealFilename(URL urlo)
 	{
 		String retval = null;
 		String rawFn = connection.getHeaderField("Content-Disposition");
@@ -107,7 +110,7 @@ public class Downloader {
 		return retval;
 	}
 	
-	private long extractRemoteSize(URLConnection connection)
+	private long extractRemoteSize()
 	{
 		long retval = -1;
 		if ((connection.getHeaderFields().get("Content-Length") != null)
@@ -119,7 +122,7 @@ public class Downloader {
 		return retval;
 	}
 	
-	private void performDownload(URLConnection connection, BufferedInputStream in, FileOutputStream fos, File fcheck,URL urlo) throws IOException
+	private void performDownload(File fcheck,URL urlo) throws IOException
 	{
 		boolean redownload = false;
 		String destination = fcheck.getAbsolutePath();
@@ -154,31 +157,31 @@ public class Downloader {
 		}
 	}
 	
-	private void closeConnections(BufferedInputStream in, FileOutputStream fos)
+	private void closeConnections()
 	{
 		try {
 			if (fos != null) {
 				fos.close();
+				fos = null;
 			}
 			if (in != null) {
 				in.close();
+				fos = null;
 			}
 		} catch (IOException e) {	}
 	}
 	
 	public void download(String url, String filepath) {
-		BufferedInputStream in = null;
-		FileOutputStream fos = null;
+		
 		try {
 			URL urlo = new URL(url);
-			URLConnection connection = null;
 			connection = urlo.openConnection();
 			// Get real filename in dynamic urls
-			filename = extractRealFilename(connection, urlo);
+			filename = extractRealFilename(urlo);
 			String destination = filepath + filename;
 			boolean skip = false;
 			File fcheck = new File(destination);
-			long remoteSize = extractRemoteSize(connection);
+			long remoteSize = extractRemoteSize();
 			long localSize = fcheck.length();
 			if (fcheck.exists() && remoteSize > 0) {
 				skip = remoteSize == localSize;
@@ -189,13 +192,13 @@ public class Downloader {
 						"Bytes=" + (fcheck.length()) + "-");
 			}
 			if (!skip) {
-				performDownload(connection, in, fos, fcheck, urlo);
+				performDownload(fcheck, urlo);
 			}
 			this.size = new File(destination).length();
 
 		} catch (Exception e) {
 		} finally {
-			closeConnections(in, fos);
+			closeConnections();
 		}
 	}
 }
