@@ -20,20 +20,16 @@ public class Downloader {
 	private String filepath;
 	private String filename;
 	private long size;
+	private static final int maxByteSize = 1024;
 	private static Downloader instance = null;
 
-	
-	
 	public String getFilename() {
 		return filename;
 	}
 
-	
 	public long getSize() {
 		return size;
 	}
-
-	
 
 	/**
 	 * 
@@ -45,17 +41,18 @@ public class Downloader {
 	public Downloader(String url, String filepath) {
 		this.filepath = filepath;
 		this.url = url;
-		if(instance == null) instance = this;
+		if (instance == null) {
+			instance = this;
+		}
 	}
-	
-	private Downloader()
-	{
+
+	private Downloader() {
 		super();
 	}
 
 	/**
-	 * You need to specify Url and filepath using setters 
-	 */	
+	 * You need to specify Url and filepath using setters
+	 */
 	public static Downloader getInstance() {
 		if (instance == null) {
 			instance = new Downloader();
@@ -79,14 +76,13 @@ public class Downloader {
 		this.filepath = filepath;
 	}
 
-
 	/**
 	 * Download using properties values
 	 */
 	public void download() {
 		download(url, filepath);
 	}
-	
+
 	/**
 	 * 
 	 * @param url
@@ -110,12 +106,12 @@ public class Downloader {
 				rawFn = rawFn.replaceAll("\"", "");
 				filename = rawFn;
 			} else {
-						filename = urlo.getPath().substring(
-								urlo.getPath().lastIndexOf("/") + 1);
+				filename = urlo.getPath().substring(
+						urlo.getPath().lastIndexOf("/") + 1);
 			}
-			filepath = filepath + filename;
+			String destination = filepath + filename;
 			boolean skip = false;
-			File fcheck = new File(filepath);
+			File fcheck = new File(destination);
 
 			if ((connection.getHeaderFields().get("Content-Length") != null)
 					&& (!connection.getHeaderFields().get("Content-Length")
@@ -125,57 +121,59 @@ public class Downloader {
 			}
 
 			long localSize = fcheck.length();
-			if (fcheck.exists() && remoteSize > 0)
+			if (fcheck.exists() && remoteSize > 0) {
 				skip = remoteSize == localSize;
+			}
 			connection = urlo.openConnection();
 			if (fcheck.exists()) {
 				connection.setRequestProperty("Range",
 						"Bytes=" + (fcheck.length()) + "-");
 			}
-			
+
 			boolean redownload = false;
-			
+
 			if (!skip) {
 				connection.setDoInput(true);
 				connection.setDoOutput(true);
-				try
-				{
-				in = new BufferedInputStream(connection.getInputStream());
-				}catch(IOException e)
-				{
+				try {
+					in = new BufferedInputStream(connection.getInputStream());
+				} catch (IOException e) {
 					connection = urlo.openConnection();
 					in = new BufferedInputStream(connection.getInputStream());
 					redownload = true;
 				}
 
 				if (fcheck.exists()) {
-					if ((!redownload)||(connection.getHeaderField("Accept-Ranges") != null
-							&& connection.getHeaderField("Accept-Ranges")
-									.equals("bytes"))) {
-						fos = new java.io.FileOutputStream(filepath, true);
+					if ((!redownload)
+							|| (connection.getHeaderField("Accept-Ranges") != null && connection
+									.getHeaderField("Accept-Ranges").equals(
+											"bytes"))) {
+						fos = new java.io.FileOutputStream(destination, true);
 					} else {
-						fos = new java.io.FileOutputStream(filepath);
+						fos = new java.io.FileOutputStream(destination);
 					}
 				} else {
 					fcheck.createNewFile();
-					fos = new java.io.FileOutputStream(filepath);
+					fos = new java.io.FileOutputStream(destination);
 				}
 
-				byte data[] = new byte[1024];
+				byte data[] = new byte[maxByteSize];
 				int count;
-				while ((count = in.read(data, 0, 1024)) != -1) {
+				while ((count = in.read(data, 0, maxByteSize)) != -1) {
 					fos.write(data, 0, count);
 				}
 			}
-			instance.size = new File(filepath).length();
+			instance.size = new File(destination).length();
 
-		} catch (Exception e) {		} 
-		finally {
+		} catch (Exception e) {
+		} finally {
 			try {
-				if (fos != null)
+				if (fos != null) {
 					fos.close();
-				if (in != null)
+				}
+				if (in != null) {
 					in.close();
+				}
 			} catch (IOException e) {
 
 			}

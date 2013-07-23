@@ -36,6 +36,7 @@ public class TestCatalogAnalyzer {
 			assertTrue(toCheck.toString().isEmpty());
 			Session ss = PersistencyManager.getSessionFactory().openSession();
 			Query q = ss.createQuery("from Catalog");
+			@SuppressWarnings("unchecked")
 			List<Catalog> cats = q.list();
 			assertFalse(cats.isEmpty());
 			Catalog c = cats.get(0);

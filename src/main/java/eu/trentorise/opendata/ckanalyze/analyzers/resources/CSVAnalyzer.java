@@ -28,7 +28,7 @@ import au.com.bytecode.opencsv.CSVReader;
  */
 public class CSVAnalyzer {
 	private static Logger logger = LoggerFactory.getLogger(CSVAnalyzer.class);
-
+	private static final int maxDateSize = 30; 
 	/**
 	 * Defines supported data types
 	 * 
@@ -106,10 +106,10 @@ public class CSVAnalyzer {
 				for (int i = 0; i < row.length; i++) {
 					if (i >= columnCount) {
 						logger.warn("Malformed CSV file");
-					} else {
-						String field = row[i];
-						analyzeCell(field, i, colsTypes);
+						break;
 					}
+					String field = row[i];
+					analyzeCell(field, i, colsTypes);
 				}
 			}
 			// stores what columns are discovered as String
@@ -118,16 +118,11 @@ public class CSVAnalyzer {
 			computeStringMetrics(retval, strColumnsPos);
 			reader.close();
 		} catch (FileNotFoundException e) {
-			throw new CKAnalyzeException("File Not Found");
+			throw new CKAnalyzeException("File Not Found",e);
 		} catch (IOException e) {
-			throw new CKAnalyzeException("Can't read resource file");
+			throw new CKAnalyzeException("Can't read resource file",e);
 		} catch (IndexOutOfBoundsException e) {
-			try {
-				reader.close();
-			} catch (IOException e1) {
-			}
-			e.printStackTrace();
-			throw new CKAnalyzeException("Malformed CSV file");
+			throw new CKAnalyzeException("Malformed CSV file",e);
 		}
 
 	}
@@ -141,8 +136,10 @@ public class CSVAnalyzer {
 		}
 
 	}
+
 	/**
 	 * Process columns where type is not inferred by header analysis.
+	 * 
 	 * @param field
 	 * @param cellIndex
 	 * @param colsTypes
@@ -167,32 +164,32 @@ public class CSVAnalyzer {
 									+ toAdd);
 		}
 	}
+
 	/**
 	 * Process column where a type was inferred by the header analysis
+	 * 
 	 * @param field
 	 * @param cellIndex
 	 * @param colsTypes
 	 */
 	private void processColsWithHeaders(String field, int cellIndex,
 			List<ColumnType> colsTypes) {
+		// Convention: DATE = 2 guessedbyHeader means date
+		// identification not sure.
 		if (colsTypes.get(cellIndex).getConfidenceTypes()
-				.containsKey(Datatype.DATE)) {
-			// Convention: DATE = 2 guessedbyHeader means date
-			// identification not sure.
-			if (colsTypes.get(cellIndex).getConfidenceTypes()
-					.get(Datatype.DATE) > 1) {
-				Datatype cellVal = parse(field);
-				int toadd = 1;
-				if (cellVal.equals(Datatype.DATE)) {
-					toadd = 2;
-				}
-				processColsWhithoutHeader(field, cellIndex, colsTypes, toadd);
+				.containsKey(Datatype.DATE)
+				&& (colsTypes.get(cellIndex).getConfidenceTypes()
+						.get(Datatype.DATE) > 1)) {
+			Datatype cellVal = parse(field);
+			int toadd = 1;
+			if (cellVal.equals(Datatype.DATE)) {
+				toadd = 2;
 			}
+			processColsWhithoutHeader(field, cellIndex, colsTypes, toadd);
 		}
 	}
-	
-	private void computeStringMetrics(List<String[]> file,
-			Set<Integer> strPos) {
+
+	private void computeStringMetrics(List<String[]> file, Set<Integer> strPos) {
 		int numOfStrings = 0;
 		double sum = 0;
 		for (String[] row : file) {
@@ -255,7 +252,7 @@ public class CSVAnalyzer {
 	}
 
 	// Compute the colsPerType variable
-	private void computeTypeOfColumn(ArrayList<ColumnType> metrics,
+	private void computeTypeOfColumn(List<ColumnType> metrics,
 			Set<Integer> strPos) {
 		for (int i = 0; i < metrics.size(); i++) {
 			ColumnType ct = metrics.get(i);
@@ -319,12 +316,14 @@ public class CSVAnalyzer {
 
 	private boolean checkFloat(String str) {
 		try {
-			if (str.contains(".") && (str.contains(","))) {
-				if (str.lastIndexOf(",") < str.lastIndexOf(".")) {
-					str = str.replace(",", "");
+			String toCheck = str;
+			if (toCheck.contains(".") && (toCheck.contains(","))
+					&& (toCheck.lastIndexOf(",") < toCheck.lastIndexOf("."))) {
+				{
+					toCheck = toCheck.replace(",", "");
 				}
 			}
-			Double.parseDouble(str);
+			Double.parseDouble(toCheck);
 			return true;
 		} catch (NumberFormatException e) {
 			return false;
@@ -335,11 +334,11 @@ public class CSVAnalyzer {
 	}
 
 	private boolean checkDate(String str) {
-		if (str.length() > 30) {
+		if (str.length() > maxDateSize) {
 			return false;
 		}
-		str = str.replaceAll("[^\\w\\s]", "");
-		return (DateIdentifier.isADate(str).getResult());
+		String toCheck = str.replaceAll("[^\\w\\s]", "");
+		return (DateIdentifier.isADate(toCheck).getResult());
 	}
 
 	private boolean moreThanOneColumn(List<String[]> check) {

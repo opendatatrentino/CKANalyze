@@ -19,6 +19,12 @@ public class CKAnalyzeException extends Exception {
 	    public CKAnalyzeException( String message ) {
 	        messages.add( message );
 	    }
+	    
+	    public CKAnalyzeException(String message, Throwable e)
+	    {
+	    	super(message, e);
+	    	messages.add( message );
+	    }
 
 	    public void addError( String error ) {
 	        messages.add( error );

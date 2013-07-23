@@ -1,6 +1,7 @@
 package eu.trentorise.opendata.ckanalyze.main;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
@@ -31,7 +32,7 @@ import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
  * @author Alberto Zanella <a.zanella@trentorise.eu>
  * @since Last modified by azanella On 17/lug/2013
  */
-public class AnalysisMain {
+public final class AnalysisMain {
 
 	private AnalysisMain() {
 		super();
@@ -75,7 +76,6 @@ public class AnalysisMain {
 				}
 			} catch (Exception e) {
 				logger.error("error in dataset {}", dsname, e.getMessage());
-				e.printStackTrace();
 			}
 		}
 		CatalogAnalyzer catanalyze = new CatalogAnalyzer();
@@ -117,8 +117,7 @@ public class AnalysisMain {
 				resSave.setUrl(dwn.getUrl());
 				PersistencyManager.insert(resSave);
 				for (Datatype dt : ca.getColsPerType().keySet()) {
-					eu.trentorise.opendata.ckanalyze.jpa.Datatype dtSave = eu.trentorise.opendata.ckanalyze.jpa.Datatype
-							.getDatatypeByName(dt.toString());
+					eu.trentorise.opendata.ckanalyze.jpa.Datatype dtSave = PersistencyManager.getDatatypeByName(dt.toString());
 					if (dtSave == null) {
 						dtSave = new eu.trentorise.opendata.ckanalyze.jpa.Datatype();
 						dtSave.setName(dt.toString());
@@ -147,7 +146,7 @@ public class AnalysisMain {
 		}
 	}
 
-	public static void tempDirConfig() throws Exception {
+	public static void tempDirConfig() throws IOException {
 		Properties prop = new Properties();
 		prop.load(ClassLoader.getSystemResourceAsStream("ckanalyze.properties"));
 		if (prop.getProperty("tmpdir") != null) {
@@ -156,13 +155,15 @@ public class AnalysisMain {
 		if (tempdir == null) {
 			prop = System.getProperties();
 			if (prop.getProperty("tmpdir") != null)
+			{
 				tempdir = prop.getProperty("tempdir");
-			if (tempdir == null) {
+			}
+			else {
 				logger.error("No temporary directory configured! Please configure it using the -D option and the tmpdir=dirname property or the ckanalyze.property file");
 				System.exit(1);
 			}
-			tempdir = tempdir + "/";
 		}
+		tempdir = tempdir + "/";
 		new File(tempdir).mkdirs();
 	}
 

@@ -19,7 +19,7 @@ public class Resource {
 	private String ckanId;
 	@ManyToOne
 	@JoinColumn(name="catalogId")
-	Catalog catalog;
+	private Catalog catalog;
 	@Column
 	private String fileName;
 	@Column

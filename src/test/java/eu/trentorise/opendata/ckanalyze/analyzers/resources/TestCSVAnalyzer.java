@@ -3,7 +3,6 @@ package eu.trentorise.opendata.ckanalyze.analyzers.resources;
 import static org.junit.Assert.*;
 
 import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
