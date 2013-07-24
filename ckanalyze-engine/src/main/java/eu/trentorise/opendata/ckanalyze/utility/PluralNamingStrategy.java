@@ -1,4 +1,4 @@
-package eu.trentorise.opendata.ckanalyze.services;
+package eu.trentorise.opendata.ckanalyze.utility;
 
 import org.hibernate.cfg.ImprovedNamingStrategy;
 

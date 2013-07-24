@@ -9,5 +9,6 @@
   <modules>
     <module>ckanalyze-engine</module>
     <module>ckanalyze-jpa</module>
+    <module>ckanalyze-web</module>
   </modules>
 </project>
