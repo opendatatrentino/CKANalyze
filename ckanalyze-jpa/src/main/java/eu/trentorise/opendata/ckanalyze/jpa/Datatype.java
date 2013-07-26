@@ -18,10 +18,13 @@
 package eu.trentorise.opendata.ckanalyze.jpa;
 
 
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 
 
@@ -32,7 +35,8 @@ public class Datatype {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int datatypeId;
 	private String name;
-
+	@OneToMany(mappedBy="datatype")
+	private Set<ResourceDatatypesCount> colsDataTypes;
 	public int getDatatypeId() {
 		return datatypeId;
 	}
@@ -48,5 +52,14 @@ public class Datatype {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public Set<ResourceDatatypesCount> getColsDataTypes() {
+		return colsDataTypes;
+	}
+
+	public void setColsDataTypes(Set<ResourceDatatypesCount> colsDataTypes) {
+		this.colsDataTypes = colsDataTypes;
+	}
+	
 
 }

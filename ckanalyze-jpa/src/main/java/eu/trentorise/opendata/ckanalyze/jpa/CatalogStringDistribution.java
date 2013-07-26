@@ -38,6 +38,10 @@ public class CatalogStringDistribution {
 	
 	
 	
+	public CatalogStringDistribution() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public CatalogStringDistribution(long length, long freq) {
 		super();
 		this.length = length;
