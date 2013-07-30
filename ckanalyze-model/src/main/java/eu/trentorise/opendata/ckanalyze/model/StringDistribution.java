@@ -34,9 +34,9 @@ public class StringDistribution implements Comparable<StringDistribution> {
 	public void setFrequence(Long frequence) {
 		this.frequence = frequence;
 	}
-	@Override
-	public int compareTo(StringDistribution o) {
-		return length.compareTo(o.getLength());
+	public int compareTo(StringDistribution arg0) {
+		return length.compareTo(arg0.getLength());
 	}
+	
 	
 }
