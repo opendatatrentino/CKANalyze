@@ -27,8 +27,19 @@ import eu.trentorise.opendata.ckanalyze.controller.CatalogueAnalysis;
 import eu.trentorise.opendata.ckanalyze.exceptions.WebAPIException;
 import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueStat;
 
+/**
+ * Expose statistics of a specific catalog
+ * @author a.zanella
+ * Last modified by azanella On 30/lug/2013
+ */
 @Path("/stats")
 public class CatalogService {
+	/**
+	 * 
+	 * @param catName the catalogue name
+	 * @return Object which contains statistics about the required catalogue
+	 * @throws WebAPIException if the catalogue name is invalid (is empty or does not exists)
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public CatalogueStat getCatalogStats(@QueryParam("catalogue") String catName)

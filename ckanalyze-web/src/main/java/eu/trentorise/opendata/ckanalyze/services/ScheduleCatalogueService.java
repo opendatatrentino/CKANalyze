@@ -27,7 +27,11 @@ import javax.ws.rs.core.MediaType;
 import eu.trentorise.opendata.ckanalyze.controller.CatalogueScheduler;
 import eu.trentorise.opendata.ckanalyze.exceptions.WebAPIException;
 import eu.trentorise.opendata.ckanalyze.model.configuration.ScheduleResponse;
-
+/**
+ * Service which let the user to add a catalogue
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ * Last modified by azanella On 30/lug/2013
+ */
 @Path("/schedule-catalogue")
 public class ScheduleCatalogueService {
 	@GET

@@ -24,17 +24,26 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import eu.trentorise.opendata.ckanalyze.exceptions.WebAPIException;
 import eu.trentorise.opendata.ckanalyze.model.Status;
 import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
 
+/**
+ * Serivice which exposes available catalogs into the DB
+ * @author a.zanella
+ *
+ */
 @Path("/is-available")
 public class AvailableCatalogsService {
+	/**
+	 * 
+	 * @param catName Catalogue name
+	 * @return Return a Status with the variable status True if statistics on catalog passed in parameter is available
+	 * 
+	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Status isAvailable(@QueryParam("catalogue")String catName) throws WebAPIException
+	public Status isAvailable(@QueryParam("catalogue")String catName)
 	{
-		if((catName == null)||(catName.isEmpty())) throw new WebAPIException("catalogue parameter not specified");
 		Status status = new Status(QueryBuilder.isScheduled(catName));
 		return status;
 		
