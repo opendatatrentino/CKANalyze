@@ -19,21 +19,25 @@ package eu.trentorise.opendata.ckanalyze.jpa;
 
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 @Entity
 public class Catalog {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private long catalogId;
 	@OneToMany(mappedBy="catalog")
+	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
 	private Set<Resource> catalogResources;
-	@OneToMany(mappedBy="catalog",cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="catalog")
+	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
 	private Set<CatalogStringDistribution> stringDistribution;
 	@Column
 	private double avgStringLength;

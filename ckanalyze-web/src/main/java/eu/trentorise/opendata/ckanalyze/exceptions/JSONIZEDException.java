@@ -16,30 +16,20 @@
 *******************************************************************************
 */
 
-package eu.trentorise.opendata.ckanalyze.model.catalog;
+package eu.trentorise.opendata.ckanalyze.exceptions;
 
-import com.sun.xml.txw2.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlElement
-public class DatatypeCount {
-	String typeName;
-	Double count;
-	public String getTypeName() {
-		return typeName;
+@XmlRootElement
+public class JSONIZEDException {
+	private String errorDescription;
+
+	public String getErrorDescription() {
+		return errorDescription;
 	}
-	public void setTypeName(String typeName) {
-		this.typeName = typeName;
-	}
-	public Double getCount() {
-		return count;
-	}
-	public void setCount(Double count) {
-		this.count = count;
-	}
-	public DatatypeCount(String typeName, Double count) {
-		super();
-		this.typeName = typeName;
-		this.count = count;
+
+	public void setErrorDescription(String errorDescription) {
+		this.errorDescription = errorDescription;
 	}
 	
 }

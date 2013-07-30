@@ -25,6 +25,8 @@ import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
+
 
 
 @XmlRootElement
@@ -41,9 +43,9 @@ public class CatalogueStat {
 	private long totalFileSizeCount;
 	private double avgColumnCount;
 	private double avgRowCount;
-	List<DatatypeCount> avgColsPerType;
+	private List<CatalogueDatatypeCount> avgColsPerType;
 	private double avgResourcesFileSize;
-	private List<CatalogueStringDistribution> stringLengthsDistribution;
+	private List<StringDistribution> stringLengthsDistribution;
 	
 	public String getCatalogueName() {
 		return catalogueName;
@@ -87,10 +89,13 @@ public class CatalogueStat {
 	public void setAvgRowCount(double avgRowCount) {
 		this.avgRowCount = avgRowCount;
 	}
-	public List<DatatypeCount> getAvgColsPerType() {
+	public List<CatalogueDatatypeCount> getAvgColsPerType() {
 		return avgColsPerType;
 	}
-	public void setAvgColsPerType(List<DatatypeCount> avgColsPerType) {
+	
+	@XmlElements({@XmlElement(name="datatype")})
+	@XmlElementWrapper
+	public void setAvgColsPerType(List<CatalogueDatatypeCount> avgColsPerType) {
 		this.avgColsPerType = avgColsPerType;
 	}
 	public double getAvgResourcesFileSize() {
@@ -102,11 +107,11 @@ public class CatalogueStat {
 	
 	@XmlElements({@XmlElement(name="distribution")})
 	@XmlElementWrapper
-	public List<CatalogueStringDistribution> getStringLengthsDistribution() {
+	public List<StringDistribution> getStringLengthsDistribution() {
 		return stringLengthsDistribution;
 	}
 	public void setStringLengthsDistribution(
-			List<CatalogueStringDistribution> stringLengthsDistrib) {
+			List<StringDistribution> stringLengthsDistrib) {
 		this.stringLengthsDistribution = stringLengthsDistrib;
 	}
 

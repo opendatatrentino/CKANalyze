@@ -19,6 +19,7 @@ package eu.trentorise.opendata.ckanalyze.analyzers;
 
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -31,15 +32,24 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 import eu.trentorise.opendata.ckanalyze.jpa.Catalog;
+import eu.trentorise.opendata.ckanalyze.jpa.Configuration;
 import eu.trentorise.opendata.ckanalyze.jpa.Resource;
 import eu.trentorise.opendata.ckanalyze.jpa.ResourceStringDistribution;
 import eu.trentorise.opendata.ckanalyze.main.AnalysisMain;
 import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
 
 public class TestCatalogAnalyzer {
+	
 	@Test
 	public void analyzeDataset() {
 		try {
+			if(!checkConfDatiTrentino())
+			{
+				Configuration conf = new Configuration();
+				conf.setCatalogHostName("http://dati.trentino.it");
+				conf.setLastUpdate(new Date());
+				PersistencyManager.addCatalogstoProcessList(conf);
+			}
 			StringWriter toCheck = new StringWriter();
 			WriterAppender appender = new WriterAppender(new PatternLayout(
 					"%d{ISO8601} %p - %m%n"), toCheck);
@@ -85,10 +95,19 @@ public class TestCatalogAnalyzer {
 			assertTrue(avgStringLength == c.getAvgStringLength());
 			ss.close();
 		} catch (Exception e) {
-			e.printStackTrace();
 			assertTrue(false);
-			
 		}		
 
+	}
+	
+	private static boolean checkConfDatiTrentino()
+	{
+		for (eu.trentorise.opendata.ckanalyze.jpa.Configuration conf : PersistencyManager.getConfigurations()) {
+			if(conf.getCatalogHostName().equals("http://dati.trentino.it"))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }

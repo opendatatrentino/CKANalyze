@@ -23,6 +23,7 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
@@ -78,6 +79,7 @@ public final class PersistencyManager {
 		configuration.addAnnotatedClass(Resource.class);
 		configuration.addAnnotatedClass(Datatype.class);
 		configuration.addAnnotatedClass(ResourceDatatypesCount.class);
+		configuration.addAnnotatedClass(eu.trentorise.opendata.ckanalyze.jpa.Configuration.class);
 		PluralNamingStrategy strategy = new PluralNamingStrategy();
 		configuration.setNamingStrategy(strategy);
 		configuration.configure();
@@ -112,6 +114,47 @@ public final class PersistencyManager {
 		ss.close();
 	}
 	
+	public static void deleteifExists(String url)
+	{
+		String hql = "FROM Catalog WHERE url = :name";
+		Session ss = PersistencyManager.getSessionFactory().openSession();
+		Query query = ss.createQuery(hql);
+		query.setParameter("name", url);
+		@SuppressWarnings("unchecked")
+		List<Catalog> results = (List<Catalog>) query.list();
+		if(!results.isEmpty())
+		{
+			Catalog cat = results.get(0);
+			ss.close();
+			ss = PersistencyManager.getSessionFactory().openSession();
+			Transaction t = ss.beginTransaction();
+			ss.delete(cat);
+			ss.flush();
+			t.commit();
+		}
+		ss.close();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<eu.trentorise.opendata.ckanalyze.jpa.Configuration> getConfigurations()
+	{
+		List<eu.trentorise.opendata.ckanalyze.jpa.Configuration> retval;
+		String hql = "FROM Configuration";
+		Session ss = PersistencyManager.getSessionFactory().openSession();
+		Query query = ss.createQuery(hql);
+		retval = query.list();
+		ss.close();
+		return retval;
+	}
+	
+	public static void addCatalogstoProcessList(eu.trentorise.opendata.ckanalyze.jpa.Configuration conf) {
+		Session ss = PersistencyManager.getSessionFactory().openSession();
+		ss.beginTransaction();
+		ss.saveOrUpdate(conf);
+		ss.getTransaction().commit();
+		ss.close();
+	}
+	
 	public static Datatype getDatatypeByName(String name) {
 		String hql = "FROM Datatype WHERE name = :name";
 		Session ss = PersistencyManager.getSessionFactory().openSession();
@@ -127,5 +170,5 @@ public final class PersistencyManager {
 			ss.close();
 			return retval;
 		}
-	}
+	}	
 }

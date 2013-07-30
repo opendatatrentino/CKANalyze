@@ -19,6 +19,7 @@ package eu.trentorise.opendata.ckanalyze.main;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -37,9 +38,9 @@ import eu.trentorise.opendata.ckanalyze.downloader.Downloader;
 import eu.trentorise.opendata.ckanalyze.exceptions.CKAnalyzeException;
 import eu.trentorise.opendata.ckanalyze.jpa.Catalog;
 import eu.trentorise.opendata.ckanalyze.jpa.CatalogStringDistribution;
+import eu.trentorise.opendata.ckanalyze.jpa.Configuration;
 import eu.trentorise.opendata.ckanalyze.jpa.ResourceDatatypesCount;
 import eu.trentorise.opendata.ckanalyze.jpa.ResourceStringDistribution;
-import eu.trentorise.opendata.ckanalyze.managers.ConfigurationManager;
 import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
 
 /**
@@ -71,6 +72,7 @@ public final class AnalysisMain {
 
 	public static void catalogAnalysis(String hostname, List<String> dss)
 			throws CKANException, CKAnalyzeException {
+		PersistencyManager.deleteifExists(hostname);
 		Catalog catSave = new Catalog();
 		catSave.setUrl(hostname);
 		Client c = getCkanClient(hostname);
@@ -187,9 +189,11 @@ public final class AnalysisMain {
 	public static void main(String args[]) {
 		try {
 			tempDirConfig();
-			for (String catHostname : ConfigurationManager.readCatalogsList()) {
-				catalogAnalysis(catHostname, getCkanClient(catHostname)
+			for (Configuration conf : PersistencyManager.getConfigurations()) {
+				catalogAnalysis(conf.getCatalogHostName(), getCkanClient(conf.getCatalogHostName())
 						.getDatasetList().result);
+				conf.setLastUpdate(new Date());
+				PersistencyManager.addCatalogstoProcessList(conf);
 			}
 		} catch (Exception e) {
 			logger.error("failed  ", e);

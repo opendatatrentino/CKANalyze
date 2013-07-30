@@ -16,29 +16,31 @@
 *******************************************************************************
 */
 
-package eu.trentorise.opendata.ckanalyze.model.catalog;
+package eu.trentorise.opendata.ckanalyze.model;
 
-import com.sun.xml.txw2.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlElement
-public class CatalogueStringDistribution implements Comparable<CatalogueStringDistribution> {
-	private Long length;
-	private Long frequence;
-	public Long getLength() {
-		return length;
+@XmlRootElement
+public class Status {
+	private Boolean status;
+
+	public Boolean getStatus() {
+		return status;
 	}
-	public void setLength(Long length) {
-		this.length = length;
+
+	public void setStatus(Boolean status) {
+		this.status = status;
 	}
-	public Long getFrequence() {
-		return frequence;
+
+	public Status(Boolean status) {
+		super();
+		this.status = status;
 	}
-	public void setFrequence(Long frequence) {
-		this.frequence = frequence;
+
+	public Status() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
-	@Override
-	public int compareTo(CatalogueStringDistribution o) {
-		return length.compareTo(o.getLength());
-	}
+
 	
 }

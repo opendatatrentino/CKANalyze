@@ -1,6 +1,6 @@
 /**
  * *****************************************************************************
- * Copyright 2012-2013 Trento Rise (www.trentorise.eu/) 
+ * Copyright 2012-2013 Trento Rise (www.trentorise.eu/)
  *
  * All rights reserved. This program and the accompanying materials are made
  * available under the terms of the GNU Lesser General Public License (LGPL)
@@ -15,31 +15,38 @@
  *
  *******************************************************************************
  */
+
 package eu.trentorise.opendata.ckanalyze.services;
 
-import javax.ws.rs.GET;
+import javax.ws.rs.GET; 
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import eu.trentorise.opendata.ckanalyze.controller.CatalogueAnalysis;
+import eu.trentorise.opendata.ckanalyze.controller.ResourceAnalysis;
 import eu.trentorise.opendata.ckanalyze.exceptions.WebAPIException;
-import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueStat;
+import eu.trentorise.opendata.ckanalyze.model.resources.ResourceStat;
 
-@Path("/stats")
-public class CatalogService {
+
+
+@Path("/resource-stats")
+public class ResourceService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public CatalogueStat getCatalogStats(@QueryParam("catalogue") String catName)
-			throws WebAPIException {
+	public ResourceStat getResourceStats(@QueryParam("catalogue")String catName, @QueryParam("idResource")String resid) throws WebAPIException
+	{
+		if((resid == null)||(resid.isEmpty())) throw new WebAPIException("resourceId parameter not specified");
 		if((catName == null)||(catName.isEmpty())) throw new WebAPIException("catalogue parameter not specified");
-		if (CatalogueAnalysis.isValidCatalogue(catName)) {
-			return CatalogueAnalysis.getCatalogueStats(catName);
-		} else {
-			throw new WebAPIException("Catalogue "+catName+" not found");
-
+		
+		ResourceAnalysis rsa = new ResourceAnalysis();
+		if(rsa.isValidResource(catName, resid))
+		{
+			return rsa.getResourceStats(resid);
+		}
+		else
+		{
+			throw new WebAPIException("Catalogue "+catName+" or resource id not found");
 		}
 	}
-
 }

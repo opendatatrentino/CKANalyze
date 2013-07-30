@@ -17,6 +17,8 @@
 */
 package eu.trentorise.opendata.ckanalyze.jpa;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,6 +31,8 @@ public class Configuration {
 	private int configurationId;
 	@Column
 	private String catalogHostName;
+	@Column
+	private Date lastUpdate;
 	public int getConfigurationId() {
 		return configurationId;
 	}
@@ -40,6 +44,12 @@ public class Configuration {
 	}
 	public void setCatalogHostName(String catalogHostName) {
 		this.catalogHostName = catalogHostName;
+	}
+	public Date getLastUpdate() {
+		return lastUpdate;
+	}
+	public void setLastUpdate(Date lastUpdate) {
+		this.lastUpdate = lastUpdate;
 	}
 	
 	

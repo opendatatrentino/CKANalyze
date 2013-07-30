@@ -25,10 +25,9 @@ import java.util.Set;
 
 import eu.trentorise.opendata.ckanalyze.jpa.Catalog;
 import eu.trentorise.opendata.ckanalyze.jpa.CatalogStringDistribution;
-import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
+import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueDatatypeCount;
 import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueStat;
-import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueStringDistribution;
-import eu.trentorise.opendata.ckanalyze.model.catalog.DatatypeCount;
+import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
 import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
 
 public class CatalogueAnalysis {
@@ -38,33 +37,32 @@ public class CatalogueAnalysis {
 	}
 	public static CatalogueStat getCatalogueStats(String name)
 	{
-		QueryBuilder query = new QueryBuilder(name);
 		Catalog jpaCat = QueryBuilder.getCatalogByName(name);
 		CatalogueStat retval = new CatalogueStat();
 		retval.setCatalogueName(jpaCat.getUrl());
 		retval.setAvgColumnCount(jpaCat.getAvgColumnCount());
 		retval.setAvgRowCount(jpaCat.getAvgRowCount());
 		retval.setAvgStringLength(jpaCat.getAvgStringLength());
-		retval.setAvgResourcesFileSize(query.getAvgFileSize());
+		retval.setAvgResourcesFileSize(QueryBuilder.getAvgFileSize(jpaCat));
 		retval.setTotalDatasetsCount(jpaCat.getTotalDatasetsCount());
 		retval.setTotalFileSizeCount(jpaCat.getTotalFileSizeCount());
 		retval.setTotalResourcesCount(jpaCat.getTotalResourcesCount());
 		retval.setStringLengthsDistribution(computeStringDistribution(jpaCat.getStringDistribution()));
-		retval.setAvgColsPerType(computeAvgColsPerType(query));
-		QueryBuilder.ss.close();
+		retval.setAvgColsPerType(computeAvgColsPerType(jpaCat));
+		QueryBuilder.closeSession();
 		return retval;
 	}
 	
-	private static List<DatatypeCount> computeAvgColsPerType(QueryBuilder query)
+	private static List<CatalogueDatatypeCount> computeAvgColsPerType(Catalog jpaCat)
 	{
-		return query.getAllColsAvgTypes();
+		return QueryBuilder.getAllColsAvgTypes(jpaCat);
 	}
 	
-	private static List<CatalogueStringDistribution> computeStringDistribution(Set<CatalogStringDistribution> jpaCsd)
+	private static List<StringDistribution> computeStringDistribution(Set<CatalogStringDistribution> jpaCsd)
 	{
-		List<CatalogueStringDistribution> distr = new ArrayList<>();
+		List<StringDistribution> distr = new ArrayList<>();
 		for (CatalogStringDistribution catalogStringDistribution : jpaCsd) {
-			CatalogueStringDistribution toAdd = new CatalogueStringDistribution();
+			StringDistribution toAdd = new StringDistribution();
 			toAdd.setFrequence(catalogStringDistribution.getFreq());
 			toAdd.setLength(catalogStringDistribution.getLength());
 			distr.add(toAdd);

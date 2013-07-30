@@ -27,6 +27,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 @Entity
 public class Resource {
 	@Id
@@ -53,8 +56,10 @@ public class Resource {
 	@Column
 	private double stringAvg;
 	@OneToMany(mappedBy="resource")
+	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
 	private Set<ResourceDatatypesCount> colsDataTypes;
 	@OneToMany(mappedBy="resource")
+	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
 	private Set<ResourceStringDistribution> stringDistribution;
 	
 	
