@@ -155,6 +155,21 @@ public final class PersistencyManager {
 		ss.close();
 	}
 	
+	public static void updateCatalog(String catalogName, boolean status)
+	{
+		String hql = "FROM Configuration WHERE catalogHostName = :name";
+		Session ss = PersistencyManager.getSessionFactory().openSession();
+		Query query = ss.createQuery(hql);
+		query.setParameter("name", catalogName);
+		eu.trentorise.opendata.ckanalyze.jpa.Configuration conf = (eu.trentorise.opendata.ckanalyze.jpa.Configuration)query.list().get(0);
+		conf.setUpdating(status);
+		ss.beginTransaction();
+		ss.update(conf);
+		ss.getTransaction().commit();
+		ss.close();
+		
+	}
+	
 	public static Datatype getDatatypeByName(String name) {
 		String hql = "FROM Datatype WHERE name = :name";
 		Session ss = PersistencyManager.getSessionFactory().openSession();

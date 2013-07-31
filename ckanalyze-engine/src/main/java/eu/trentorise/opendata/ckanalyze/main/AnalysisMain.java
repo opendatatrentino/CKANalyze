@@ -72,6 +72,7 @@ public final class AnalysisMain {
 
 	public static void catalogAnalysis(String hostname, List<String> dss)
 			throws CKANException, CKAnalyzeException {
+		PersistencyManager.updateCatalog(hostname, true);
 		PersistencyManager.deleteifExists(hostname);
 		Catalog catSave = new Catalog();
 		catSave.setUrl(hostname);
@@ -108,6 +109,7 @@ public final class AnalysisMain {
 			csd.setCatalog(catSave);
 			PersistencyManager.insert(csd);
 		}
+		PersistencyManager.updateCatalog(hostname, false);
 	}
 
 	private static void resourceAnalysis(Resource r, Catalog catSave) {

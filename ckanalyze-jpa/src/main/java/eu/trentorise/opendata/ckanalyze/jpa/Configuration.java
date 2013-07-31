@@ -37,6 +37,15 @@ public class Configuration {
 	private String catalogHostName;
 	@Column
 	private Date lastUpdate;
+	@Column
+	private boolean updating = false;
+	
+	public boolean isUpdating() {
+		return updating;
+	}
+	public void setUpdating(boolean updating) {
+		this.updating = updating;
+	}
 	public int getConfigurationId() {
 		return configurationId;
 	}

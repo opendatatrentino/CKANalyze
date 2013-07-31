@@ -87,7 +87,6 @@ public final class QueryBuilder {
 	}
 
 	public static Set<Datatype> getAllDataTypes(Catalog catalog) {
-		Set<Datatype> retval = new HashSet<Datatype>();
 		String hql = "SELECT distinct d FROM Datatype d JOIN d.colsDataTypes dt JOIN dt.resource r WHERE dt.freq > 0 AND r.catalog = :cat";
 		org.hibernate.Query q = openSession().createQuery(hql);
 		q.setParameter("cat", catalog);
@@ -136,5 +135,21 @@ public final class QueryBuilder {
 		ss.close();
 	}
 	
+	public static boolean isUpdating(String catalogName)
+	{
+		String hql = "FROM Configuration WHERE catalogHostName = :name";
+		ss = PersistencyManager.getSessionFactory().openSession();
+		Query query = ss.createQuery(hql);
+		query.setParameter("name", catalogName);
+		@SuppressWarnings("rawtypes")
+		List result = query.list();
+		if(result.isEmpty())
+		{
+			return false;
+		}
+		eu.trentorise.opendata.ckanalyze.jpa.Configuration conf = (eu.trentorise.opendata.ckanalyze.jpa.Configuration) result.get(0);
+		closeSession();
+		return conf.isUpdating();
+	}
 
 }

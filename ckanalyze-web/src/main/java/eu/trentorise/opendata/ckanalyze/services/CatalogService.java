@@ -26,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 import eu.trentorise.opendata.ckanalyze.controller.CatalogueAnalysis;
 import eu.trentorise.opendata.ckanalyze.exceptions.WebAPIException;
 import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueStat;
+import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
 
 /**
  * Expose statistics of a specific catalog
@@ -50,6 +51,10 @@ public class CatalogService {
 			throws WebAPIException {
 		if ((catName == null) || (catName.isEmpty())) {
 			throw new WebAPIException("catalogue parameter not specified");
+		}
+		if(QueryBuilder.isUpdating(catName))
+		{
+			throw new WebAPIException("Catalogue " + catName + " is not available at the moment for updating process");
 		}
 		if (CatalogueAnalysis.isValidCatalogue(catName)) {
 			return CatalogueAnalysis.getCatalogueStats(catName);

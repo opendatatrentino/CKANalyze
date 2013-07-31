@@ -28,8 +28,6 @@
     <module>ckanalyze-engine</module>
     <module>ckanalyze-jpa</module>
     <module>ckanalyze-web</module>
-    
-    
     <module>ckanalyze-model</module>
     <module>ckanalyze-client</module>
   </modules>
