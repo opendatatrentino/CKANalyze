@@ -23,7 +23,7 @@ log4j.rootLogger=INFO, FILE_ERROR, FILE_DEBUG
 # Type of appender
 log4j.appender.FILE_ERROR=org.apache.log4j.RollingFileAppender
 # File where to save all messages
-log4j.appender.FILE_ERROR.File=C:/Users/a.zanella/test/error.txt
+log4j.appender.FILE_ERROR.File=path/of/file
 # Max file size, after that will be created new log file, and old file will be renamed
 log4j.appender.FILE_ERROR.MaxFileSize=100MB
 # Maximum amount of old log files.
@@ -37,7 +37,7 @@ log4j.appender.FILE_ERROR.Threshold=ERROR
 
 # FILE_WARN file appender
 log4j.appender.FILE_DEBUG=org.apache.log4j.RollingFileAppender
-log4j.appender.FILE_DEBUG.File=C:/Users/a.zanella/test/debug.txt
+log4j.appender.FILE_DEBUG.File=path/of/file
 log4j.appender.FILE_DEBUG.MaxFileSize=100MB
 log4j.appender.FILE_DEBUG.MaxBackupIndex=10
 log4j.appender.FILE_DEBUG.layout=org.apache.log4j.PatternLayout

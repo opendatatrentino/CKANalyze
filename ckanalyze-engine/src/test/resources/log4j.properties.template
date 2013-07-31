@@ -1,0 +1,46 @@
+#* *****************************************************************************
+#* Copyright 2012-2013 Trento Rise (www.trentorise.eu/)
+#*
+#* All rights reserved. This program and the accompanying materials are made
+#* available under the terms of the GNU Lesser General Public License (LGPL)
+#* version 2.1 which accompanies this distribution, and is available at
+#*
+#* http://www.gnu.org/licenses/lgpl-2.1.html
+#*
+#* This library is distributed in the hope that it will be useful, but WITHOUT
+#* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#* FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+#* details.
+#*
+
+
+log4j.rootLogger=INFO, FILE_ERROR, FILE_DEBUG
+
+
+######## APPENDERS:
+
+# FILE_INFO
+# Type of appender
+log4j.appender.FILE_ERROR=org.apache.log4j.RollingFileAppender
+# File where to save all messages
+log4j.appender.FILE_ERROR.File=path/of/file
+# Max file size, after that will be created new log file, and old file will be renamed
+log4j.appender.FILE_ERROR.MaxFileSize=100MB
+# Maximum amount of old log files.
+log4j.appender.FILE_ERROR.MaxBackupIndex=100
+# Patter of messages.
+log4j.appender.FILE_ERROR.layout=org.apache.log4j.PatternLayout
+log4j.appender.FILE_ERROR.layout.ConversionPattern=%d{ISO8601}  - %m%n
+#log4j.appender.FILE_ERROR.layout.ConversionPattern=%d{ISO8601} [%-5p][%-24.24t][%32.32c] - %m%n
+# Custom level for appender. In this file will be add only messages with level INFO or highter
+log4j.appender.FILE_ERROR.Threshold=ERROR
+
+# FILE_WARN file appender
+log4j.appender.FILE_DEBUG=org.apache.log4j.RollingFileAppender
+log4j.appender.FILE_DEBUG.File=path/of/file
+log4j.appender.FILE_DEBUG.MaxFileSize=100MB
+log4j.appender.FILE_DEBUG.MaxBackupIndex=10
+log4j.appender.FILE_DEBUG.layout=org.apache.log4j.PatternLayout
+log4j.appender.FILE_DEBUG.layout.ConversionPattern=%d{ISO8601}  - %m%n
+# Custom level for appender. In this file will be add only messages with level WARN or highter
+log4j.appender.FILE_DEBUG.Threshold=INFO
