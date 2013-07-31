@@ -1,0 +1,4 @@
+.settings
+*.properties
+hibernate.cfg.xml
+target
