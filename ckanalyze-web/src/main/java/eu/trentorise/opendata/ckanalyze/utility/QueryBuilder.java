@@ -32,10 +32,20 @@ import eu.trentorise.opendata.ckanalyze.jpa.Resource;
 import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
 import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueDatatypeCount;
 
-public class QueryBuilder {
+/**
+ * This is a centralized class which contains all queries to the DB.
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ * Last modified by azanella On 31/lug/2013
+ */
+public final class QueryBuilder {
+	
+	
+	private QueryBuilder() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	private static Session ss;
-
 	public static void closeSession() {
 		if (ss == null) {
 			ss = PersistencyManager.getSessionFactory().openSession();

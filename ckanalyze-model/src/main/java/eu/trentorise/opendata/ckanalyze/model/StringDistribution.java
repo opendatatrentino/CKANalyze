@@ -18,7 +18,11 @@
 
 package eu.trentorise.opendata.ckanalyze.model;
 
-
+/**
+ * Class representing a single string distribution item with string length and frequence 
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ *
+ */
 public class StringDistribution implements Comparable<StringDistribution> {
 	private Long length;
 	private Long frequence;
@@ -34,6 +38,10 @@ public class StringDistribution implements Comparable<StringDistribution> {
 	public void setFrequence(Long frequence) {
 		this.frequence = frequence;
 	}
+	
+	/**
+	 * The compareTo is based on length to quick sort objects
+	 */
 	public int compareTo(StringDistribution arg0) {
 		return length.compareTo(arg0.getLength());
 	}

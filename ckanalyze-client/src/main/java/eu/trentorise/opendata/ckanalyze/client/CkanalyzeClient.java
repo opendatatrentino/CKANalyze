@@ -32,17 +32,32 @@ import eu.trentorise.opendata.ckanalyze.model.Status;
 import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueStat;
 import eu.trentorise.opendata.ckanalyze.model.configuration.ScheduleResponse;
 import eu.trentorise.opendata.ckanalyze.model.resources.ResourceStat;
-
+/**
+ * Client main class
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ *Last modified by azanella On 31/lug/2013
+ */
 public class CkanalyzeClient {
 	private String basePath;
 	private Client client;
 
+	/**
+	 * 
+	 * @param basePath -- the baseURL (domain) i.e. http://localhost:8080/ckanalyze-web
+	 */
 	public CkanalyzeClient(String basePath) {
 		super();
 		this.basePath = basePath + "/rest".replaceAll("//", "/");
 		this.client = Client.create();
 	}
 
+	/**
+	 * Provide catalogue statistics
+	 * @param catalogueName -- name of the catalogue (URL)
+	 * @return object containing catalogue statistics or null if exceptions are throws
+	 * @throws CkanalyzeClientLocalException
+	 * @throws CkanalyzeClientRemoteException
+	 */
 	public CatalogueStat getCatalogueStat(String catalogueName)
 			throws CkanalyzeClientLocalException, CkanalyzeClientRemoteException {
 		CatalogueStat retval = null;
@@ -67,6 +82,14 @@ public class CkanalyzeClient {
 		return retval;
 	}
 
+	/**
+	 * Provide resource statistics
+	 * @param catalogueName -- name of the catalogue (URL)
+	 * @param resourceId -- CKAN-Id of the required resource
+	 * @return an object containing Resource statistics or null if exceptions are throws
+	 * @throws CkanalyzeClientLocalException
+	 * @throws CkanalyzeClientRemoteException
+	 */
 	public ResourceStat getResourceStat(String catalogueName, String resourceId)
 			throws CkanalyzeClientLocalException, CkanalyzeClientRemoteException {
 		ResourceStat retval = null;
@@ -96,6 +119,11 @@ public class CkanalyzeClient {
 		return retval;
 	}
 	
+	/**
+	 * Provide information about scheduled catalogues
+	 * @param catalogueName -- catalogue name (URL)
+	 * @return true if the specified catalogue is already scheduled, false otherwise.
+	 */
 	public boolean isScheduledCatalogue(String catalogueName)
 	{
 		Status retval;
@@ -121,6 +149,11 @@ public class CkanalyzeClient {
 		}
 	}
 	
+	/**
+	 * Schedule a new catalogue
+	 * @param catalogueName
+	 * @return
+	 */
 	public ScheduleResponse scheduleCatalog(String catalogueName)
 	{
 		ScheduleResponse retval = null;

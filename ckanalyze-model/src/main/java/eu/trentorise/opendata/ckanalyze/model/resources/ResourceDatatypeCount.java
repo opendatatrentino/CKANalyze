@@ -18,7 +18,11 @@
 
 package eu.trentorise.opendata.ckanalyze.model.resources;
 
-
+/**
+ * Represents a touple of typeName and frequency of the given Datatype 
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ *
+ */
 public class ResourceDatatypeCount {
 	private String typeName;
 	private Integer count;

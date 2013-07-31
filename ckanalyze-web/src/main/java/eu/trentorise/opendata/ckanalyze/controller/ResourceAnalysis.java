@@ -30,7 +30,11 @@ import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
 import eu.trentorise.opendata.ckanalyze.model.resources.ResourceDatatypeCount;
 import eu.trentorise.opendata.ckanalyze.model.resources.ResourceStat;
 import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
-
+/**
+ * Offer analysis of dataset resouces
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ *Last modified by azanella On 31/lug/2013
+ */
 public class ResourceAnalysis {
 	private Catalog refCatalog;
 	public boolean isValidResource(String catalogname, String resourceId)

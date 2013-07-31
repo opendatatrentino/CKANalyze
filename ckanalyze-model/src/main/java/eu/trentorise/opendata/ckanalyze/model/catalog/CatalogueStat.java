@@ -34,8 +34,8 @@ import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
 
 @XmlRootElement
 /**
- * 
- * @author a.zanella
+ * This class contains all statistics of a catalogue 
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
  *Last modified by azanella On 25/lug/2013
  */
 public class CatalogueStat {
@@ -102,6 +102,10 @@ public class CatalogueStat {
 		this.avgColsPerType = avgColsPerType;
 	}
 	
+	/**
+	 * This methods returns the same content of getAvgColsPerType but organized in a map instead of an array of tuples. 
+	 * @return a map with TypeName Strings as keys and AVG of frequency  as values
+	 */
 	@XmlTransient
 	public Map<String, Double> getAvgColsPerTypeMap()
 	{

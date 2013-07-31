@@ -37,7 +37,11 @@ import eu.trentorise.opendata.ckanalyze.jpa.Resource;
 import eu.trentorise.opendata.ckanalyze.jpa.ResourceStringDistribution;
 import eu.trentorise.opendata.ckanalyze.main.AnalysisMain;
 import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
-
+/**
+ * Tests of catalogue analysis functionalities
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ *
+ */
 public class TestCatalogAnalyzer {
 	
 	@Test

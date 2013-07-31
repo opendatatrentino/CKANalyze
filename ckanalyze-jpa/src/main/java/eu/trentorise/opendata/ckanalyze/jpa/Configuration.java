@@ -23,7 +23,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-
+/**
+ * 
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ *
+ */
 @Entity
 public class Configuration {
 	@Id

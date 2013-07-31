@@ -28,8 +28,8 @@ import eu.trentorise.opendata.ckanalyze.model.Status;
 import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
 
 /**
- * Serivice which exposes available catalogs into the DB
- * @author a.zanella
+ * Service which exposes available catalogs into the DB
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
  *
  */
 @Path("/is-available")

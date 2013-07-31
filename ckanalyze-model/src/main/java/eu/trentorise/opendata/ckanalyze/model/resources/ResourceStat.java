@@ -30,7 +30,11 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
 
-
+/**
+ * Object containing resources statistics 
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ *
+ */
 @XmlRootElement
 public class ResourceStat {
 	   private String resourceId; // ID?
@@ -96,7 +100,10 @@ public class ResourceStat {
 	public void setColsPerType(List<ResourceDatatypeCount> colsPerType) {
 		this.colsPerType = colsPerType;
 	}
-	
+	/**
+	 * This methods returns the same content of getAvgColsPerType but organized in a map instead of an array of tuples. 
+	 * @return a map with TypeName Strings as keys and frequency as values
+	 */
 	@XmlTransient
 	public Map<String, Integer> getColsPerTypeMap()
 	{

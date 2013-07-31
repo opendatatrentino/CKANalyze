@@ -23,6 +23,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+/**
+ * 
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ *
+ */
 @Entity
 public class ResourceStringDistribution {
 	@Id

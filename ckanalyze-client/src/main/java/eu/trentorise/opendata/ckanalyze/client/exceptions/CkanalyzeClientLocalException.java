@@ -18,6 +18,11 @@
 
 package eu.trentorise.opendata.ckanalyze.client.exceptions;
 
+/**
+ * Represent an exception occurred locally (into the library)
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ *Last modified by azanella On 31/lug/2013
+ */
 public class CkanalyzeClientLocalException extends RuntimeException {
 
 	/**

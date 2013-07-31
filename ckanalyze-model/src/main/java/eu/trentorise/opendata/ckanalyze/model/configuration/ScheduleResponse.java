@@ -21,7 +21,11 @@ package eu.trentorise.opendata.ckanalyze.model.configuration;
 import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
-
+/**
+ * This class represents a schedule response. 
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ *
+ */
 @XmlRootElement
 public class ScheduleResponse {
 	private Boolean alreadyScheduled;
@@ -32,6 +36,10 @@ public class ScheduleResponse {
 	public void setAlreadyScheduled(Boolean alreadyScheduled) {
 		this.alreadyScheduled = alreadyScheduled;
 	}
+	/**
+	 * 
+	 * @return the last time the dataset was processed (if it is scheduled
+	 */
 	public Date getLastProcessed() {
 		return lastProcessed;
 	}

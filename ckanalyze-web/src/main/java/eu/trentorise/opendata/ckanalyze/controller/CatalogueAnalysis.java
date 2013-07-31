@@ -30,6 +30,11 @@ import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueStat;
 import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
 import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
 
+/**
+ * Perform analysis of specified catalog.
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ * Last modified by azanella On 31/lug/2013
+ */
 public class CatalogueAnalysis {
 	public static boolean isValidCatalogue(String name)
 	{

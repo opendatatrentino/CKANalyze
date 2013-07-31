@@ -26,6 +26,11 @@ import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+/**
+ * 
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ *
+ */
 @Entity
 public class ResourceDatatypesCount {
 	@Id

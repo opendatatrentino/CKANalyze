@@ -27,7 +27,11 @@ import com.sun.jersey.api.client.ClientResponse.Status;
 
 import eu.trentorise.opendata.ckanalyze.exceptions.WebAPIException;
 import eu.trentorise.opendata.ckanalyze.model.JSONIZEDException;
-
+/**
+ * Mapper to expose most importants services exception.
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ *Last modified by azanella On 31/lug/2013
+ */
 @Provider
 public class WebAPIExceptionMapper implements ExceptionMapper<WebAPIException> {
     	

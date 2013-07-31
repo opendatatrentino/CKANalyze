@@ -23,7 +23,11 @@ import java.util.List;
 import eu.trentorise.opendata.ckanalyze.jpa.Configuration;
 import eu.trentorise.opendata.ckanalyze.model.configuration.ScheduleResponse;
 import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
-
+/**
+ * Add a catalog to the list of ones to be analyzed
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ *Last modified by azanella On 31/lug/2013
+ */
 public class CatalogueScheduler {
 	public static ScheduleResponse scheduleCatalog(String catalogueName)
 	{

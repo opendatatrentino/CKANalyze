@@ -28,6 +28,11 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+/**
+ * 
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ *
+ */
 @Entity
 public class Catalog {
 	@Id

@@ -18,10 +18,13 @@
 
 package eu.trentorise.opendata.ckanalyze.exceptions;
 
+/**
+ * 
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ *Last modified by azanella On 31/lug/2013
+ */
 public class WebAPIException extends Exception {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	@Override

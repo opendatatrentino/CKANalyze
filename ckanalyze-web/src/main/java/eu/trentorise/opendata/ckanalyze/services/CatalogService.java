@@ -29,7 +29,7 @@ import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueStat;
 
 /**
  * Expose statistics of a specific catalog
- * @author a.zanella
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
  * Last modified by azanella On 30/lug/2013
  */
 @Path("/stats")

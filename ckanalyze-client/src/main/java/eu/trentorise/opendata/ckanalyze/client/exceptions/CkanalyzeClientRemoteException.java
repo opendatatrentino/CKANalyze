@@ -17,7 +17,11 @@
 */
 
 package eu.trentorise.opendata.ckanalyze.client.exceptions;
-
+/**
+ * Represens an exception occurred remotely (reported from the Web API)
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ *Last modified by azanella On 31/lug/2013
+ */
 public class CkanalyzeClientRemoteException extends RuntimeException {
 
 	/**

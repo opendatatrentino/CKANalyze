@@ -18,7 +18,11 @@
 
 package eu.trentorise.opendata.ckanalyze.model.catalog;
 
-
+/**
+ * This object represents a touple with datatype name and count of datatype occurrence 
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ *
+ */
 public class CatalogueDatatypeCount {
 	private String typeName;
 	private Double count;
