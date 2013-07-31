@@ -29,26 +29,32 @@ import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueStat;
 
 /**
  * Expose statistics of a specific catalog
- * @author Alberto Zanella <a.zanella@trentorise.eu>
- * Last modified by azanella On 30/lug/2013
+ * 
+ * @author Alberto Zanella <a.zanella@trentorise.eu> Last modified by azanella
+ *         On 30/lug/2013
  */
 @Path("/stats")
 public class CatalogService {
 	/**
 	 * 
-	 * @param catName the catalogue name
+	 * @param catName
+	 *            the catalogue name
 	 * @return Object which contains statistics about the required catalogue
-	 * @throws WebAPIException if the catalogue name is invalid (is empty or does not exists)
+	 * @throws WebAPIException
+	 *             if the catalogue name is invalid (is empty or does not
+	 *             exists)
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public CatalogueStat getCatalogStats(@QueryParam("catalogue") String catName)
 			throws WebAPIException {
-		if((catName == null)||(catName.isEmpty())) throw new WebAPIException("catalogue parameter not specified");
+		if ((catName == null) || (catName.isEmpty())) {
+			throw new WebAPIException("catalogue parameter not specified");
+		}
 		if (CatalogueAnalysis.isValidCatalogue(catName)) {
 			return CatalogueAnalysis.getCatalogueStats(catName);
 		} else {
-			throw new WebAPIException("Catalogue "+catName+" not found");
+			throw new WebAPIException("Catalogue " + catName + " not found");
 
 		}
 	}

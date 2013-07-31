@@ -18,7 +18,7 @@
 
 package eu.trentorise.opendata.ckanalyze.services;
 
-import javax.ws.rs.GET; 
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -28,36 +28,43 @@ import eu.trentorise.opendata.ckanalyze.controller.ResourceAnalysis;
 import eu.trentorise.opendata.ckanalyze.exceptions.WebAPIException;
 import eu.trentorise.opendata.ckanalyze.model.resources.ResourceStat;
 
-
 /**
  * Serivice which exposes resource statistics
- * @author Alberto Zanella <a.zanella@trentorise.eu>
- * Last modified by azanella On 30/lug/2013
+ * 
+ * @author Alberto Zanella <a.zanella@trentorise.eu> Last modified by azanella
+ *         On 30/lug/2013
  */
 @Path("/resource-stats")
 public class ResourceService {
 	/**
 	 * 
-	 * @param catName name of the catalogue
-	 * @param resid id of the required resource
+	 * @param catName
+	 *            name of the catalogue
+	 * @param resid
+	 *            id of the required resource
 	 * @return statistics about the required resource
-	 * @throws WebAPIException if the resourceId or the catalogue paameter are missing or if they are invalid
+	 * @throws WebAPIException
+	 *             if the resourceId or the catalogue paameter are missing or if
+	 *             they are invalid
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResourceStat getResourceStats(@QueryParam("catalogue")String catName, @QueryParam("idResource")String resid) throws WebAPIException
-	{
-		if((resid == null)||(resid.isEmpty())) throw new WebAPIException("idResource parameter not specified");
-		if((catName == null)||(catName.isEmpty())) throw new WebAPIException("catalogue parameter not specified");
-		
-		ResourceAnalysis rsa = new ResourceAnalysis();
-		if(rsa.isValidResource(catName, resid))
-		{
-			return rsa.getResourceStats(resid);
+	public ResourceStat getResourceStats(
+			@QueryParam("catalogue") String catName,
+			@QueryParam("idResource") String resid) throws WebAPIException {
+		if ((resid == null) || (resid.isEmpty())) {
+			throw new WebAPIException("idResource parameter not specified");
 		}
-		else
-		{
-			throw new WebAPIException("Catalogue "+catName+" or resource id not found");
+		if ((catName == null) || (catName.isEmpty())) {
+			throw new WebAPIException("catalogue parameter not specified");
+		}
+
+		ResourceAnalysis rsa = new ResourceAnalysis();
+		if (rsa.isValidResource(catName, resid)) {
+			return rsa.getResourceStats(resid);
+		} else {
+			throw new WebAPIException("Catalogue " + catName
+					+ " or resource id not found");
 		}
 	}
 }

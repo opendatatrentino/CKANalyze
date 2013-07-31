@@ -37,6 +37,7 @@ import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueDatatypeCount;
  * @author Alberto Zanella <a.zanella@trentorise.eu>
  * Last modified by azanella On 31/lug/2013
  */
+@SuppressWarnings("unchecked")
 public final class QueryBuilder {
 	
 	
@@ -61,31 +62,28 @@ public final class QueryBuilder {
 	}
 
 	public static Resource getResourceByCkanId(String resckanid, Catalog cat) {
-		Resource retval = null;
+		
 		Query q = openSession()
 				.createQuery(
 						"SELECT r FROM Resource r JOIN r.catalog c WHERE r.ckanId = :ckanid AND r.catalog = :catalog");
 		q.setParameter("catalog", cat);
 		q.setParameter("ckanid", resckanid);
-		@SuppressWarnings("unchecked")
 		List<Resource> toCheck = q.list();
 		if (!toCheck.isEmpty()) {
-			retval = toCheck.get(0);
+			return toCheck.get(0);
 		}
-		return retval;
+		return null;
 	}
 
 	public static Catalog getCatalogByName(String name) {
-		Catalog retval = null;
 		Query q = openSession().createQuery(
 				"FROM Catalog c WHERE c.url = :name");
 		q.setParameter("name", name);
-		@SuppressWarnings("unchecked")
 		List<Catalog> toCheck = q.list();
 		if (!toCheck.isEmpty()) {
-			retval = toCheck.get(0);
+			return toCheck.get(0);
 		}
-		return retval;
+		return null;
 	}
 
 	public static Set<Datatype> getAllDataTypes(Catalog catalog) {
@@ -93,13 +91,12 @@ public final class QueryBuilder {
 		String hql = "SELECT distinct d FROM Datatype d JOIN d.colsDataTypes dt JOIN dt.resource r WHERE dt.freq > 0 AND r.catalog = :cat";
 		org.hibernate.Query q = openSession().createQuery(hql);
 		q.setParameter("cat", catalog);
-		@SuppressWarnings("unchecked")
 		List<Datatype> result = q.list();
 		retval.addAll(result);
 		return retval;
 	}
 
-	@SuppressWarnings("unchecked")
+
 	public static List<CatalogueDatatypeCount> getAllColsAvgTypes(
 			Catalog catalog) {
 		String hql = "SELECT new eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueDatatypeCount(d.name, avg(dtc.freq)) FROM ResourceDatatypesCount dtc JOIN dtc.resource r JOIN dtc.datatype d WHERE r.catalog = :cat GROUP BY d.name";
@@ -113,7 +110,6 @@ public final class QueryBuilder {
 		String hql = "SELECT avg(fileSize) from Resource r WHERE catalog = :cat";
 		org.hibernate.Query q = openSession().createQuery(hql);
 		q.setParameter("cat", catalog);
-		@SuppressWarnings("unchecked")
 		List<Double> retval = q.list();
 		if (!retval.isEmpty()) {
 			return retval.get(0);
@@ -121,7 +117,7 @@ public final class QueryBuilder {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
+
 	public static List<Configuration> getScheduledCatalog(String catalogName) {
 		List<Configuration> retval;
 		String hql = "FROM Configuration WHERE catalogHostName = :cname";

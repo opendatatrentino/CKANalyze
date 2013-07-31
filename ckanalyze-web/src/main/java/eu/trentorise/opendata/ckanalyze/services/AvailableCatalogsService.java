@@ -44,8 +44,7 @@ public class AvailableCatalogsService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Status isAvailable(@QueryParam("catalogue")String catName)
 	{
-		Status status = new Status(QueryBuilder.isScheduled(catName));
-		return status;
+		return new Status(QueryBuilder.isScheduled(catName));
 		
 	}
 }

@@ -28,7 +28,14 @@ import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
  * @author Alberto Zanella <a.zanella@trentorise.eu>
  *Last modified by azanella On 31/lug/2013
  */
-public class CatalogueScheduler {
+public final class CatalogueScheduler {
+	
+	
+	private CatalogueScheduler() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	public static ScheduleResponse scheduleCatalog(String catalogueName)
 	{
 		ScheduleResponse retval = new ScheduleResponse();

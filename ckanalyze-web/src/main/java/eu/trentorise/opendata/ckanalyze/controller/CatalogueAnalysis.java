@@ -35,7 +35,13 @@ import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
  * @author Alberto Zanella <a.zanella@trentorise.eu>
  * Last modified by azanella On 31/lug/2013
  */
-public class CatalogueAnalysis {
+public final class CatalogueAnalysis {
+	
+	
+	private CatalogueAnalysis() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 	public static boolean isValidCatalogue(String name)
 	{
 		return QueryBuilder.getCatalogByName(name) != null;

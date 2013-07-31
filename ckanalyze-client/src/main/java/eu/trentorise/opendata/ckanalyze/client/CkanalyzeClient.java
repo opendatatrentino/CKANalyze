@@ -40,7 +40,9 @@ import eu.trentorise.opendata.ckanalyze.model.resources.ResourceStat;
 public class CkanalyzeClient {
 	private String basePath;
 	private Client client;
-
+	private final String JSON = "application/json";
+	private final String UTF8 = "UTF-8";
+	private final int REQUEST_OK = 200;
 	/**
 	 * 
 	 * @param basePath -- the baseURL (domain) i.e. http://localhost:8080/ckanalyze-web
@@ -55,22 +57,22 @@ public class CkanalyzeClient {
 	 * Provide catalogue statistics
 	 * @param catalogueName -- name of the catalogue (URL)
 	 * @return object containing catalogue statistics or null if exceptions are throws
-	 * @throws CkanalyzeClientLocalException
-	 * @throws CkanalyzeClientRemoteException
+	 * 
+	 * 
 	 */
 	public CatalogueStat getCatalogueStat(String catalogueName)
-			throws CkanalyzeClientLocalException, CkanalyzeClientRemoteException {
+	{
 		CatalogueStat retval = null;
 		try {
 			if (catalogueName.isEmpty()) {
 				emptyCatalogue();
 			}
-			String par = URLEncoder.encode(catalogueName, "UTF-8");
+			String par = URLEncoder.encode(catalogueName, UTF8);
 			String url = basePath + "/stats?catalogue=" + par;
 			WebResource resource = client.resource(url);
-			ClientResponse response = resource.accept("application/json").get(
+			ClientResponse response = resource.accept(JSON).get(
 					ClientResponse.class);
-			if (response.getStatus() != 200) {
+			if (response.getStatus() != REQUEST_OK) {
 				throw new CkanalyzeClientRemoteException(response.getEntity(
 						JSONIZEDException.class).getErrorDescription());
 			} else {
@@ -87,11 +89,11 @@ public class CkanalyzeClient {
 	 * @param catalogueName -- name of the catalogue (URL)
 	 * @param resourceId -- CKAN-Id of the required resource
 	 * @return an object containing Resource statistics or null if exceptions are throws
-	 * @throws CkanalyzeClientLocalException
-	 * @throws CkanalyzeClientRemoteException
+	 * 
+	 * 
 	 */
 	public ResourceStat getResourceStat(String catalogueName, String resourceId)
-			throws CkanalyzeClientLocalException, CkanalyzeClientRemoteException {
+	{
 		ResourceStat retval = null;
 		try {
 			if (catalogueName.isEmpty()) {
@@ -100,14 +102,14 @@ public class CkanalyzeClient {
 			if (resourceId.isEmpty()) {
 				emptyResource();
 			}
-			String catEsc = URLEncoder.encode(catalogueName, "UTF-8");
-			String residEsc = URLEncoder.encode(resourceId, "UTF-8");
+			String catEsc = URLEncoder.encode(catalogueName, UTF8);
+			String residEsc = URLEncoder.encode(resourceId, UTF8);
 			String url = basePath + "/resource-stats?catalogue=" + catEsc
 					+ "&idResource=" + residEsc;
 			WebResource resource = client.resource(url);
-			ClientResponse response = resource.accept("application/json").get(
+			ClientResponse response = resource.accept(JSON).get(
 					ClientResponse.class);
-			if (response.getStatus() != 200) {
+			if (response.getStatus() != REQUEST_OK) {
 				throw new CkanalyzeClientRemoteException(response.getEntity(
 						JSONIZEDException.class).getErrorDescription());
 			} else {
@@ -131,12 +133,12 @@ public class CkanalyzeClient {
 			if (catalogueName.isEmpty()) {
 				emptyCatalogue();
 			}
-			String par = URLEncoder.encode(catalogueName, "UTF-8");
+			String par = URLEncoder.encode(catalogueName, UTF8);
 			String url = basePath + "/is-available?catalogue=" + par;
 			WebResource resource = client.resource(url);
-			ClientResponse response = resource.accept("application/json").get(
+			ClientResponse response = resource.accept(JSON).get(
 					ClientResponse.class);
-			if (response.getStatus() != 200) {
+			if (response.getStatus() != REQUEST_OK) {
 				throw new CkanalyzeClientRemoteException(response.getEntity(
 						JSONIZEDException.class).getErrorDescription());
 			} else {
@@ -161,12 +163,12 @@ public class CkanalyzeClient {
 			if (catalogueName.isEmpty()) {
 				emptyCatalogue();
 			}
-			String par = URLEncoder.encode(catalogueName, "UTF-8");
+			String par = URLEncoder.encode(catalogueName, UTF8);
 			String url = basePath + "/schedule-catalogue?catalogue=" + par;
 			WebResource resource = client.resource(url);
-			ClientResponse response = resource.accept("application/json").get(
+			ClientResponse response = resource.accept(JSON).get(
 					ClientResponse.class);
-			if (response.getStatus() != 200) {
+			if (response.getStatus() != REQUEST_OK) {
 				throw new CkanalyzeClientRemoteException(response.getEntity(
 						JSONIZEDException.class).getErrorDescription());
 			} else {
