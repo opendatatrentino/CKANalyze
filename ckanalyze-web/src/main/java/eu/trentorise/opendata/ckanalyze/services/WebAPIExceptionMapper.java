@@ -25,8 +25,8 @@ import javax.ws.rs.ext.Provider;
 
 import com.sun.jersey.api.client.ClientResponse.Status;
 
-import eu.trentorise.opendata.ckanalyze.exceptions.JSONIZEDException;
 import eu.trentorise.opendata.ckanalyze.exceptions.WebAPIException;
+import eu.trentorise.opendata.ckanalyze.model.JSONIZEDException;
 
 @Provider
 public class WebAPIExceptionMapper implements ExceptionMapper<WebAPIException> {

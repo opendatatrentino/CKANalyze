@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
 /**
 * *****************************************************************************
 * Copyright 2012-2013 Trento Rise (www.trentorise.eu/)
@@ -17,20 +15,34 @@
 *
 *******************************************************************************
 */
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>eu.trentorise.opendata</groupId>
-  <artifactId>ckanalyze</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <name>ckanalyze</name>
-  <modules>
-    <module>ckanalyze-engine</module>
-    <module>ckanalyze-jpa</module>
-    <module>ckanalyze-web</module>
-    
-    
-    <module>ckanalyze-model</module>
-    <module>ckanalyze-client</module>
-  </modules>
-</project>
+
+package eu.trentorise.opendata.ckanalyze.client.exceptions;
+
+public class CkanalyzeClientRemoteException extends RuntimeException {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public CkanalyzeClientRemoteException() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public CkanalyzeClientRemoteException(String message, Throwable cause) {
+		super(message, cause);
+		// TODO Auto-generated constructor stub
+	}
+
+	public CkanalyzeClientRemoteException(String message) {
+		super(message);
+		// TODO Auto-generated constructor stub
+	}
+
+	public CkanalyzeClientRemoteException(Throwable cause) {
+		super(cause);
+		// TODO Auto-generated constructor stub
+	}
+	
+}

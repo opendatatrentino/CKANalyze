@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
 /**
 * *****************************************************************************
 * Copyright 2012-2013 Trento Rise (www.trentorise.eu/)
@@ -17,20 +15,21 @@
 *
 *******************************************************************************
 */
---><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>eu.trentorise.opendata</groupId>
-  <artifactId>ckanalyze</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <name>ckanalyze</name>
-  <modules>
-    <module>ckanalyze-engine</module>
-    <module>ckanalyze-jpa</module>
-    <module>ckanalyze-web</module>
-    
-    
-    <module>ckanalyze-model</module>
-    <module>ckanalyze-client</module>
-  </modules>
-</project>
+
+package eu.trentorise.opendata.ckanalyze.model;
+
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+public class JSONIZEDException {
+	private String errorDescription;
+
+	public String getErrorDescription() {
+		return errorDescription;
+	}
+
+	public void setErrorDescription(String errorDescription) {
+		this.errorDescription = errorDescription;
+	}
+	
+}

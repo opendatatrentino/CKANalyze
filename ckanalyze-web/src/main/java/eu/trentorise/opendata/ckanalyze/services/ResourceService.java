@@ -47,7 +47,7 @@ public class ResourceService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResourceStat getResourceStats(@QueryParam("catalogue")String catName, @QueryParam("idResource")String resid) throws WebAPIException
 	{
-		if((resid == null)||(resid.isEmpty())) throw new WebAPIException("resourceId parameter not specified");
+		if((resid == null)||(resid.isEmpty())) throw new WebAPIException("idResource parameter not specified");
 		if((catName == null)||(catName.isEmpty())) throw new WebAPIException("catalogue parameter not specified");
 		
 		ResourceAnalysis rsa = new ResourceAnalysis();

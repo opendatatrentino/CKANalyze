@@ -96,7 +96,6 @@ public class TestCSVAnalyzer {
 					"must report a warning message since the CSV is malformed",
 					!toCheck.toString().isEmpty());
 		} catch (CKAnalyzeException e) {
-			e.printStackTrace();
 			assertTrue(false);
 		}
 	}

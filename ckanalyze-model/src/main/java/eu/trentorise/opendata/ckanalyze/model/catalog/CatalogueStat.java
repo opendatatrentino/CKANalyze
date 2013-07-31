@@ -18,12 +18,15 @@
 
 package eu.trentorise.opendata.ckanalyze.model.catalog;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
 
@@ -98,6 +101,17 @@ public class CatalogueStat {
 	public void setAvgColsPerType(List<CatalogueDatatypeCount> avgColsPerType) {
 		this.avgColsPerType = avgColsPerType;
 	}
+	
+	@XmlTransient
+	public Map<String, Double> getAvgColsPerTypeMap()
+	{
+		Map<String, Double> retval = new HashMap<String,Double>();
+		for (CatalogueDatatypeCount cdc : avgColsPerType) {
+			retval.put(cdc.getTypeName(), cdc.getCount());
+		}
+		return retval;
+	}
+	
 	public double getAvgResourcesFileSize() {
 		return avgResourcesFileSize;
 	}
@@ -114,5 +128,5 @@ public class CatalogueStat {
 			List<StringDistribution> stringLengthsDistrib) {
 		this.stringLengthsDistribution = stringLengthsDistrib;
 	}
-
+	
 }

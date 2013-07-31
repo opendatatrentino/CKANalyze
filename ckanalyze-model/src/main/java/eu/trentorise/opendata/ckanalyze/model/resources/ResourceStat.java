@@ -18,14 +18,18 @@
 
 package eu.trentorise.opendata.ckanalyze.model.resources;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
+
 
 @XmlRootElement
 public class ResourceStat {
@@ -91,6 +95,16 @@ public class ResourceStat {
 	}
 	public void setColsPerType(List<ResourceDatatypeCount> colsPerType) {
 		this.colsPerType = colsPerType;
+	}
+	
+	@XmlTransient
+	public Map<String, Integer> getColsPerTypeMap()
+	{
+		Map<String, Integer> retval = new HashMap<String,Integer>();
+		for (ResourceDatatypeCount cdc : colsPerType) {
+			retval.put(cdc.getTypeName(), cdc.getCount());
+		}
+		return retval;
 	}
 	
 	@XmlElements({@XmlElement(name="distribution")})

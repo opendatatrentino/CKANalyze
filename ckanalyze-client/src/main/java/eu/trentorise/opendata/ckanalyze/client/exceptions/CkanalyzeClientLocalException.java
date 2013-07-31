@@ -16,20 +16,33 @@
 *******************************************************************************
 */
 
-package eu.trentorise.opendata.ckanalyze.exceptions;
+package eu.trentorise.opendata.ckanalyze.client.exceptions;
 
-import javax.xml.bind.annotation.XmlRootElement;
+public class CkanalyzeClientLocalException extends RuntimeException {
 
-@XmlRootElement
-public class JSONIZEDException {
-	private String errorDescription;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-	public String getErrorDescription() {
-		return errorDescription;
+	public CkanalyzeClientLocalException() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
-	public void setErrorDescription(String errorDescription) {
-		this.errorDescription = errorDescription;
+	public CkanalyzeClientLocalException(String message, Throwable cause) {
+		super(message, cause);
+		// TODO Auto-generated constructor stub
+	}
+
+	public CkanalyzeClientLocalException(String message) {
+		super(message);
+		// TODO Auto-generated constructor stub
+	}
+
+	public CkanalyzeClientLocalException(Throwable cause) {
+		super(cause);
+		// TODO Auto-generated constructor stub
 	}
 	
 }
