@@ -91,9 +91,7 @@ public final class QueryBuilder {
 		String hql = "SELECT distinct d FROM Datatype d JOIN d.colsDataTypes dt JOIN dt.resource r WHERE dt.freq > 0 AND r.catalog = :cat";
 		org.hibernate.Query q = openSession().createQuery(hql);
 		q.setParameter("cat", catalog);
-		List<Datatype> result = q.list();
-		retval.addAll(result);
-		return retval;
+		return new HashSet<Datatype>(q.list());
 	}
 
 
@@ -102,8 +100,7 @@ public final class QueryBuilder {
 		String hql = "SELECT new eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueDatatypeCount(d.name, avg(dtc.freq)) FROM ResourceDatatypesCount dtc JOIN dtc.resource r JOIN dtc.datatype d WHERE r.catalog = :cat GROUP BY d.name";
 		org.hibernate.Query q = openSession().createQuery(hql);
 		q.setParameter("cat", catalog);
-		List<CatalogueDatatypeCount> retval = q.list();
-		return retval;
+		return q.list();
 	}
 
 	public static Double getAvgFileSize(Catalog catalog) {
@@ -119,11 +116,10 @@ public final class QueryBuilder {
 
 
 	public static List<Configuration> getScheduledCatalog(String catalogName) {
-		List<Configuration> retval;
 		String hql = "FROM Configuration WHERE catalogHostName = :cname";
 		org.hibernate.Query q = openSession().createQuery(hql);
 		q.setParameter("cname", catalogName);
-		retval = q.list();
+		List<Configuration> retval = q.list();
 		closeSession();
 		return retval;
 	}
@@ -133,7 +129,7 @@ public final class QueryBuilder {
 	}
 
 	public static void scheduleCatalog(Configuration conf) {
-		Session ss = PersistencyManager.getSessionFactory().openSession();
+		ss = PersistencyManager.getSessionFactory().openSession();
 		ss.beginTransaction();
 		ss.saveOrUpdate(conf);
 		ss.getTransaction().commit();

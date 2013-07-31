@@ -40,9 +40,9 @@ import eu.trentorise.opendata.ckanalyze.model.resources.ResourceStat;
 public class CkanalyzeClient {
 	private String basePath;
 	private Client client;
-	private final String JSON = "application/json";
-	private final String UTF8 = "UTF-8";
-	private final int REQUEST_OK = 200;
+	private static final String JSON = "application/json";
+	private static final String UTF8 = "UTF-8";
+	private static final int REQUEST_OK = 200;
 	/**
 	 * 
 	 * @param basePath -- the baseURL (domain) i.e. http://localhost:8080/ckanalyze-web
