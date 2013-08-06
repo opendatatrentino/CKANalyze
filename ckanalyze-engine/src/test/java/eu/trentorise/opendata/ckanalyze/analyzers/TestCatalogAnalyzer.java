@@ -60,7 +60,7 @@ public class TestCatalogAnalyzer {
 			appender.setName("LOGGER_APPENDER");
 			Logger.getLogger("ckanalyze").addAppender(appender);
 			appender.setThreshold(org.apache.log4j.Level.WARN);
-			List<String> dstest = new ArrayList<>();
+			List<String> dstest = new ArrayList<String>();
 			dstest.add("rendiconto-del-2005");
 			AnalysisMain.tempDirConfig();
 			AnalysisMain.catalogAnalysis("http://dati.trentino.it", dstest);

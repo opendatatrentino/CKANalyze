@@ -128,23 +128,24 @@ public final class QueryBuilder {
 	}
 
 	public static void scheduleCatalog(Configuration conf) {
-		ss = PersistencyManager.getSessionFactory().openSession();
+		ss = openSession();
 		ss.beginTransaction();
 		ss.saveOrUpdate(conf);
 		ss.getTransaction().commit();
-		ss.close();
+		closeSession();
 	}
 	
 	public static boolean isUpdating(String catalogName)
 	{
 		String hql = "FROM Configuration WHERE catalogHostName = :name";
-		ss = PersistencyManager.getSessionFactory().openSession();
+		ss = openSession();
 		Query query = ss.createQuery(hql);
 		query.setParameter("name", catalogName);
 		@SuppressWarnings("rawtypes")
 		List result = query.list();
 		if(result.isEmpty())
 		{
+			closeSession();
 			return false;
 		}
 		eu.trentorise.opendata.ckanalyze.jpa.Configuration conf = (eu.trentorise.opendata.ckanalyze.jpa.Configuration) result.get(0);

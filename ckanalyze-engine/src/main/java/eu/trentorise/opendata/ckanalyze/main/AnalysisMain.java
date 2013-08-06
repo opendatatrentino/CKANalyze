@@ -195,6 +195,7 @@ public final class AnalysisMain {
 				catalogAnalysis(conf.getCatalogHostName(), getCkanClient(conf.getCatalogHostName())
 						.getDatasetList().result);
 				conf.setLastUpdate(new Date());
+				conf.setUpdating(false);
 				PersistencyManager.addCatalogstoProcessList(conf);
 			}
 		} catch (Exception e) {

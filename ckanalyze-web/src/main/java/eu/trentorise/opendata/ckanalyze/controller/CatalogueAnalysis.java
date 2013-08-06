@@ -44,7 +44,9 @@ public final class CatalogueAnalysis {
 	}
 	public static boolean isValidCatalogue(String name)
 	{
-		return QueryBuilder.getCatalogByName(name) != null;
+		boolean retval =  QueryBuilder.getCatalogByName(name) != null;
+		QueryBuilder.closeSession();
+		return retval;
 	}
 	public static CatalogueStat getCatalogueStats(String name)
 	{
@@ -71,7 +73,7 @@ public final class CatalogueAnalysis {
 	
 	private static List<StringDistribution> computeStringDistribution(Set<CatalogStringDistribution> jpaCsd)
 	{
-		List<StringDistribution> distr = new ArrayList<>();
+		List<StringDistribution> distr = new ArrayList<StringDistribution>();
 		for (CatalogStringDistribution catalogStringDistribution : jpaCsd) {
 			StringDistribution toAdd = new StringDistribution();
 			toAdd.setFrequence(catalogStringDistribution.getFreq());
