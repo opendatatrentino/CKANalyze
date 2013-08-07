@@ -42,6 +42,7 @@ public class CatalogStats {
 	private String catalogName;
 	private int totalDatasetsCount;
 	private int totalResourcesCount;
+	private long totalColsCount;
 	private double avgStringLength;
 	private long totalFileSizeCount;
 	private double avgColumnCount;
@@ -50,6 +51,14 @@ public class CatalogStats {
 	private double avgResourcesFileSize;
 	private List<StringDistribution> stringLengthsDistribution;
 	
+	
+	
+	public long getTotalColsCount() {
+		return totalColsCount;
+	}
+	public void setTotalColsCount(long totalColsCount) {
+		this.totalColsCount = totalColsCount;
+	}
 	public String getCatalogName() {
 		return catalogName;
 	}

@@ -50,7 +50,7 @@ public class CatalogService {
 	public CatalogStats getCatalogStats(@QueryParam("catalog") String catName)
 			throws WebAPIException {
 		if ((catName == null) || (catName.isEmpty())) {
-			throw new WebAPIException("catalogue parameter not specified");
+			throw new WebAPIException("catalog parameter not specified");
 		}
 		if(QueryBuilder.isUpdating(catName))
 		{

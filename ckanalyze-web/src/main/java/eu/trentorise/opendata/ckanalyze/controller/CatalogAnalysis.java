@@ -58,6 +58,7 @@ public final class CatalogAnalysis {
 		retval.setAvgStringLength(jpaCat.getAvgStringLength());
 		retval.setAvgResourcesFileSize(QueryBuilder.getAvgFileSize(jpaCat));
 		retval.setTotalDatasetsCount(jpaCat.getTotalDatasetsCount());
+		retval.setTotalColsCount(QueryBuilder.getColsCount(jpaCat));
 		retval.setTotalFileSizeCount(jpaCat.getTotalFileSizeCount());
 		retval.setTotalResourcesCount(jpaCat.getTotalResourcesCount());
 		retval.setStringLengthsDistribution(computeStringDistribution(jpaCat.getStringDistribution()));

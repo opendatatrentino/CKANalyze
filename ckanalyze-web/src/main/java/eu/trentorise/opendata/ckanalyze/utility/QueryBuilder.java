@@ -102,6 +102,14 @@ public final class QueryBuilder {
 		return q.list();
 	}
 
+	public static long getColsCount(
+			Catalog catalog) {
+		String hql = "SELECT sum(dtc.freq) FROM ResourceDatatypesCount dtc JOIN dtc.resource r WHERE r.catalog = :cat";
+		org.hibernate.Query q = openSession().createQuery(hql);
+		q.setParameter("cat", catalog);
+		return (Long)q.list().get(0);
+	}
+	
 	public static Double getAvgFileSize(Catalog catalog) {
 		String hql = "SELECT avg(fileSize) from Resource r WHERE catalog = :cat";
 		org.hibernate.Query q = openSession().createQuery(hql);
