@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
+import eu.trentorise.opendata.ckanalyze.model.Types;
 
 
 
@@ -117,11 +118,16 @@ public class CatalogStats {
 	 * @return a map with TypeName Strings as keys and AVG of frequency  as values
 	 */
 	@XmlTransient
-	public Map<String, Long> getColsPerTypeMap()
+	public Map<Types, Long> getColsPerTypeMap()
 	{
-		Map<String, Long> retval = new HashMap<String,Long>();
+		Map<Types, Long> retval = new HashMap<Types,Long>();
 		for (CatalogDatatypeCount cdc : colsPerType) {
-			retval.put(cdc.getTypeName(), cdc.getCount());
+			for (Types t : Types.values()) {
+				if(t.toString().equals(cdc.getTypeName()))
+				{
+					retval.put(t, cdc.getCount());
+				}
+			}
 		}
 		return retval;
 	}

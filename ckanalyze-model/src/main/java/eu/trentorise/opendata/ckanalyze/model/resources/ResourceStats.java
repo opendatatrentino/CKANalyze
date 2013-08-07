@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
+import eu.trentorise.opendata.ckanalyze.model.Types;
 
 /**
  * Object containing resources statistics 
@@ -105,11 +106,16 @@ public class ResourceStats {
 	 * @return a map with TypeName Strings as keys and frequency as values
 	 */
 	@XmlTransient
-	public Map<String, Integer> getColsPerTypeMap()
+	public Map<Types, Integer> getColsPerTypeMap()
 	{
-		Map<String, Integer> retval = new HashMap<String,Integer>();
+		Map<Types, Integer> retval = new HashMap<Types,Integer>();
 		for (ResourceDatatypeCount cdc : colsPerType) {
-			retval.put(cdc.getTypeName(), cdc.getCount());
+			for (Types t : Types.values()) {
+				if(t.toString().equals(cdc.getTypeName()))
+				{
+					retval.put(t, cdc.getCount());
+				}
+			}
 		}
 		return retval;
 	}
