@@ -114,6 +114,10 @@ public class ResourceStat {
 		return retval;
 	}
 	
+	/**
+	 * 
+	 * @return the a list of StringDistribution objects. Length with frequence 0 are omitted.
+	 */
 	@XmlElements({@XmlElement(name="distribution")})
 	@XmlElementWrapper
 	public List<StringDistribution> getStringLengthsDistribution() {
@@ -123,6 +127,11 @@ public class ResourceStat {
 			List<StringDistribution> stringLengthsDistribution) {
 		this.stringLengthsDistribution = stringLengthsDistribution;
 	}
+	
+	/**
+	 *
+	 * @return the file size expressed in Byte
+	 */
 	public long getFileSize() {
 		return fileSize;
 	}

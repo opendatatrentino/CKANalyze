@@ -38,7 +38,7 @@ import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
  * @author Alberto Zanella <a.zanella@trentorise.eu>
  *Last modified by azanella On 25/lug/2013
  */
-public class CatalogueStat {
+public class CatalogStats {
 	private String catalogueName;
 	private int totalDatasetsCount;
 	private int totalResourcesCount;
@@ -46,7 +46,7 @@ public class CatalogueStat {
 	private long totalFileSizeCount;
 	private double avgColumnCount;
 	private double avgRowCount;
-	private List<CatalogueDatatypeCount> avgColsPerType;
+	private List<CatalogueDatatypeCount> colsPerType;
 	private double avgResourcesFileSize;
 	private List<StringDistribution> stringLengthsDistribution;
 	
@@ -92,14 +92,15 @@ public class CatalogueStat {
 	public void setAvgRowCount(double avgRowCount) {
 		this.avgRowCount = avgRowCount;
 	}
-	public List<CatalogueDatatypeCount> getAvgColsPerType() {
-		return avgColsPerType;
+	
+	public List<CatalogueDatatypeCount> getColsPerType() {
+		return colsPerType;
 	}
 	
 	@XmlElements({@XmlElement(name="datatype")})
 	@XmlElementWrapper
-	public void setAvgColsPerType(List<CatalogueDatatypeCount> avgColsPerType) {
-		this.avgColsPerType = avgColsPerType;
+	public void setColsPerType(List<CatalogueDatatypeCount> colsPerType) {
+		this.colsPerType = colsPerType;
 	}
 	
 	/**
@@ -107,10 +108,10 @@ public class CatalogueStat {
 	 * @return a map with TypeName Strings as keys and AVG of frequency  as values
 	 */
 	@XmlTransient
-	public Map<String, Double> getAvgColsPerTypeMap()
+	public Map<String, Long> getColsPerTypeMap()
 	{
-		Map<String, Double> retval = new HashMap<String,Double>();
-		for (CatalogueDatatypeCount cdc : avgColsPerType) {
+		Map<String, Long> retval = new HashMap<String,Long>();
+		for (CatalogueDatatypeCount cdc : colsPerType) {
 			retval.put(cdc.getTypeName(), cdc.getCount());
 		}
 		return retval;
@@ -122,7 +123,11 @@ public class CatalogueStat {
 	public void setAvgResourcesFileSize(double avgResourcesFileSize) {
 		this.avgResourcesFileSize = avgResourcesFileSize;
 	}
-	
+
+	/**
+	 * 
+	 * 	 * @return the a list of StringDistribution objects. Length with frequence 0 are omitted.
+	 */
 	@XmlElements({@XmlElement(name="distribution")})
 	@XmlElementWrapper
 	public List<StringDistribution> getStringLengthsDistribution() {

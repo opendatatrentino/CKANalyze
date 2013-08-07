@@ -94,9 +94,9 @@ public final class QueryBuilder {
 	}
 
 
-	public static List<CatalogueDatatypeCount> getAllColsAvgTypes(
+	public static List<CatalogueDatatypeCount> getAllColsTypes(
 			Catalog catalog) {
-		String hql = "SELECT new eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueDatatypeCount(d.name, avg(dtc.freq)) FROM ResourceDatatypesCount dtc JOIN dtc.resource r JOIN dtc.datatype d WHERE r.catalog = :cat GROUP BY d.name";
+		String hql = "SELECT new eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueDatatypeCount(d.name, sum(dtc.freq)) FROM ResourceDatatypesCount dtc JOIN dtc.resource r JOIN dtc.datatype d WHERE r.catalog = :cat GROUP BY d.name";
 		org.hibernate.Query q = openSession().createQuery(hql);
 		q.setParameter("cat", catalog);
 		return q.list();

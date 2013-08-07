@@ -25,23 +25,24 @@ package eu.trentorise.opendata.ckanalyze.model.catalog;
  */
 public class CatalogueDatatypeCount {
 	private String typeName;
-	private Double count;
+	private Long count;
 	public String getTypeName() {
 		return typeName;
 	}
 	public void setTypeName(String typeName) {
 		this.typeName = typeName;
 	}
-	public Double getCount() {
+	
+	public Long getCount() {
 		return count;
 	}
-	public void setCount(Double count) {
+	public void setCount(Long count) {
 		this.count = count;
 	}
-	public CatalogueDatatypeCount(String typeName, double count) {
+	public CatalogueDatatypeCount(String typeName, long count) {
 		super();
 		this.typeName = typeName;
-		this.count = count;
+		this.count = new Long(count);
 	}
 	public CatalogueDatatypeCount() {
 		super();

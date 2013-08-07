@@ -29,7 +29,7 @@ import eu.trentorise.opendata.ckanalyze.client.exceptions.CkanalyzeClientLocalEx
 import eu.trentorise.opendata.ckanalyze.client.exceptions.CkanalyzeClientRemoteException;
 import eu.trentorise.opendata.ckanalyze.model.JSONIZEDException;
 import eu.trentorise.opendata.ckanalyze.model.Status;
-import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueStat;
+import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogStats;
 import eu.trentorise.opendata.ckanalyze.model.configuration.ScheduleResponse;
 import eu.trentorise.opendata.ckanalyze.model.resources.ResourceStat;
 /**
@@ -60,9 +60,9 @@ public class CkanalyzeClient {
 	 * 
 	 * 
 	 */
-	public CatalogueStat getCatalogueStat(String catalogueName)
+	public CatalogStats getCatalogueStat(String catalogueName)
 	{
-		CatalogueStat retval = null;
+		CatalogStats retval = null;
 		try {
 			if (catalogueName.isEmpty()) {
 				emptyCatalogue();
@@ -76,7 +76,7 @@ public class CkanalyzeClient {
 				throw new CkanalyzeClientRemoteException(response.getEntity(
 						JSONIZEDException.class).getErrorDescription());
 			} else {
-				retval = response.getEntity(CatalogueStat.class);
+				retval = response.getEntity(CatalogStats.class);
 			}
 		} catch (UnsupportedEncodingException e) {
 			unsupportedEncoding(e);

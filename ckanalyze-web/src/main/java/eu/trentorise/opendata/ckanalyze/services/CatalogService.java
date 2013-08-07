@@ -25,7 +25,7 @@ import javax.ws.rs.core.MediaType;
 
 import eu.trentorise.opendata.ckanalyze.controller.CatalogueAnalysis;
 import eu.trentorise.opendata.ckanalyze.exceptions.WebAPIException;
-import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueStat;
+import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogStats;
 import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
 
 /**
@@ -47,7 +47,7 @@ public class CatalogService {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public CatalogueStat getCatalogStats(@QueryParam("catalogue") String catName)
+	public CatalogStats getCatalogStats(@QueryParam("catalogue") String catName)
 			throws WebAPIException {
 		if ((catName == null) || (catName.isEmpty())) {
 			throw new WebAPIException("catalogue parameter not specified");

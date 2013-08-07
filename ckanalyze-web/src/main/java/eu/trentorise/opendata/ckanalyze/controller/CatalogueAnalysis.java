@@ -26,7 +26,7 @@ import java.util.Set;
 import eu.trentorise.opendata.ckanalyze.jpa.Catalog;
 import eu.trentorise.opendata.ckanalyze.jpa.CatalogStringDistribution;
 import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueDatatypeCount;
-import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueStat;
+import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogStats;
 import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
 import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
 
@@ -48,10 +48,10 @@ public final class CatalogueAnalysis {
 		QueryBuilder.closeSession();
 		return retval;
 	}
-	public static CatalogueStat getCatalogueStats(String name)
+	public static CatalogStats getCatalogueStats(String name)
 	{
 		Catalog jpaCat = QueryBuilder.getCatalogByName(name);
-		CatalogueStat retval = new CatalogueStat();
+		CatalogStats retval = new CatalogStats();
 		retval.setCatalogueName(jpaCat.getUrl());
 		retval.setAvgColumnCount(jpaCat.getAvgColumnCount());
 		retval.setAvgRowCount(jpaCat.getAvgRowCount());
@@ -61,14 +61,14 @@ public final class CatalogueAnalysis {
 		retval.setTotalFileSizeCount(jpaCat.getTotalFileSizeCount());
 		retval.setTotalResourcesCount(jpaCat.getTotalResourcesCount());
 		retval.setStringLengthsDistribution(computeStringDistribution(jpaCat.getStringDistribution()));
-		retval.setAvgColsPerType(computeAvgColsPerType(jpaCat));
+		retval.setColsPerType(computeColsPerType(jpaCat));
 		QueryBuilder.closeSession();
 		return retval;
 	}
 	
-	private static List<CatalogueDatatypeCount> computeAvgColsPerType(Catalog jpaCat)
+	private static List<CatalogueDatatypeCount> computeColsPerType(Catalog jpaCat)
 	{
-		return QueryBuilder.getAllColsAvgTypes(jpaCat);
+		return QueryBuilder.getAllColsTypes(jpaCat);
 	}
 	
 	private static List<StringDistribution> computeStringDistribution(Set<CatalogStringDistribution> jpaCsd)
