@@ -122,12 +122,7 @@ public class CatalogStats {
 	{
 		Map<Types, Long> retval = new HashMap<Types,Long>();
 		for (CatalogDatatypeCount cdc : colsPerType) {
-			for (Types t : Types.values()) {
-				if(t.toString().equals(cdc.getTypeName()))
-				{
-					retval.put(t, cdc.getCount());
-				}
-			}
+			retval.put(Types.valueOf(cdc.getTypeName()), cdc.getCount());
 		}
 		return retval;
 	}

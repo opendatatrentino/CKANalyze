@@ -110,12 +110,7 @@ public class ResourceStats {
 	{
 		Map<Types, Integer> retval = new HashMap<Types,Integer>();
 		for (ResourceDatatypeCount cdc : colsPerType) {
-			for (Types t : Types.values()) {
-				if(t.toString().equals(cdc.getTypeName()))
-				{
-					retval.put(t, cdc.getCount());
-				}
-			}
+			retval.put(Types.valueOf(cdc.getTypeName()), cdc.getCount());
 		}
 		return retval;
 	}
