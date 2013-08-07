@@ -40,34 +40,34 @@ public class ResourceService {
 	/**
 	 * 
 	 * @param catName
-	 *            name of the catalogue
+	 *            name of the catalog
 	 * @param resid
 	 *            id of the required resource
 	 * @return statistics about the required resource
 	 * @throws WebAPIException
-	 *             if the resourceId or the catalogue paameter are missing or if
+	 *             if the resourceId or the catalog paameter are missing or if
 	 *             they are invalid
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public ResourceStat getResourceStats(
-			@QueryParam("catalogue") String catName,
+			@QueryParam("catalog") String catName,
 			@QueryParam("idResource") String resid) throws WebAPIException {
 		if ((resid == null) || (resid.isEmpty())) {
 			throw new WebAPIException("idResource parameter not specified");
 		}
 		if ((catName == null) || (catName.isEmpty())) {
-			throw new WebAPIException("catalogue parameter not specified");
+			throw new WebAPIException("catalog parameter not specified");
 		}
 		if(QueryBuilder.isUpdating(catName))
 		{
-			throw new WebAPIException("Catalogue " + catName + " is not available at the moment for updating process");
+			throw new WebAPIException("Catalog " + catName + " is not available at the moment for updating process");
 		}
 		ResourceAnalysis rsa = new ResourceAnalysis();
 		if (rsa.isValidResource(catName, resid)) {
 			return rsa.getResourceStats(resid);
 		} else {
-			throw new WebAPIException("Catalogue " + catName
+			throw new WebAPIException("Catalog " + catName
 					+ " or resource id not found");
 		}
 	}

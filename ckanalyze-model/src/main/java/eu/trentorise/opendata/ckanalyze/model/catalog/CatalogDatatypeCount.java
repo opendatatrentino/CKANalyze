@@ -23,7 +23,7 @@ package eu.trentorise.opendata.ckanalyze.model.catalog;
  * @author Alberto Zanella <a.zanella@trentorise.eu>
  *
  */
-public class CatalogueDatatypeCount {
+public class CatalogDatatypeCount {
 	private String typeName;
 	private Long count;
 	public String getTypeName() {
@@ -39,12 +39,12 @@ public class CatalogueDatatypeCount {
 	public void setCount(Long count) {
 		this.count = count;
 	}
-	public CatalogueDatatypeCount(String typeName, long count) {
+	public CatalogDatatypeCount(String typeName, long count) {
 		super();
 		this.typeName = typeName;
 		this.count = new Long(count);
 	}
-	public CatalogueDatatypeCount() {
+	public CatalogDatatypeCount() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

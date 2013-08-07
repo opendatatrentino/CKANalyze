@@ -25,7 +25,7 @@ import java.util.Set;
 
 import eu.trentorise.opendata.ckanalyze.jpa.Catalog;
 import eu.trentorise.opendata.ckanalyze.jpa.CatalogStringDistribution;
-import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueDatatypeCount;
+import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogDatatypeCount;
 import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogStats;
 import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
 import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
@@ -35,24 +35,24 @@ import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
  * @author Alberto Zanella <a.zanella@trentorise.eu>
  * Last modified by azanella On 31/lug/2013
  */
-public final class CatalogueAnalysis {
+public final class CatalogAnalysis {
 	
 	
-	private CatalogueAnalysis() {
+	private CatalogAnalysis() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public static boolean isValidCatalogue(String name)
+	public static boolean isValidCatalog(String name)
 	{
 		boolean retval =  QueryBuilder.getCatalogByName(name) != null;
 		QueryBuilder.closeSession();
 		return retval;
 	}
-	public static CatalogStats getCatalogueStats(String name)
+	public static CatalogStats getCatalogStats(String name)
 	{
 		Catalog jpaCat = QueryBuilder.getCatalogByName(name);
 		CatalogStats retval = new CatalogStats();
-		retval.setCatalogueName(jpaCat.getUrl());
+		retval.setCatalogName(jpaCat.getUrl());
 		retval.setAvgColumnCount(jpaCat.getAvgColumnCount());
 		retval.setAvgRowCount(jpaCat.getAvgRowCount());
 		retval.setAvgStringLength(jpaCat.getAvgStringLength());
@@ -66,7 +66,7 @@ public final class CatalogueAnalysis {
 		return retval;
 	}
 	
-	private static List<CatalogueDatatypeCount> computeColsPerType(Catalog jpaCat)
+	private static List<CatalogDatatypeCount> computeColsPerType(Catalog jpaCat)
 	{
 		return QueryBuilder.getAllColsTypes(jpaCat);
 	}

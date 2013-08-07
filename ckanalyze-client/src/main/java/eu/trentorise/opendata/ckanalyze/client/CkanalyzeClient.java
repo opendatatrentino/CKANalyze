@@ -54,21 +54,21 @@ public class CkanalyzeClient {
 	}
 
 	/**
-	 * Provide catalogue statistics
-	 * @param catalogueName -- name of the catalogue (URL)
-	 * @return object containing catalogue statistics or null if exceptions are throws
+	 * Provide catalog statistics
+	 * @param catalogName -- name of the catalog (URL)
+	 * @return object containing catalog statistics or null if exceptions are throws
 	 * 
 	 * 
 	 */
-	public CatalogStats getCatalogueStat(String catalogueName)
+	public CatalogStats getCatalogStat(String catalogName)
 	{
 		CatalogStats retval = null;
 		try {
-			if (catalogueName.isEmpty()) {
-				emptyCatalogue();
+			if (catalogName.isEmpty()) {
+				emptyCatalog();
 			}
-			String par = URLEncoder.encode(catalogueName, UTF8);
-			String url = basePath + "/stats?catalogue=" + par;
+			String par = URLEncoder.encode(catalogName, UTF8);
+			String url = basePath + "/stats?catalog=" + par;
 			WebResource resource = client.resource(url);
 			ClientResponse response = resource.accept(JSON).get(
 					ClientResponse.class);
@@ -86,25 +86,25 @@ public class CkanalyzeClient {
 
 	/**
 	 * Provide resource statistics
-	 * @param catalogueName -- name of the catalogue (URL)
+	 * @param catalogName -- name of the catalog (URL)
 	 * @param resourceId -- CKAN-Id of the required resource
 	 * @return an object containing Resource statistics or null if exceptions are throws
 	 * 
 	 * 
 	 */
-	public ResourceStat getResourceStat(String catalogueName, String resourceId)
+	public ResourceStat getResourceStat(String catalogName, String resourceId)
 	{
 		ResourceStat retval = null;
 		try {
-			if (catalogueName.isEmpty()) {
-				emptyCatalogue();
+			if (catalogName.isEmpty()) {
+				emptyCatalog();
 			}
 			if (resourceId.isEmpty()) {
 				emptyResource();
 			}
-			String catEsc = URLEncoder.encode(catalogueName, UTF8);
+			String catEsc = URLEncoder.encode(catalogName, UTF8);
 			String residEsc = URLEncoder.encode(resourceId, UTF8);
-			String url = basePath + "/resource-stats?catalogue=" + catEsc
+			String url = basePath + "/resource-stats?catalog=" + catEsc
 					+ "&idResource=" + residEsc;
 			WebResource resource = client.resource(url);
 			ClientResponse response = resource.accept(JSON).get(
@@ -122,19 +122,19 @@ public class CkanalyzeClient {
 	}
 	
 	/**
-	 * Provide information about scheduled catalogues
-	 * @param catalogueName -- catalogue name (URL)
-	 * @return true if the specified catalogue is already scheduled, false otherwise.
+	 * Provide information about scheduled catalogs
+	 * @param catalogName -- catalog name (URL)
+	 * @return true if the specified catalog is already scheduled, false otherwise.
 	 */
-	public boolean isScheduledCatalogue(String catalogueName)
+	public boolean isScheduledCatalog(String catalogName)
 	{
 		Status retval;
 		try {
-			if (catalogueName.isEmpty()) {
-				emptyCatalogue();
+			if (catalogName.isEmpty()) {
+				emptyCatalog();
 			}
-			String par = URLEncoder.encode(catalogueName, UTF8);
-			String url = basePath + "/is-available?catalogue=" + par;
+			String par = URLEncoder.encode(catalogName, UTF8);
+			String url = basePath + "/is-available?catalog=" + par;
 			WebResource resource = client.resource(url);
 			ClientResponse response = resource.accept(JSON).get(
 					ClientResponse.class);
@@ -152,19 +152,19 @@ public class CkanalyzeClient {
 	}
 	
 	/**
-	 * Schedule a new catalogue
-	 * @param catalogueName
+	 * Schedule a new catalog
+	 * @param catalogName
 	 * @return
 	 */
-	public ScheduleResponse scheduleCatalog(String catalogueName)
+	public ScheduleResponse scheduleCatalog(String catalogName)
 	{
 		ScheduleResponse retval = null;
 		try {
-			if (catalogueName.isEmpty()) {
-				emptyCatalogue();
+			if (catalogName.isEmpty()) {
+				emptyCatalog();
 			}
-			String par = URLEncoder.encode(catalogueName, UTF8);
-			String url = basePath + "/schedule-catalogue?catalogue=" + par;
+			String par = URLEncoder.encode(catalogName, UTF8);
+			String url = basePath + "/schedule-catalog?catalog=" + par;
 			WebResource resource = client.resource(url);
 			ClientResponse response = resource.accept(JSON).get(
 					ClientResponse.class);
@@ -180,10 +180,10 @@ public class CkanalyzeClient {
 		return retval;
 	}
 	
-	private void emptyCatalogue()
+	private void emptyCatalog()
 	{
 		throw new CkanalyzeClientLocalException(
-				"Empty parameter catalogueName");
+				"Empty parameter catalogName");
 	}
 	
 	private void emptyResource()

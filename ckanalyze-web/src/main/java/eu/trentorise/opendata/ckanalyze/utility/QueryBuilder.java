@@ -30,7 +30,7 @@ import eu.trentorise.opendata.ckanalyze.jpa.Configuration;
 import eu.trentorise.opendata.ckanalyze.jpa.Datatype;
 import eu.trentorise.opendata.ckanalyze.jpa.Resource;
 import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
-import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueDatatypeCount;
+import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogDatatypeCount;
 
 /**
  * This is a centralized class which contains all queries to the DB.
@@ -94,9 +94,9 @@ public final class QueryBuilder {
 	}
 
 
-	public static List<CatalogueDatatypeCount> getAllColsTypes(
+	public static List<CatalogDatatypeCount> getAllColsTypes(
 			Catalog catalog) {
-		String hql = "SELECT new eu.trentorise.opendata.ckanalyze.model.catalog.CatalogueDatatypeCount(d.name, sum(dtc.freq)) FROM ResourceDatatypesCount dtc JOIN dtc.resource r JOIN dtc.datatype d WHERE r.catalog = :cat GROUP BY d.name";
+		String hql = "SELECT new eu.trentorise.opendata.ckanalyze.model.catalog.CatalogDatatypeCount(d.name, sum(dtc.freq)) FROM ResourceDatatypesCount dtc JOIN dtc.resource r JOIN dtc.datatype d WHERE r.catalog = :cat GROUP BY d.name";
 		org.hibernate.Query q = openSession().createQuery(hql);
 		q.setParameter("cat", catalog);
 		return q.list();

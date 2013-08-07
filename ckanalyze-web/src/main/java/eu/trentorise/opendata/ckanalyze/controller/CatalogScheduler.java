@@ -28,18 +28,18 @@ import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
  * @author Alberto Zanella <a.zanella@trentorise.eu>
  *Last modified by azanella On 31/lug/2013
  */
-public final class CatalogueScheduler {
+public final class CatalogScheduler {
 	
 	
-	private CatalogueScheduler() {
+	private CatalogScheduler() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public static ScheduleResponse scheduleCatalog(String catalogueName)
+	public static ScheduleResponse scheduleCatalog(String catalogName)
 	{
 		ScheduleResponse retval = new ScheduleResponse();
-		List<Configuration> confs = QueryBuilder.getScheduledCatalog(catalogueName);
+		List<Configuration> confs = QueryBuilder.getScheduledCatalog(catalogName);
 		if(!confs.isEmpty())
 		{
 			retval.setAlreadyScheduled(true);
@@ -48,7 +48,7 @@ public final class CatalogueScheduler {
 		else
 		{
 			Configuration conf = new Configuration();
-			conf.setCatalogHostName(catalogueName);
+			conf.setCatalogHostName(catalogName);
 			QueryBuilder.scheduleCatalog(conf);
 			retval.setAlreadyScheduled(false);
 			retval.setLastProcessed(null);

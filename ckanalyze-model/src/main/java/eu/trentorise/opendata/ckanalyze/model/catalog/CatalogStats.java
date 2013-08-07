@@ -34,27 +34,27 @@ import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
 
 @XmlRootElement
 /**
- * This class contains all statistics of a catalogue 
+ * This class contains all statistics of a catalog 
  * @author Alberto Zanella <a.zanella@trentorise.eu>
  *Last modified by azanella On 25/lug/2013
  */
 public class CatalogStats {
-	private String catalogueName;
+	private String catalogName;
 	private int totalDatasetsCount;
 	private int totalResourcesCount;
 	private double avgStringLength;
 	private long totalFileSizeCount;
 	private double avgColumnCount;
 	private double avgRowCount;
-	private List<CatalogueDatatypeCount> colsPerType;
+	private List<CatalogDatatypeCount> colsPerType;
 	private double avgResourcesFileSize;
 	private List<StringDistribution> stringLengthsDistribution;
 	
-	public String getCatalogueName() {
-		return catalogueName;
+	public String getCatalogName() {
+		return catalogName;
 	}
-	public void setCatalogueName(String catalogueName) {
-		this.catalogueName = catalogueName;
+	public void setCatalogName(String catalogName) {
+		this.catalogName = catalogName;
 	}
 	public int getTotalDatasetsCount() {
 		return totalDatasetsCount;
@@ -93,13 +93,13 @@ public class CatalogStats {
 		this.avgRowCount = avgRowCount;
 	}
 	
-	public List<CatalogueDatatypeCount> getColsPerType() {
+	public List<CatalogDatatypeCount> getColsPerType() {
 		return colsPerType;
 	}
 	
 	@XmlElements({@XmlElement(name="datatype")})
 	@XmlElementWrapper
-	public void setColsPerType(List<CatalogueDatatypeCount> colsPerType) {
+	public void setColsPerType(List<CatalogDatatypeCount> colsPerType) {
 		this.colsPerType = colsPerType;
 	}
 	
@@ -111,7 +111,7 @@ public class CatalogStats {
 	public Map<String, Long> getColsPerTypeMap()
 	{
 		Map<String, Long> retval = new HashMap<String,Long>();
-		for (CatalogueDatatypeCount cdc : colsPerType) {
+		for (CatalogDatatypeCount cdc : colsPerType) {
 			retval.put(cdc.getTypeName(), cdc.getCount());
 		}
 		return retval;

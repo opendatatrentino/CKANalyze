@@ -23,7 +23,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import eu.trentorise.opendata.ckanalyze.controller.CatalogueAnalysis;
+import eu.trentorise.opendata.ckanalyze.controller.CatalogAnalysis;
 import eu.trentorise.opendata.ckanalyze.exceptions.WebAPIException;
 import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogStats;
 import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
@@ -39,27 +39,27 @@ public class CatalogService {
 	/**
 	 * 
 	 * @param catName
-	 *            the catalogue name
-	 * @return Object which contains statistics about the required catalogue
+	 *            the catalog name
+	 * @return Object which contains statistics about the required catalog
 	 * @throws WebAPIException
-	 *             if the catalogue name is invalid (is empty or does not
+	 *             if the catalog name is invalid (is empty or does not
 	 *             exists)
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public CatalogStats getCatalogStats(@QueryParam("catalogue") String catName)
+	public CatalogStats getCatalogStats(@QueryParam("catalog") String catName)
 			throws WebAPIException {
 		if ((catName == null) || (catName.isEmpty())) {
 			throw new WebAPIException("catalogue parameter not specified");
 		}
 		if(QueryBuilder.isUpdating(catName))
 		{
-			throw new WebAPIException("Catalogue " + catName + " is not available at the moment for updating process");
+			throw new WebAPIException("Catalog " + catName + " is not available at the moment for updating process");
 		}
-		if (CatalogueAnalysis.isValidCatalogue(catName)) {
-			return CatalogueAnalysis.getCatalogueStats(catName);
+		if (CatalogAnalysis.isValidCatalog(catName)) {
+			return CatalogAnalysis.getCatalogStats(catName);
 		} else {
-			throw new WebAPIException("Catalogue " + catName + " not found");
+			throw new WebAPIException("Catalog " + catName + " not found");
 
 		}
 	}

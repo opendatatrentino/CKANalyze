@@ -24,25 +24,25 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import eu.trentorise.opendata.ckanalyze.controller.CatalogueScheduler;
+import eu.trentorise.opendata.ckanalyze.controller.CatalogScheduler;
 import eu.trentorise.opendata.ckanalyze.exceptions.WebAPIException;
 import eu.trentorise.opendata.ckanalyze.model.configuration.ScheduleResponse;
 
 /**
- * Service which let the user to add a catalogue
+ * Service which let the user to add a catalog
  * 
  * @author Alberto Zanella <a.zanella@trentorise.eu> Last modified by azanella
  *         On 30/lug/2013
  */
-@Path("/schedule-catalogue")
-public class ScheduleCatalogueService {
+@Path("/schedule-catalog")
+public class ScheduleCatalogService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public ScheduleResponse scheduleCatalog(
-			@QueryParam("catalogue") String catName) throws WebAPIException {
+			@QueryParam("catalog") String catName) throws WebAPIException {
 		if ((catName == null) || (catName.isEmpty())) {
-			throw new WebAPIException("catalogue parameter not specified");
+			throw new WebAPIException("catalog parameter not specified");
 		}
-		return CatalogueScheduler.scheduleCatalog(catName);
+		return CatalogScheduler.scheduleCatalog(catName);
 	}
 }
