@@ -28,7 +28,7 @@ import eu.trentorise.opendata.ckanalyze.jpa.ResourceDatatypesCount;
 import eu.trentorise.opendata.ckanalyze.jpa.ResourceStringDistribution;
 import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
 import eu.trentorise.opendata.ckanalyze.model.resources.ResourceDatatypeCount;
-import eu.trentorise.opendata.ckanalyze.model.resources.ResourceStat;
+import eu.trentorise.opendata.ckanalyze.model.resources.ResourceStats;
 import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
 /**
  * Offer analysis of dataset resouces
@@ -50,10 +50,10 @@ public class ResourceAnalysis {
 		}
 	}
 	
-	public ResourceStat getResourceStats(String resId)
+	public ResourceStats getResourceStats(String resId)
 	{
 		Resource jpaRes = QueryBuilder.getResourceByCkanId(resId, refCatalog);
-		ResourceStat retval = new ResourceStat();
+		ResourceStats retval = new ResourceStats();
 		retval.setColumnCount(jpaRes.getColumnCount());
 		retval.setFileFormat(jpaRes.getFileFormat());
 		retval.setFileName(jpaRes.getFileName());

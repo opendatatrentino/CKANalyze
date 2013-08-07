@@ -36,7 +36,7 @@ import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
  *
  */
 @XmlRootElement
-public class ResourceStat {
+public class ResourceStats {
 	   private String resourceId;
 	   private int rowCount;
 	   private int columnCount;

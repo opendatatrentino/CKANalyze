@@ -26,7 +26,7 @@ import javax.ws.rs.core.MediaType;
 
 import eu.trentorise.opendata.ckanalyze.controller.ResourceAnalysis;
 import eu.trentorise.opendata.ckanalyze.exceptions.WebAPIException;
-import eu.trentorise.opendata.ckanalyze.model.resources.ResourceStat;
+import eu.trentorise.opendata.ckanalyze.model.resources.ResourceStats;
 import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
 
 /**
@@ -50,7 +50,7 @@ public class ResourceService {
 	 */
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public ResourceStat getResourceStats(
+	public ResourceStats getResourceStats(
 			@QueryParam("catalog") String catName,
 			@QueryParam("idResource") String resid) throws WebAPIException {
 		if ((resid == null) || (resid.isEmpty())) {

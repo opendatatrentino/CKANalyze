@@ -31,7 +31,7 @@ import eu.trentorise.opendata.ckanalyze.model.JSONIZEDException;
 import eu.trentorise.opendata.ckanalyze.model.Status;
 import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogStats;
 import eu.trentorise.opendata.ckanalyze.model.configuration.ScheduleResponse;
-import eu.trentorise.opendata.ckanalyze.model.resources.ResourceStat;
+import eu.trentorise.opendata.ckanalyze.model.resources.ResourceStats;
 /**
  * Client main class
  * @author Alberto Zanella <a.zanella@trentorise.eu>
@@ -60,7 +60,7 @@ public class CkanalyzeClient {
 	 * 
 	 * 
 	 */
-	public CatalogStats getCatalogStat(String catalogName)
+	public CatalogStats getCatalogStats(String catalogName)
 	{
 		CatalogStats retval = null;
 		try {
@@ -92,9 +92,9 @@ public class CkanalyzeClient {
 	 * 
 	 * 
 	 */
-	public ResourceStat getResourceStat(String catalogName, String resourceId)
+	public ResourceStats getResourceStats(String catalogName, String resourceId)
 	{
-		ResourceStat retval = null;
+		ResourceStats retval = null;
 		try {
 			if (catalogName.isEmpty()) {
 				emptyCatalog();
@@ -113,7 +113,7 @@ public class CkanalyzeClient {
 				throw new CkanalyzeClientRemoteException(response.getEntity(
 						JSONIZEDException.class).getErrorDescription());
 			} else {
-				retval = response.getEntity(ResourceStat.class);
+				retval = response.getEntity(ResourceStats.class);
 			}
 		} catch (UnsupportedEncodingException e) {
 			unsupportedEncoding(e);
