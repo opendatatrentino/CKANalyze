@@ -24,6 +24,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import eu.trentorise.opendata.ckanalyze.controller.CatalogAnalysis;
 import eu.trentorise.opendata.ckanalyze.controller.ResourceAnalysis;
 import eu.trentorise.opendata.ckanalyze.exceptions.WebAPIException;
 import eu.trentorise.opendata.ckanalyze.model.resources.ResourceStats;
@@ -63,12 +64,15 @@ public class ResourceService {
 		{
 			throw new WebAPIException("Catalog " + catName + " is not available at the moment for updating process");
 		}
+		if (CatalogAnalysis.isValidCatalog(catName))
+		{
+			throw new WebAPIException("Catalog " + catName + " not found");
+		}
 		ResourceAnalysis rsa = new ResourceAnalysis();
 		if (rsa.isValidResource(catName, resid)) {
 			return rsa.getResourceStats(resid);
 		} else {
-			throw new WebAPIException("Catalog " + catName
-					+ " or resource id not found");
+			throw new WebAPIException("resource id not found");
 		}
 	}
 }

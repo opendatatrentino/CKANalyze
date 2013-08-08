@@ -27,6 +27,7 @@ import com.sun.jersey.api.client.WebResource;
 
 import eu.trentorise.opendata.ckanalyze.client.exceptions.CkanalyzeClientLocalException;
 import eu.trentorise.opendata.ckanalyze.client.exceptions.CkanalyzeClientRemoteException;
+import eu.trentorise.opendata.ckanalyze.client.exceptions.CkanalyzeClientResourceNotFoundException;
 import eu.trentorise.opendata.ckanalyze.model.JSONIZEDException;
 import eu.trentorise.opendata.ckanalyze.model.Status;
 import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogStats;
@@ -41,6 +42,7 @@ public class CkanalyzeClient {
 	private String basePath;
 	private Client client;
 	private static final String JSON = "application/json";
+	private static final String RES_NOT_FOUND = "resource id not found";
 	private static final String UTF8 = "UTF-8";
 	private static final int REQUEST_OK = 200;
 	/**
@@ -85,7 +87,7 @@ public class CkanalyzeClient {
 	}
 
 	/**
-	 * Provide resource statistics
+	 * Provide resource statistics . This method could throw specific CkanResourceNotFoundException
 	 * @param catalogName -- name of the catalog (URL)
 	 * @param resourceId -- CKAN-Id of the required resource
 	 * @return an object containing Resource statistics or null if exceptions are throws
@@ -110,6 +112,11 @@ public class CkanalyzeClient {
 			ClientResponse response = resource.accept(JSON).get(
 					ClientResponse.class);
 			if (response.getStatus() != REQUEST_OK) {
+				if(response.getEntity(
+						JSONIZEDException.class).getErrorDescription().contains(RES_NOT_FOUND))
+				{
+					throw new CkanalyzeClientResourceNotFoundException();
+				}
 				throw new CkanalyzeClientRemoteException(response.getEntity(
 						JSONIZEDException.class).getErrorDescription());
 			} else {
