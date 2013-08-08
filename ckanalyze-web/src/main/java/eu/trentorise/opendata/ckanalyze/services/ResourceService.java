@@ -64,7 +64,7 @@ public class ResourceService {
 		{
 			throw new WebAPIException("Catalog " + catName + " is not available at the moment for updating process");
 		}
-		if (CatalogAnalysis.isValidCatalog(catName))
+		if (!CatalogAnalysis.isValidCatalog(catName))
 		{
 			throw new WebAPIException("Catalog " + catName + " not found");
 		}

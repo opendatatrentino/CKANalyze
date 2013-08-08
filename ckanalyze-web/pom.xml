@@ -107,7 +107,7 @@
 				<configuration>
 					<url>http://opendata.disi.unitn.it:8080/manager/text/</url>
 					<server>tomcat-disi</server>
-					<path>/ckanalyze-web-auto</path>
+					<path>/ckanalyze-web</path>
 				</configuration>
 			</plugin>
 
