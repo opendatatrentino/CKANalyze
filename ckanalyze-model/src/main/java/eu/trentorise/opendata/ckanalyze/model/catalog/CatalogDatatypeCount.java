@@ -18,12 +18,18 @@
 
 package eu.trentorise.opendata.ckanalyze.model.catalog;
 
+import java.io.Serializable;
+
 /**
  * This object represents a touple with datatype name and count of datatype occurrence 
  * @author Alberto Zanella <a.zanella@trentorise.eu>
  *
  */
-public class CatalogDatatypeCount {
+public class CatalogDatatypeCount implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String typeName;
 	private Long count;
 	public String getTypeName() {

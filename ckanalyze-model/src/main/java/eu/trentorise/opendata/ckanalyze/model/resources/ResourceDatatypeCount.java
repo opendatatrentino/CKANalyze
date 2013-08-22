@@ -18,12 +18,18 @@
 
 package eu.trentorise.opendata.ckanalyze.model.resources;
 
+import java.io.Serializable;
+
 /**
  * Represents a touple of typeName and frequency of the given Datatype 
  * @author Alberto Zanella <a.zanella@trentorise.eu>
  *
  */
-public class ResourceDatatypeCount {
+public class ResourceDatatypeCount implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String typeName;
 	private Integer count;
 	public String getTypeName() {

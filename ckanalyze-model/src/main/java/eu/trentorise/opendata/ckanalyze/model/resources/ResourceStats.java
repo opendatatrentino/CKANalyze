@@ -18,6 +18,7 @@
 
 package eu.trentorise.opendata.ckanalyze.model.resources;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,8 +38,12 @@ import eu.trentorise.opendata.ckanalyze.model.Types;
  *
  */
 @XmlRootElement
-public class ResourceStats {
-	   private String resourceId;
+public class ResourceStats implements Serializable {
+	   /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String resourceId;
 	   private int rowCount;
 	   private int columnCount;
 	   private double stringLengthAvg;

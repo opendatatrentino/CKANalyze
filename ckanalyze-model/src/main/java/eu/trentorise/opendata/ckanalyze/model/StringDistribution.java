@@ -18,12 +18,18 @@
 
 package eu.trentorise.opendata.ckanalyze.model;
 
+import java.io.Serializable;
+
 /**
  * Class representing a single string distribution item with string length and frequence 
  * @author Alberto Zanella <a.zanella@trentorise.eu>
  *
  */
-public class StringDistribution implements Comparable<StringDistribution> {
+public class StringDistribution implements Comparable<StringDistribution>, Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Long length;
 	private Long frequence;
 	public Long getLength() {

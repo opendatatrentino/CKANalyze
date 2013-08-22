@@ -18,6 +18,8 @@
 
 package eu.trentorise.opendata.ckanalyze.model;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlRootElement;
 /**
  * 
@@ -25,7 +27,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  */
 @XmlRootElement
-public class Status {
+public class Status implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Boolean status;
 
 	public Boolean getStatus() {

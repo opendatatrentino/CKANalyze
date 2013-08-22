@@ -18,6 +18,8 @@
 
 package eu.trentorise.opendata.ckanalyze.model;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -26,7 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
  *
  */
 @XmlTransient
-public enum Types {
+public enum Types implements Serializable {
 	INT,
 	STRING,
 	FLOAT,

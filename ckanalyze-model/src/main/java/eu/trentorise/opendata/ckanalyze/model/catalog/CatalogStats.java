@@ -18,6 +18,7 @@
 
 package eu.trentorise.opendata.ckanalyze.model.catalog;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,11 @@ import eu.trentorise.opendata.ckanalyze.model.Types;
  * @author Alberto Zanella <a.zanella@trentorise.eu>
  *Last modified by azanella On 25/lug/2013
  */
-public class CatalogStats {
+public class CatalogStats implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String catalogName;
 	private int totalDatasetsCount;
 	private int totalResourcesCount;

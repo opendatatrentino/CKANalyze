@@ -18,6 +18,7 @@
 
 package eu.trentorise.opendata.ckanalyze.model.configuration;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -27,7 +28,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  */
 @XmlRootElement
-public class ScheduleResponse {
+public class ScheduleResponse implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Boolean alreadyScheduled;
 	private Date lastProcessed;
 	public Boolean getAlreadyScheduled() {
