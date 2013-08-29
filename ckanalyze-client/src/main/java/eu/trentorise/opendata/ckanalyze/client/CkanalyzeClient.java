@@ -90,7 +90,7 @@ public class CkanalyzeClient {
 	 * Provide resource statistics . This method could throw specific CkanResourceNotFoundException
 	 * @param catalogName -- name of the catalog (URL)
 	 * @param resourceId -- CKAN-Id of the required resource
-	 * @return an object containing Resource statistics or null if exceptions are throws
+	 * @return an object containing Resource statistics or null if  UnsupportedEncodingException  is thrown
 	 * 
 	 * 
 	 */
