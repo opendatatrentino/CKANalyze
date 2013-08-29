@@ -58,7 +58,7 @@ public class CkanalyzeClient {
 	/**
 	 * Provide catalog statistics
 	 * @param catalogName -- name of the catalog (URL)
-	 * @return object containing catalog statistics or null if exceptions are throws
+	 * @return object containing catalog statistics or null if  UnsupportedEncodingException  is thrown
 	 * 
 	 * 
 	 */
