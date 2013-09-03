@@ -34,7 +34,6 @@ import eu.trentorise.opendata.ckanalyze.jpa.Datatype;
 import eu.trentorise.opendata.ckanalyze.jpa.ResourceDatatypesCount;
 import eu.trentorise.opendata.ckanalyze.jpa.Resource;
 import eu.trentorise.opendata.ckanalyze.jpa.ResourceStringDistribution;
-import eu.trentorise.opendata.ckanalyze.utility.PluralNamingStrategy;
 
 /**
  * Provide access to the database

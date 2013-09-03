@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import eu.trentorise.opendata.ckanalyze.client.CkanalyzeClient;
+import eu.trentorise.opendata.ckanalyze.client.exceptions.CkanalyzeClientLocalException;
 import eu.trentorise.opendata.ckanalyze.client.exceptions.CkanalyzeClientRemoteException;
 import eu.trentorise.opendata.ckanalyze.client.exceptions.CkanalyzeClientResourceNotFoundException;
 import eu.trentorise.opendata.ckanalyze.model.resources.ResourceStats;
@@ -76,7 +77,7 @@ public class ResourceServiceITCase {
 		/**
 		 * When a null catalog name is provided must throw an Exception
 		 */
-		@Test(expected = NullPointerException.class)
+		@Test(expected = CkanalyzeClientLocalException.class)
 		public void NullCatalogTest()
 		{
 			client.getResourceStats(null,RES_RESOCONTO_DEL_2005);
@@ -85,7 +86,7 @@ public class ResourceServiceITCase {
 		/**
 		 * When a null resourceID is provided must throw an Exception
 		 */
-		@Test(expected = NullPointerException.class)
+		@Test(expected = CkanalyzeClientLocalException.class)
 		public void NullResourceIdTest()
 		{
 			client.getResourceStats(CATALOG_NAME,null);

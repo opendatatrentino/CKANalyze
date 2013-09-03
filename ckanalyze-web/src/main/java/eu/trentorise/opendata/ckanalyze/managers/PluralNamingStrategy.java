@@ -15,7 +15,7 @@
 *
 *******************************************************************************
 */
-package eu.trentorise.opendata.ckanalyze.utility;
+package eu.trentorise.opendata.ckanalyze.managers;
 
 import org.hibernate.cfg.ImprovedNamingStrategy;
 

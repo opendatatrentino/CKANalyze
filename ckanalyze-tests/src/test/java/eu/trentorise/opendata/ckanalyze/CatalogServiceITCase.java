@@ -70,7 +70,7 @@ public class CatalogServiceITCase {
 	/**
 	 * When a null catalog name is provided must throw an Exception
 	 */
-	@Test(expected = NullPointerException.class)
+	@Test(expected = CkanalyzeClientLocalException.class)
 	public void NullCatalogTest()
 	{
 		client.getCatalogStats(null);

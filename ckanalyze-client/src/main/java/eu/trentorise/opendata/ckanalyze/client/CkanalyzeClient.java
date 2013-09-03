@@ -33,10 +33,12 @@ import eu.trentorise.opendata.ckanalyze.model.Status;
 import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogStats;
 import eu.trentorise.opendata.ckanalyze.model.configuration.ScheduleResponse;
 import eu.trentorise.opendata.ckanalyze.model.resources.ResourceStats;
+
 /**
  * Client main class
- * @author Alberto Zanella <a.zanella@trentorise.eu>
- *Last modified by azanella On 31/lug/2013
+ * 
+ * @author Alberto Zanella <a.zanella@trentorise.eu> Last modified by azanella
+ *         On 31/lug/2013
  */
 public class CkanalyzeClient {
 	private String basePath;
@@ -45,9 +47,12 @@ public class CkanalyzeClient {
 	private static final String RES_NOT_FOUND = "resource id not found";
 	private static final String UTF8 = "UTF-8";
 	private static final int REQUEST_OK = 200;
+
 	/**
 	 * 
-	 * @param basePath -- the baseURL (domain) i.e. http://localhost:8080/ckanalyze-web
+	 * @param basePath
+	 *            -- the baseURL (domain) i.e.
+	 *            http://localhost:8080/ckanalyze-web
 	 */
 	public CkanalyzeClient(String basePath) {
 		super();
@@ -57,15 +62,19 @@ public class CkanalyzeClient {
 
 	/**
 	 * Provide catalog statistics
-	 * @param catalogName -- name of the catalog (URL)
-	 * @return object containing catalog statistics or null if  UnsupportedEncodingException  is thrown
+	 * 
+	 * @param catalogName
+	 *            -- name of the catalog (URL)
+	 * @return object containing catalog statistics or null if
+	 *         UnsupportedEncodingException is thrown
 	 * 
 	 * 
 	 */
-	public CatalogStats getCatalogStats(String catalogName)
-	{
+	public CatalogStats getCatalogStats(String catalogName) {
 		CatalogStats retval = null;
-		if(catalogName == null) throw new NullPointerException();
+		if (catalogName == null) {
+			throw new CkanalyzeClientLocalException("Null catalog name");
+		}
 		try {
 			if (catalogName.isEmpty()) {
 				emptyCatalog();
@@ -88,17 +97,25 @@ public class CkanalyzeClient {
 	}
 
 	/**
-	 * Provide resource statistics . This method could throw specific CkanResourceNotFoundException
-	 * @param catalogName -- name of the catalog (URL)
-	 * @param resourceId -- CKAN-Id of the required resource
-	 * @return an object containing Resource statistics or null if  UnsupportedEncodingException  is thrown
+	 * Provide resource statistics . This method could throw specific
+	 * CkanResourceNotFoundException
+	 * 
+	 * @param catalogName
+	 *            -- name of the catalog (URL)
+	 * @param resourceId
+	 *            -- CKAN-Id of the required resource
+	 * @return an object containing Resource statistics or null if
+	 *         UnsupportedEncodingException is thrown
 	 * 
 	 * 
 	 */
-	public ResourceStats getResourceStats(String catalogName, String resourceId)
-	{
-		if(catalogName == null) throw new NullPointerException();
-		if(resourceId == null) throw new NullPointerException();
+	public ResourceStats getResourceStats(String catalogName, String resourceId) {
+		if (catalogName == null) {
+			throw new CkanalyzeClientLocalException("Null catalog name");
+		}
+		if (resourceId == null) {
+			throw new CkanalyzeClientLocalException("Null resourceID");
+		}
 		ResourceStats retval = null;
 		try {
 			if (catalogName.isEmpty()) {
@@ -115,10 +132,9 @@ public class CkanalyzeClient {
 			ClientResponse response = resource.accept(JSON).get(
 					ClientResponse.class);
 			if (response.getStatus() != REQUEST_OK) {
-				String json = response.getEntity(
-						JSONIZEDException.class).getErrorDescription();
-				if(json.contains(RES_NOT_FOUND))
-				{
+				String json = response.getEntity(JSONIZEDException.class)
+						.getErrorDescription();
+				if (json.contains(RES_NOT_FOUND)) {
 					throw new CkanalyzeClientResourceNotFoundException();
 				}
 				throw new CkanalyzeClientRemoteException(json);
@@ -130,14 +146,16 @@ public class CkanalyzeClient {
 		}
 		return retval;
 	}
-	
+
 	/**
 	 * Provide information about scheduled catalogs
-	 * @param catalogName -- catalog name (URL)
-	 * @return true if the specified catalog is already scheduled, false otherwise.
+	 * 
+	 * @param catalogName
+	 *            -- catalog name (URL)
+	 * @return true if the specified catalog is already scheduled, false
+	 *         otherwise.
 	 */
-	public boolean isScheduledCatalog(String catalogName)
-	{
+	public boolean isScheduledCatalog(String catalogName) {
 		Status retval;
 		try {
 			if (catalogName.isEmpty()) {
@@ -160,14 +178,14 @@ public class CkanalyzeClient {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Schedule a new catalog
+	 * 
 	 * @param catalogName
 	 * @return
 	 */
-	public ScheduleResponse scheduleCatalog(String catalogName)
-	{
+	public ScheduleResponse scheduleCatalog(String catalogName) {
 		ScheduleResponse retval = null;
 		try {
 			if (catalogName.isEmpty()) {
@@ -189,21 +207,16 @@ public class CkanalyzeClient {
 		}
 		return retval;
 	}
-	
-	private void emptyCatalog()
-	{
-		throw new CkanalyzeClientLocalException(
-				"Empty parameter catalogName");
+
+	private void emptyCatalog() {
+		throw new CkanalyzeClientLocalException("Empty parameter catalogName");
 	}
-	
-	private void emptyResource()
-	{
-		throw new CkanalyzeClientLocalException(
-				"Empty parameter resourceId");
+
+	private void emptyResource() {
+		throw new CkanalyzeClientLocalException("Empty parameter resourceId");
 	}
-	
-	private void unsupportedEncoding(Throwable e)
-	{
+
+	private void unsupportedEncoding(Throwable e) {
 		throw new CkanalyzeClientLocalException(
 				"Unsupported parameter encoding", e);
 	}
