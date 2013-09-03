@@ -98,6 +98,10 @@ public class ResourceStats implements Serializable {
 		this.url = url;
 	}
 	
+	/**
+	 * 
+	 * @return a list of datatype and its count. If a datatype is not present in the resource it is not added into the list.
+	 */
 	@XmlElements({@XmlElement(name="datatype")})
 	@XmlElementWrapper
 	public List<ResourceDatatypeCount> getColsPerType() {
@@ -107,8 +111,8 @@ public class ResourceStats implements Serializable {
 		this.colsPerType = colsPerType;
 	}
 	/**
-	 * This methods returns the same content of getAvgColsPerType but organized in a map instead of an array of tuples. 
-	 * @return a map with TypeName Strings as keys and frequency as values
+	 * This methods returns the same content of getColsPerType but organized in a map instead of an array of tuples. 
+	 * @return a map with TypeName Strings as keys and frequency as values . If a datatype is not present in the resource it is not added into the Key Set.
 	 */
 	@XmlTransient
 	public Map<Types, Integer> getColsPerTypeMap()

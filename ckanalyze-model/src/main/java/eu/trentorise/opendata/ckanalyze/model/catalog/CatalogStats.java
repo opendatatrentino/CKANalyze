@@ -108,6 +108,10 @@ public class CatalogStats implements Serializable{
 		this.avgRowCount = avgRowCount;
 	}
 	
+	/**
+	 * 
+	 * @return a list CatalogDatatypeCount for each datatype present in the catalog. If a datatype is not present in the catalog it is not added into the list.
+	 */
 	public List<CatalogDatatypeCount> getColsPerType() {
 		return colsPerType;
 	}
@@ -119,8 +123,8 @@ public class CatalogStats implements Serializable{
 	}
 	
 	/**
-	 * This methods returns the same content of getAvgColsPerType but organized in a map instead of an array of tuples. 
-	 * @return a map with TypeName Strings as keys and AVG of frequency  as values
+	 * This methods returns the same content of getColsPerType but organized in a map instead of an array of tuples. 
+	 * @return a map with TypeName Strings as keys and AVG of frequency  as values . If a datatype is not present in the catalog it is not added into the Key Set. 
 	 */
 	@XmlTransient
 	public Map<Types, Long> getColsPerTypeMap()

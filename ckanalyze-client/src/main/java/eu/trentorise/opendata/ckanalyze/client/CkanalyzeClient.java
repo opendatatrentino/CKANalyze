@@ -65,6 +65,7 @@ public class CkanalyzeClient {
 	public CatalogStats getCatalogStats(String catalogName)
 	{
 		CatalogStats retval = null;
+		if(catalogName == null) throw new NullPointerException();
 		try {
 			if (catalogName.isEmpty()) {
 				emptyCatalog();
@@ -96,6 +97,8 @@ public class CkanalyzeClient {
 	 */
 	public ResourceStats getResourceStats(String catalogName, String resourceId)
 	{
+		if(catalogName == null) throw new NullPointerException();
+		if(resourceId == null) throw new NullPointerException();
 		ResourceStats retval = null;
 		try {
 			if (catalogName.isEmpty()) {
@@ -112,13 +115,13 @@ public class CkanalyzeClient {
 			ClientResponse response = resource.accept(JSON).get(
 					ClientResponse.class);
 			if (response.getStatus() != REQUEST_OK) {
-				if(response.getEntity(
-						JSONIZEDException.class).getErrorDescription().contains(RES_NOT_FOUND))
+				String json = response.getEntity(
+						JSONIZEDException.class).getErrorDescription();
+				if(json.contains(RES_NOT_FOUND))
 				{
 					throw new CkanalyzeClientResourceNotFoundException();
 				}
-				throw new CkanalyzeClientRemoteException(response.getEntity(
-						JSONIZEDException.class).getErrorDescription());
+				throw new CkanalyzeClientRemoteException(json);
 			} else {
 				retval = response.getEntity(ResourceStats.class);
 			}
