@@ -36,4 +36,9 @@
 			</plugin>
 		</plugins>
 	</build>
+	<scm>
+		<url>git@github.com:opendatatrentino/CKANalyze.git</url>
+		<connection>scm:git:git@github.com:opendatatrentino/CKANalyze.git</connection>
+		<developerConnection>scm:git:git@github.com:opendatatrentino/CKANalyze.git</developerConnection>
+	</scm>
 </project>
