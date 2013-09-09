@@ -4,7 +4,7 @@
 	<artifactId>ckanalyze-tests</artifactId>
 	<name>ckanalyze-tests</name>
 	<groupId>eu.trentorise.opendata</groupId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<description>Integration tests of CKANalyze</description>
 	<build>
 		<plugins>
@@ -107,12 +107,12 @@
 		<dependency>
 			<groupId>eu.trentorise.opendata</groupId>
 			<artifactId>ckanalyze-client</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>eu.trentorise.opendata</groupId>
 			<artifactId>ckanalyze-web</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.1.0</version>
 			<type>war</type>
 		</dependency>
 	</dependencies>
