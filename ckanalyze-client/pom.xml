@@ -113,11 +113,6 @@
 			</plugin>
 		</plugins>
 	</build>
-	<scm>
-		<url>git@github.com:opendatatrentino/CKANalyze.git</url>
-		<connection>scm:git:git@github.com:opendatatrentino/CKANalyze.git</connection>
-		<developerConnection>scm:git:git@github.com:opendatatrentino/CKANalyze.git</developerConnection>
-	</scm>
 	<description>Tool to perform statistics on CKAN datasets written in Java. More info can be found in the Wiki. -- Java Client library</description>
 	<developers>
 		<developer>
