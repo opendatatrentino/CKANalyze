@@ -38,8 +38,9 @@ public final class CatalogScheduler {
 
 	public static ScheduleResponse scheduleCatalog(String catalogName)
 	{
+		QueryBuilder qb = new QueryBuilder();
 		ScheduleResponse retval = new ScheduleResponse();
-		List<Configuration> confs = QueryBuilder.getScheduledCatalog(catalogName);
+		List<Configuration> confs = qb.getScheduledCatalog(catalogName);
 		if(!confs.isEmpty())
 		{
 			retval.setAlreadyScheduled(true);
@@ -49,7 +50,7 @@ public final class CatalogScheduler {
 		{
 			Configuration conf = new Configuration();
 			conf.setCatalogHostName(catalogName);
-			QueryBuilder.scheduleCatalog(conf);
+			qb.scheduleCatalog(conf);
 			retval.setAlreadyScheduled(false);
 			retval.setLastProcessed(null);
 		}

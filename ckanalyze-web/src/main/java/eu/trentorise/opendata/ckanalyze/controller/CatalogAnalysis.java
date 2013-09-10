@@ -44,32 +44,34 @@ public final class CatalogAnalysis {
 	}
 	public static boolean isValidCatalog(String name)
 	{
-		boolean retval =  QueryBuilder.getCatalogByName(name) != null;
-		QueryBuilder.closeSession();
+		QueryBuilder qb = new QueryBuilder();
+		boolean retval =  qb.getCatalogByName(name) != null;
+		qb.closeSession();
 		return retval;
 	}
 	public static CatalogStats getCatalogStats(String name)
 	{
-		Catalog jpaCat = QueryBuilder.getCatalogByName(name);
+		QueryBuilder qb = new QueryBuilder();
+		Catalog jpaCat = qb.getCatalogByName(name);
 		CatalogStats retval = new CatalogStats();
 		retval.setCatalogName(jpaCat.getUrl());
 		retval.setAvgColumnCount(jpaCat.getAvgColumnCount());
 		retval.setAvgRowCount(jpaCat.getAvgRowCount());
 		retval.setAvgStringLength(jpaCat.getAvgStringLength());
-		retval.setAvgResourcesFileSize(QueryBuilder.getAvgFileSize(jpaCat));
+		retval.setAvgResourcesFileSize(qb.getAvgFileSize(jpaCat));
 		retval.setTotalDatasetsCount(jpaCat.getTotalDatasetsCount());
-		retval.setTotalColsCount(QueryBuilder.getColsCount(jpaCat));
+		retval.setTotalColsCount(qb.getColsCount(jpaCat));
 		retval.setTotalFileSizeCount(jpaCat.getTotalFileSizeCount());
 		retval.setTotalResourcesCount(jpaCat.getTotalResourcesCount());
 		retval.setStringLengthsDistribution(computeStringDistribution(jpaCat.getStringDistribution()));
-		retval.setColsPerType(computeColsPerType(jpaCat));
-		QueryBuilder.closeSession();
+		retval.setColsPerType(computeColsPerType(jpaCat,qb));
+		qb.closeSession();
 		return retval;
 	}
 	
-	private static List<CatalogDatatypeCount> computeColsPerType(Catalog jpaCat)
+	private static List<CatalogDatatypeCount> computeColsPerType(Catalog jpaCat,QueryBuilder qb)
 	{
-		return QueryBuilder.getAllColsTypes(jpaCat);
+		return qb.getAllColsTypes(jpaCat);
 	}
 	
 	private static List<StringDistribution> computeStringDistribution(Set<CatalogStringDistribution> jpaCsd)

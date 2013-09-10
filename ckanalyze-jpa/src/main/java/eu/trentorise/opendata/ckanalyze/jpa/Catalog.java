@@ -21,6 +21,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,6 +29,7 @@ import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+
 /**
  * 
  * @author Alberto Zanella <a.zanella@trentorise.eu>
@@ -38,10 +40,10 @@ public class Catalog {
 	@Id
 	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private long catalogId;
-	@OneToMany(mappedBy="catalog")
+	@OneToMany(mappedBy="catalog",fetch=FetchType.EAGER)
 	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
 	private Set<Resource> catalogResources;
-	@OneToMany(mappedBy="catalog")
+	@OneToMany(mappedBy="catalog",fetch=FetchType.EAGER)
 	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE})
 	private Set<CatalogStringDistribution> stringDistribution;
 	@Column

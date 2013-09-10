@@ -36,23 +36,30 @@ import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
  *Last modified by azanella On 31/lug/2013
  */
 public class ResourceAnalysis {
+	
+	private QueryBuilder qb;
+	public ResourceAnalysis()
+	{
+		qb = new QueryBuilder();
+	}
+	
 	private Catalog refCatalog;
 	public boolean isValidResource(String catalogname, String resourceId)
 	{
-		refCatalog = QueryBuilder.getCatalogByName(catalogname);
+		refCatalog = qb.getCatalogByName(catalogname);
 		if(refCatalog == null)
 		{
 			return false;
 		}
 		else
 		{
-			return QueryBuilder.getResourceByCkanId(resourceId, refCatalog) != null;
+			return qb.getResourceByCkanId(resourceId, refCatalog) != null;
 		}
 	}
 	
 	public ResourceStats getResourceStats(String resId)
 	{
-		Resource jpaRes = QueryBuilder.getResourceByCkanId(resId, refCatalog);
+		Resource jpaRes = qb.getResourceByCkanId(resId, refCatalog);
 		ResourceStats retval = new ResourceStats();
 		retval.setColumnCount(jpaRes.getColumnCount());
 		retval.setFileFormat(jpaRes.getFileFormat());
@@ -64,7 +71,7 @@ public class ResourceAnalysis {
 		retval.setUrl(jpaRes.getUrl());
 		retval.setStringLengthsDistribution(populateStringDistribution(jpaRes));
 		retval.setColsPerType(populateDatatypeCount(jpaRes));
-		QueryBuilder.closeSession();
+		qb.closeSession();
 		return retval;
 	}
 	

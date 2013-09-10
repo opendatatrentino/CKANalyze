@@ -52,7 +52,7 @@ public class CatalogService {
 		if ((catName == null) || (catName.isEmpty())) {
 			throw new WebAPIException("catalog parameter not specified");
 		}
-		if(QueryBuilder.isUpdating(catName))
+		if(new QueryBuilder().isUpdating(catName))
 		{
 			throw new WebAPIException("Catalog " + catName + " is not available at the moment for updating process");
 		}

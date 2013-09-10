@@ -38,30 +38,25 @@ import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogDatatypeCount;
  * Last modified by azanella On 31/lug/2013
  */
 @SuppressWarnings("unchecked")
-public final class QueryBuilder {
+public class QueryBuilder {
 	
 	
-	private QueryBuilder() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	private static Session ss;
-	public static void closeSession() {
+	private Session ss;
+	public void closeSession() {
 		if (ss == null) {
 			ss = PersistencyManager.getSessionFactory().openSession();
 		}
 		ss.close();
 	}
 
-	private static Session openSession() {
+	private Session openSession() {
 		if ((ss == null) || (!ss.isOpen())) {
 			ss = PersistencyManager.getSessionFactory().openSession();
 		}
 		return ss;
 	}
 
-	public static Resource getResourceByCkanId(String resckanid, Catalog cat) {
+	public Resource getResourceByCkanId(String resckanid, Catalog cat) {
 		
 		Query q = openSession()
 				.createQuery(
@@ -75,7 +70,7 @@ public final class QueryBuilder {
 		return null;
 	}
 
-	public static Catalog getCatalogByName(String name) {
+	public Catalog getCatalogByName(String name) {
 		Query q = openSession().createQuery(
 				"FROM Catalog c WHERE c.url = :name");
 		q.setParameter("name", name);
@@ -86,7 +81,7 @@ public final class QueryBuilder {
 		return null;
 	}
 
-	public static Set<Datatype> getAllDataTypes(Catalog catalog) {
+	public Set<Datatype> getAllDataTypes(Catalog catalog) {
 		String hql = "SELECT distinct d FROM Datatype d JOIN d.colsDataTypes dt JOIN dt.resource r WHERE dt.freq > 0 AND r.catalog = :cat";
 		org.hibernate.Query q = openSession().createQuery(hql);
 		q.setParameter("cat", catalog);
@@ -94,7 +89,7 @@ public final class QueryBuilder {
 	}
 
 
-	public static List<CatalogDatatypeCount> getAllColsTypes(
+	public List<CatalogDatatypeCount> getAllColsTypes(
 			Catalog catalog) {
 		String hql = "SELECT new eu.trentorise.opendata.ckanalyze.model.catalog.CatalogDatatypeCount(d.name, sum(dtc.freq)) FROM ResourceDatatypesCount dtc JOIN dtc.resource r JOIN dtc.datatype d WHERE r.catalog = :cat GROUP BY d.name";
 		org.hibernate.Query q = openSession().createQuery(hql);
@@ -102,7 +97,7 @@ public final class QueryBuilder {
 		return q.list();
 	}
 
-	public static long getColsCount(
+	public long getColsCount(
 			Catalog catalog) {
 		String hql = "SELECT sum(dtc.freq) FROM ResourceDatatypesCount dtc JOIN dtc.resource r WHERE r.catalog = :cat";
 		org.hibernate.Query q = openSession().createQuery(hql);
@@ -110,7 +105,7 @@ public final class QueryBuilder {
 		return (Long)q.list().get(0);
 	}
 	
-	public static Double getAvgFileSize(Catalog catalog) {
+	public Double getAvgFileSize(Catalog catalog) {
 		String hql = "SELECT avg(fileSize) from Resource r WHERE catalog = :cat";
 		org.hibernate.Query q = openSession().createQuery(hql);
 		q.setParameter("cat", catalog);
@@ -122,7 +117,7 @@ public final class QueryBuilder {
 	}
 
 
-	public static List<Configuration> getScheduledCatalog(String catalogName) {
+	public List<Configuration> getScheduledCatalog(String catalogName) {
 		String hql = "FROM Configuration WHERE catalogHostName = :cname";
 		org.hibernate.Query q = openSession().createQuery(hql);
 		q.setParameter("cname", catalogName);
@@ -131,11 +126,11 @@ public final class QueryBuilder {
 		return retval;
 	}
 
-	public static boolean isScheduled(String catalogName) {
+	public boolean isScheduled(String catalogName) {
 		return !getScheduledCatalog(catalogName).isEmpty();
 	}
 
-	public static void scheduleCatalog(Configuration conf) {
+	public void scheduleCatalog(Configuration conf) {
 		ss = openSession();
 		ss.beginTransaction();
 		ss.saveOrUpdate(conf);
@@ -143,7 +138,7 @@ public final class QueryBuilder {
 		closeSession();
 	}
 	
-	public static boolean isUpdating(String catalogName)
+	public boolean isUpdating(String catalogName)
 	{
 		String hql = "FROM Configuration WHERE catalogHostName = :name";
 		ss = openSession();
