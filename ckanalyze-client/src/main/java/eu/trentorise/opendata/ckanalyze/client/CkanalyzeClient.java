@@ -21,6 +21,8 @@ package eu.trentorise.opendata.ckanalyze.client;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import org.codehaus.jackson.map.ObjectMapper;
+
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -60,6 +62,17 @@ public class CkanalyzeClient {
 		this.client = Client.create();
 	}
 
+	private void throwRemoteException(ClientResponse response) {
+		String rspstr = response.getEntity(String.class);
+		try {
+			JSONIZEDException exc = new ObjectMapper().readValue(rspstr,
+					JSONIZEDException.class);
+			throw new CkanalyzeClientRemoteException(exc.getErrorDescription());
+		} catch (Exception e) {
+			throw new CkanalyzeClientRemoteException(rspstr);
+		}
+	}
+
 	/**
 	 * Provide catalog statistics
 	 * 
@@ -85,8 +98,7 @@ public class CkanalyzeClient {
 			ClientResponse response = resource.accept(JSON).get(
 					ClientResponse.class);
 			if (response.getStatus() != REQUEST_OK) {
-				throw new CkanalyzeClientRemoteException(response.getEntity(
-						JSONIZEDException.class).getErrorDescription());
+				throwRemoteException(response);
 			} else {
 				retval = response.getEntity(CatalogStats.class);
 			}
@@ -132,12 +144,17 @@ public class CkanalyzeClient {
 			ClientResponse response = resource.accept(JSON).get(
 					ClientResponse.class);
 			if (response.getStatus() != REQUEST_OK) {
-				String json = response.getEntity(JSONIZEDException.class)
-						.getErrorDescription();
-				if (json.contains(RES_NOT_FOUND)) {
-					throw new CkanalyzeClientResourceNotFoundException();
+				String rspstr = response.getEntity(String.class);
+				try {
+					String json = new ObjectMapper().readValue(rspstr,
+							JSONIZEDException.class).getErrorDescription();
+					if (json.contains(RES_NOT_FOUND)) {
+						throw new CkanalyzeClientResourceNotFoundException();
+					}
+					throw new CkanalyzeClientRemoteException(json);
+				} catch (Exception e) {
+					throw new CkanalyzeClientRemoteException(rspstr);
 				}
-				throw new CkanalyzeClientRemoteException(json);
 			} else {
 				retval = response.getEntity(ResourceStats.class);
 			}
@@ -167,8 +184,8 @@ public class CkanalyzeClient {
 			ClientResponse response = resource.accept(JSON).get(
 					ClientResponse.class);
 			if (response.getStatus() != REQUEST_OK) {
-				throw new CkanalyzeClientRemoteException(response.getEntity(
-						JSONIZEDException.class).getErrorDescription());
+				throwRemoteException(response);
+				retval = null;
 			} else {
 				retval = response.getEntity(Status.class);
 			}
@@ -197,8 +214,7 @@ public class CkanalyzeClient {
 			ClientResponse response = resource.accept(JSON).get(
 					ClientResponse.class);
 			if (response.getStatus() != REQUEST_OK) {
-				throw new CkanalyzeClientRemoteException(response.getEntity(
-						JSONIZEDException.class).getErrorDescription());
+				throwRemoteException(response);
 			} else {
 				retval = response.getEntity(ScheduleResponse.class);
 			}
