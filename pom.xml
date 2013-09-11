@@ -24,21 +24,4 @@
 		<module>ckanalyze-client</module>
 		<module>ckanalyze-tests</module>
 	</modules>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-	<scm>
-		<url>git@github.com:opendatatrentino/CKANalyze.git</url>
-		<connection>scm:git:git@github.com:opendatatrentino/CKANalyze.git</connection>
-		<developerConnection>scm:git:git@github.com:opendatatrentino/CKANalyze.git</developerConnection>
-	</scm>
 </project>
