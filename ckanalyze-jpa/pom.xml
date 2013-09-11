@@ -103,11 +103,6 @@
 		</plugins>
 	</build>
 	<description>Tool to perform statistics on CKAN datasets written in Java. More info can be found in the Wiki. -- JPA persistency library</description>
-	<scm>
-		<url>git@github.com:opendatatrentino/CKANalyze.git</url>
-		<connection>scm:git:git@github.com:opendatatrentino/CKANalyze.git</connection>
-		<developerConnection>scm:git:git@github.com:opendatatrentino/CKANalyze.git</developerConnection>
-	</scm>
 	<developers>
 		<developer>
 			<id>a.zanella</id>
