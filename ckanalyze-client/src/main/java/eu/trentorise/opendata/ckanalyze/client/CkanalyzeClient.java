@@ -18,9 +18,12 @@
 
 package eu.trentorise.opendata.ckanalyze.client;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.sun.jersey.api.client.Client;
@@ -40,7 +43,7 @@ import eu.trentorise.opendata.ckanalyze.model.resources.ResourceStats;
  * Client main class
  * 
  * @author Alberto Zanella <a.zanella@trentorise.eu> Last modified by azanella
- *         On 31/lug/2013
+ *         On 16/set/2013
  */
 public class CkanalyzeClient {
 	private String basePath;
@@ -68,11 +71,9 @@ public class CkanalyzeClient {
 			client = null;
 		}
 	}
-	
-	private void openClient()
-	{
-		if(client == null)
-		{
+
+	private void openClient() {
+		if (client == null) {
 			client = Client.create();
 		}
 	}
@@ -84,7 +85,14 @@ public class CkanalyzeClient {
 			JSONIZEDException exc = new ObjectMapper().readValue(rspstr,
 					JSONIZEDException.class);
 			throw new CkanalyzeClientRemoteException(exc.getErrorDescription());
-		} catch (Exception e) {
+		} catch (JsonMappingException e) {
+			closeClient();
+			throw new CkanalyzeClientRemoteException(rspstr);
+		} catch (JsonParseException e) {
+			closeClient();
+			throw new CkanalyzeClientRemoteException(rspstr);
+		} catch (IOException e) {
+			closeClient();
 			throw new CkanalyzeClientRemoteException(rspstr);
 		}
 	}
@@ -169,7 +177,8 @@ public class CkanalyzeClient {
 			if (response.getStatus() != REQUEST_OK) {
 				String rspstr = response.getEntity(String.class);
 				try {
-					String json = new ObjectMapper().readValue(rspstr,
+					String json;
+					json = new ObjectMapper().readValue(rspstr,
 							JSONIZEDException.class).getErrorDescription();
 					if (json.contains(RES_NOT_FOUND)) {
 						closeClient();
@@ -177,7 +186,13 @@ public class CkanalyzeClient {
 					}
 					closeClient();
 					throw new CkanalyzeClientRemoteException(json);
-				} catch (Exception e) {
+				} catch (JsonMappingException e) {
+					closeClient();
+					throw new CkanalyzeClientRemoteException(rspstr);
+				} catch (JsonParseException e) {
+					closeClient();
+					throw new CkanalyzeClientRemoteException(rspstr);
+				} catch (IOException e) {
 					closeClient();
 					throw new CkanalyzeClientRemoteException(rspstr);
 				}
