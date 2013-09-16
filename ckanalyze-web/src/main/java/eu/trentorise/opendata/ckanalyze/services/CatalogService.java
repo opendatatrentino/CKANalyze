@@ -17,6 +17,7 @@
  */
 package eu.trentorise.opendata.ckanalyze.services;
 
+import javax.annotation.PostConstruct;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -25,6 +26,7 @@ import javax.ws.rs.core.MediaType;
 
 import eu.trentorise.opendata.ckanalyze.controller.CatalogAnalysis;
 import eu.trentorise.opendata.ckanalyze.exceptions.WebAPIException;
+import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
 import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogStats;
 import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
 
@@ -62,6 +64,11 @@ public class CatalogService {
 			throw new WebAPIException("Catalog " + catName + " not found");
 
 		}
+	}
+	
+	@PostConstruct
+	public void init() {
+		PersistencyManager.getSessionFactory();
 	}
 
 }

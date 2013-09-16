@@ -62,7 +62,23 @@ public class CkanalyzeClient {
 		this.client = Client.create();
 	}
 
+	private void closeClient() {
+		if (client != null) {
+			client.destroy();
+			client = null;
+		}
+	}
+	
+	private void openClient()
+	{
+		if(client == null)
+		{
+			client = Client.create();
+		}
+	}
+
 	private void throwRemoteException(ClientResponse response) {
+		closeClient();
 		String rspstr = response.getEntity(String.class);
 		try {
 			JSONIZEDException exc = new ObjectMapper().readValue(rspstr,
@@ -84,8 +100,10 @@ public class CkanalyzeClient {
 	 * 
 	 */
 	public CatalogStats getCatalogStats(String catalogName) {
+		openClient();
 		CatalogStats retval = null;
 		if (catalogName == null) {
+			closeClient();
 			throw new CkanalyzeClientLocalException("Null catalog name");
 		}
 		try {
@@ -103,8 +121,10 @@ public class CkanalyzeClient {
 				retval = response.getEntity(CatalogStats.class);
 			}
 		} catch (UnsupportedEncodingException e) {
+			closeClient();
 			unsupportedEncoding(e);
 		}
+		closeClient();
 		return retval;
 	}
 
@@ -122,10 +142,13 @@ public class CkanalyzeClient {
 	 * 
 	 */
 	public ResourceStats getResourceStats(String catalogName, String resourceId) {
+		openClient();
 		if (catalogName == null) {
+			closeClient();
 			throw new CkanalyzeClientLocalException("Null catalog name");
 		}
 		if (resourceId == null) {
+			closeClient();
 			throw new CkanalyzeClientLocalException("Null resourceID");
 		}
 		ResourceStats retval = null;
@@ -149,18 +172,23 @@ public class CkanalyzeClient {
 					String json = new ObjectMapper().readValue(rspstr,
 							JSONIZEDException.class).getErrorDescription();
 					if (json.contains(RES_NOT_FOUND)) {
+						closeClient();
 						throw new CkanalyzeClientResourceNotFoundException();
 					}
+					closeClient();
 					throw new CkanalyzeClientRemoteException(json);
 				} catch (Exception e) {
+					closeClient();
 					throw new CkanalyzeClientRemoteException(rspstr);
 				}
 			} else {
 				retval = response.getEntity(ResourceStats.class);
 			}
 		} catch (UnsupportedEncodingException e) {
+			closeClient();
 			unsupportedEncoding(e);
 		}
+		closeClient();
 		return retval;
 	}
 
@@ -173,6 +201,7 @@ public class CkanalyzeClient {
 	 *         otherwise.
 	 */
 	public boolean isScheduledCatalog(String catalogName) {
+		openClient();
 		Status retval;
 		try {
 			if (catalogName.isEmpty()) {
@@ -189,9 +218,11 @@ public class CkanalyzeClient {
 			} else {
 				retval = response.getEntity(Status.class);
 			}
+			closeClient();
 			return retval.getStatus();
 		} catch (UnsupportedEncodingException e) {
 			unsupportedEncoding(e);
+			closeClient();
 			return false;
 		}
 	}
@@ -203,6 +234,7 @@ public class CkanalyzeClient {
 	 * @return
 	 */
 	public ScheduleResponse scheduleCatalog(String catalogName) {
+		openClient();
 		ScheduleResponse retval = null;
 		try {
 			if (catalogName.isEmpty()) {
@@ -219,20 +251,25 @@ public class CkanalyzeClient {
 				retval = response.getEntity(ScheduleResponse.class);
 			}
 		} catch (UnsupportedEncodingException e) {
+			closeClient();
 			unsupportedEncoding(e);
 		}
+		closeClient();
 		return retval;
 	}
 
 	private void emptyCatalog() {
+		closeClient();
 		throw new CkanalyzeClientLocalException("Empty parameter catalogName");
 	}
 
 	private void emptyResource() {
+		closeClient();
 		throw new CkanalyzeClientLocalException("Empty parameter resourceId");
 	}
 
 	private void unsupportedEncoding(Throwable e) {
+		closeClient();
 		throw new CkanalyzeClientLocalException(
 				"Unsupported parameter encoding", e);
 	}

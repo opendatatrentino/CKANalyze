@@ -49,11 +49,14 @@ public class ResourceAnalysis {
 		refCatalog = qb.getCatalogByName(catalogname);
 		if(refCatalog == null)
 		{
+			qb.closeSession();
 			return false;
 		}
 		else
 		{
-			return qb.getResourceByCkanId(resourceId, refCatalog) != null;
+			boolean retval = qb.getResourceByCkanId(resourceId, refCatalog) != null;
+			qb.closeSession();
+			return retval;
 		}
 	}
 	
