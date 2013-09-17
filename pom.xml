@@ -22,6 +22,7 @@
 		<module>ckanalyze-web</module>
 		<module>ckanalyze-model</module>
 		<module>ckanalyze-client</module>
+		<module>ckanalyze-engine</module>
 		<module>ckanalyze-tests</module>
 	</modules>
 </project>
