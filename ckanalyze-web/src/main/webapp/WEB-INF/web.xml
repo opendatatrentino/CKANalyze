@@ -4,6 +4,9 @@
 
 <web-app>
 	<display-name>ckanalyze-web</display-name>
+	<listener>
+		<listener-class>eu.trentorise.opendata.ckanalyze.utility.StartDb</listener-class>
+	</listener>
 	<servlet>
 		<servlet-name>Jersey REST Service</servlet-name>
 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
