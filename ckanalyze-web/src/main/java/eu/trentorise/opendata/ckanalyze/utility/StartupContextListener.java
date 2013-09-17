@@ -23,8 +23,12 @@ import javax.servlet.ServletContextListener;
 
 import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
 
-
-public class StartDb implements ServletContextListener {
+/**
+ * This class initializes Hibernate
+ * @author Alberto Zanella <a.zanella@trentorise.eu>
+ * Last modified by azanella On 17/set/2013
+ */
+public class StartupContextListener implements ServletContextListener {
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
