@@ -70,7 +70,7 @@ public final class PersistencyManager {
 	 * 
 	 * @return configuration instance
 	 */
-	private static Configuration configure() {
+	private static synchronized Configuration configure() {
 		Configuration configuration = new Configuration();
 		configuration.addAnnotatedClass(CatalogStringDistribution.class);
 		configuration.addAnnotatedClass(ResourceStringDistribution.class);

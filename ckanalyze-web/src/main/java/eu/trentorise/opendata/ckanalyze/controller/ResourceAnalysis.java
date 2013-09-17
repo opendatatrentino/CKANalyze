@@ -22,10 +22,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.hibernate.Session;
+
 import eu.trentorise.opendata.ckanalyze.jpa.Catalog;
 import eu.trentorise.opendata.ckanalyze.jpa.Resource;
 import eu.trentorise.opendata.ckanalyze.jpa.ResourceDatatypesCount;
 import eu.trentorise.opendata.ckanalyze.jpa.ResourceStringDistribution;
+import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
 import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
 import eu.trentorise.opendata.ckanalyze.model.resources.ResourceDatatypeCount;
 import eu.trentorise.opendata.ckanalyze.model.resources.ResourceStats;
@@ -37,32 +40,29 @@ import eu.trentorise.opendata.ckanalyze.utility.QueryBuilder;
  */
 public class ResourceAnalysis {
 	
-	private QueryBuilder qb;
 	public ResourceAnalysis()
-	{
-		qb = new QueryBuilder();
-	}
+	{	}
 	
 	private Catalog refCatalog;
 	public boolean isValidResource(String catalogname, String resourceId)
 	{
+		QueryBuilder qb = new QueryBuilder();
 		refCatalog = qb.getCatalogByName(catalogname);
 		if(refCatalog == null)
 		{
-			qb.closeSession();
 			return false;
 		}
 		else
 		{
-			boolean retval = qb.getResourceByCkanId(resourceId, refCatalog) != null;
-			qb.closeSession();
-			return retval;
+			return qb.getResourceByCkanId(resourceId, refCatalog) != null;
 		}
 	}
 	
 	public ResourceStats getResourceStats(String resId)
 	{
-		Resource jpaRes = qb.getResourceByCkanId(resId, refCatalog);
+		QueryBuilder qb = new QueryBuilder();
+		Session resSession = PersistencyManager.getSessionFactory().openSession();
+		Resource jpaRes = qb.getResourceByCkanId(resId, refCatalog,resSession);
 		ResourceStats retval = new ResourceStats();
 		retval.setColumnCount(jpaRes.getColumnCount());
 		retval.setFileFormat(jpaRes.getFileFormat());
@@ -74,7 +74,7 @@ public class ResourceAnalysis {
 		retval.setUrl(jpaRes.getUrl());
 		retval.setStringLengthsDistribution(populateStringDistribution(jpaRes));
 		retval.setColsPerType(populateDatatypeCount(jpaRes));
-		qb.closeSession();
+		resSession.close();
 		return retval;
 	}
 	

@@ -41,37 +41,47 @@ import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogDatatypeCount;
 public class QueryBuilder {
 	
 	
-	private Session ss;
-	public void closeSession() {
-		if (ss == null) {
-			ss = PersistencyManager.getSessionFactory().openSession();
-		}
-		ss.close();
-	}
-
-	private Session openSession() {
-		if ((ss == null) || (!ss.isOpen())) {
-			ss = PersistencyManager.getSessionFactory().openSession();
-		}
-		return ss;
-	}
-
 	public Resource getResourceByCkanId(String resckanid, Catalog cat) {
-		
-		Query q = openSession()
-				.createQuery(
-						"SELECT r FROM Resource r JOIN r.catalog c WHERE r.ckanId = :ckanid AND r.catalog = :catalog");
-		q.setParameter("catalog", cat);
+		Session ss = PersistencyManager.getSessionFactory().openSession();
+		Query q = ss.createQuery(
+						"SELECT r FROM Resource r JOIN r.catalog c WHERE r.ckanId = :ckanid AND r.catalog.catalogId = :catalog");
+		q.setParameter("catalog", cat.getCatalogId());
 		q.setParameter("ckanid", resckanid);
 		List<Resource> toCheck = q.list();
+		ss.close();
 		if (!toCheck.isEmpty()) {
+			return toCheck.get(0);
+		}
+		return null;
+	}
+	
+	public Resource getResourceByCkanId(String resckanid, Catalog cat, Session ss) {
+		Query q = ss.createQuery(
+						"SELECT r FROM Resource r JOIN r.catalog c WHERE r.ckanId = :ckanid AND r.catalog.catalogId = :catalog");
+		q.setParameter("catalog", cat.getCatalogId());
+		q.setParameter("ckanid", resckanid);
+		List<Resource> toCheck = q.list();
+			if (!toCheck.isEmpty()) {
 			return toCheck.get(0);
 		}
 		return null;
 	}
 
 	public Catalog getCatalogByName(String name) {
-		Query q = openSession().createQuery(
+		Session ss = PersistencyManager.getSessionFactory().openSession();
+		Query q = ss.createQuery(
+				"FROM Catalog c WHERE c.url = :name");
+		q.setParameter("name", name);
+		List<Catalog> toCheck = q.list();
+		ss.close();
+		if (!toCheck.isEmpty()) {
+			return toCheck.get(0);
+		}
+		return null;
+	}
+	
+	public Catalog getCatalogByName(String name, Session ss) {
+		Query q = ss.createQuery(
 				"FROM Catalog c WHERE c.url = :name");
 		q.setParameter("name", name);
 		List<Catalog> toCheck = q.list();
@@ -82,34 +92,44 @@ public class QueryBuilder {
 	}
 
 	public Set<Datatype> getAllDataTypes(Catalog catalog) {
-		String hql = "SELECT distinct d FROM Datatype d JOIN d.colsDataTypes dt JOIN dt.resource r WHERE dt.freq > 0 AND r.catalog = :cat";
-		org.hibernate.Query q = openSession().createQuery(hql);
-		q.setParameter("cat", catalog);
+		Session ss = PersistencyManager.getSessionFactory().openSession();
+		String hql = "SELECT distinct d FROM Datatype d JOIN d.colsDataTypes dt JOIN dt.resource r WHERE dt.freq > 0 AND r.catalog.catalogId = :cat";
+		org.hibernate.Query q = ss.createQuery(hql);
+		q.setParameter("cat", catalog.getCatalogId());
+		ss.close();
 		return new HashSet<Datatype>(q.list());
 	}
 
 
 	public List<CatalogDatatypeCount> getAllColsTypes(
 			Catalog catalog) {
-		String hql = "SELECT new eu.trentorise.opendata.ckanalyze.model.catalog.CatalogDatatypeCount(d.name, sum(dtc.freq)) FROM ResourceDatatypesCount dtc JOIN dtc.resource r JOIN dtc.datatype d WHERE r.catalog = :cat GROUP BY d.name";
-		org.hibernate.Query q = openSession().createQuery(hql);
-		q.setParameter("cat", catalog);
-		return q.list();
+		String hql = "SELECT new eu.trentorise.opendata.ckanalyze.model.catalog.CatalogDatatypeCount(d.name, sum(dtc.freq)) FROM ResourceDatatypesCount dtc JOIN dtc.resource r JOIN dtc.datatype d WHERE r.catalog.catalogId = :cat GROUP BY d.name";
+		Session ss = PersistencyManager.getSessionFactory().openSession();
+		org.hibernate.Query q = ss.createQuery(hql);
+		q.setParameter("cat", catalog.getCatalogId());
+		List<CatalogDatatypeCount> retval = q.list();
+		ss.close();
+		return retval;
 	}
 
 	public long getColsCount(
 			Catalog catalog) {
-		String hql = "SELECT sum(dtc.freq) FROM ResourceDatatypesCount dtc JOIN dtc.resource r WHERE r.catalog = :cat";
-		org.hibernate.Query q = openSession().createQuery(hql);
-		q.setParameter("cat", catalog);
-		return (Long)q.list().get(0);
+		String hql = "SELECT sum(dtc.freq) FROM ResourceDatatypesCount dtc JOIN dtc.resource r WHERE r.catalog.catalogId = :cat";
+		Session ss = PersistencyManager.getSessionFactory().openSession();
+		org.hibernate.Query q = ss.createQuery(hql);
+		q.setParameter("cat", catalog.getCatalogId());
+		Long retval = (Long)q.list().get(0);
+		ss.close();
+		return retval;
 	}
 	
 	public Double getAvgFileSize(Catalog catalog) {
-		String hql = "SELECT avg(fileSize) from Resource r WHERE catalog = :cat";
-		org.hibernate.Query q = openSession().createQuery(hql);
-		q.setParameter("cat", catalog);
+		String hql = "SELECT avg(fileSize) from Resource r WHERE catalog.catalogId = :cat";
+		Session ss = PersistencyManager.getSessionFactory().openSession();
+		org.hibernate.Query q = ss.createQuery(hql);
+		q.setParameter("cat", catalog.getCatalogId());
 		List<Double> retval = q.list();
+		ss.close();
 		if (!retval.isEmpty()) {
 			return retval.get(0);
 		}
@@ -119,10 +139,11 @@ public class QueryBuilder {
 
 	public List<Configuration> getScheduledCatalog(String catalogName) {
 		String hql = "FROM Configuration WHERE catalogHostName = :cname";
-		org.hibernate.Query q = openSession().createQuery(hql);
+		Session ss = PersistencyManager.getSessionFactory().openSession();
+		org.hibernate.Query q = ss.createQuery(hql);
 		q.setParameter("cname", catalogName);
 		List<Configuration> retval = q.list();
-		closeSession();
+		ss.close();
 		return retval;
 	}
 
@@ -131,28 +152,27 @@ public class QueryBuilder {
 	}
 
 	public void scheduleCatalog(Configuration conf) {
-		ss = openSession();
+		Session ss = PersistencyManager.getSessionFactory().openSession();
 		ss.beginTransaction();
 		ss.saveOrUpdate(conf);
 		ss.getTransaction().commit();
-		closeSession();
+		ss.close();
 	}
 	
 	public boolean isUpdating(String catalogName)
 	{
 		String hql = "FROM Configuration WHERE catalogHostName = :name";
-		ss = openSession();
+		Session ss = PersistencyManager.getSessionFactory().openSession();
 		Query query = ss.createQuery(hql);
 		query.setParameter("name", catalogName);
 		@SuppressWarnings("rawtypes")
 		List result = query.list();
+		ss.close();
 		if(result.isEmpty())
 		{
-			closeSession();
 			return false;
 		}
 		eu.trentorise.opendata.ckanalyze.jpa.Configuration conf = (eu.trentorise.opendata.ckanalyze.jpa.Configuration) result.get(0);
-		closeSession();
 		return conf.isUpdating();
 	}
 

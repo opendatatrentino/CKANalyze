@@ -23,8 +23,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.Session;
+
 import eu.trentorise.opendata.ckanalyze.jpa.Catalog;
 import eu.trentorise.opendata.ckanalyze.jpa.CatalogStringDistribution;
+import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
 import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogDatatypeCount;
 import eu.trentorise.opendata.ckanalyze.model.catalog.CatalogStats;
 import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
@@ -46,13 +49,13 @@ public final class CatalogAnalysis {
 	{
 		QueryBuilder qb = new QueryBuilder();
 		boolean retval =  qb.getCatalogByName(name) != null;
-		qb.closeSession();
 		return retval;
 	}
 	public static CatalogStats getCatalogStats(String name)
 	{
 		QueryBuilder qb = new QueryBuilder();
-		Catalog jpaCat = qb.getCatalogByName(name);
+		Session catSession = PersistencyManager.getSessionFactory().openSession();
+		Catalog jpaCat = qb.getCatalogByName(name,catSession);
 		CatalogStats retval = new CatalogStats();
 		retval.setCatalogName(jpaCat.getUrl());
 		retval.setAvgColumnCount(jpaCat.getAvgColumnCount());
@@ -65,7 +68,7 @@ public final class CatalogAnalysis {
 		retval.setTotalResourcesCount(jpaCat.getTotalResourcesCount());
 		retval.setStringLengthsDistribution(computeStringDistribution(jpaCat.getStringDistribution()));
 		retval.setColsPerType(computeColsPerType(jpaCat,qb));
-		qb.closeSession();
+		catSession.close();
 		return retval;
 	}
 	
