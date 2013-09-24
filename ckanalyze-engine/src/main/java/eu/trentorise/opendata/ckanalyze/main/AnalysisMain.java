@@ -1,20 +1,20 @@
 /**
-* *****************************************************************************
-* Copyright 2012-2013 Trento Rise (www.trentorise.eu/)
-*
-* All rights reserved. This program and the accompanying materials are made
-* available under the terms of the GNU Lesser General Public License (LGPL)
-* version 2.1 which accompanies this distribution, and is available at
-*
-* http://www.gnu.org/licenses/lgpl-2.1.html
-*
-* This library is distributed in the hope that it will be useful, but WITHOUT
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-* FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
-* details.
-*
-*******************************************************************************
-*/
+ * *****************************************************************************
+ * Copyright 2012-2013 Trento Rise (www.trentorise.eu/)
+ *
+ * All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser General Public License (LGPL)
+ * version 2.1 which accompanies this distribution, and is available at
+ *
+ * http://www.gnu.org/licenses/lgpl-2.1.html
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************
+ */
 package eu.trentorise.opendata.ckanalyze.main;
 
 import java.io.File;
@@ -138,7 +138,8 @@ public final class AnalysisMain {
 				resSave.setUrl(dwn.getUrl());
 				PersistencyManager.insert(resSave);
 				for (Datatype dt : ca.getColsPerType().keySet()) {
-					eu.trentorise.opendata.ckanalyze.jpa.Datatype dtSave = PersistencyManager.getDatatypeByName(dt.toString());
+					eu.trentorise.opendata.ckanalyze.jpa.Datatype dtSave = PersistencyManager
+							.getDatatypeByName(dt.toString());
 					if (dtSave == null) {
 						dtSave = new eu.trentorise.opendata.ckanalyze.jpa.Datatype();
 						dtSave.setName(dt.toString());
@@ -175,11 +176,9 @@ public final class AnalysisMain {
 		}
 		if (tempdir == null) {
 			prop = System.getProperties();
-			if (prop.getProperty("tmpdir") != null)
-			{
+			if (prop.getProperty("tmpdir") != null) {
 				tempdir = prop.getProperty("tempdir");
-			}
-			else {
+			} else {
 				logger.error("No temporary directory configured! Please configure it using the -D option and the tmpdir=dirname property or the ckanalyze.property file");
 				System.exit(1);
 			}
@@ -188,15 +187,38 @@ public final class AnalysisMain {
 		new File(tempdir).mkdirs();
 	}
 
+	private static String catNameConfig() throws IOException {
+		String retval = null;
+		Properties prop = new Properties();
+		prop.load(ClassLoader.getSystemResourceAsStream("ckanalyze.properties"));
+		if (prop.getProperty("catalog.name") != null) {
+			retval = prop.getProperty("catalog.name");
+		}
+		if (retval == null) {
+			prop = System.getProperties();
+			if (prop.getProperty("catalog.name") != null) {
+				retval = prop.getProperty("catalog.name");
+			}
+		}
+		return retval;
+	}
+
 	public static void main(String args[]) {
 		try {
 			tempDirConfig();
+			String catName = catNameConfig();
 			for (Configuration conf : PersistencyManager.getConfigurations()) {
-				catalogAnalysis(conf.getCatalogHostName(), getCkanClient(conf.getCatalogHostName())
-						.getDatasetList().result);
-				conf.setLastUpdate(new Date());
-				conf.setUpdating(false);
-				PersistencyManager.addCatalogstoProcessList(conf);
+				if ((catName == null)
+						|| (catName != null && catName.equals(conf
+								.getCatalogHostName()))) {
+					logger.info("Processing catalog using configuration "+conf.getCatalogHostName());
+					catalogAnalysis(conf.getCatalogHostName(),
+							getCkanClient(conf.getCatalogHostName())
+									.getDatasetList().result);
+					conf.setLastUpdate(new Date());
+					conf.setUpdating(false);
+					PersistencyManager.addCatalogstoProcessList(conf);
+				}
 			}
 		} catch (Exception e) {
 			logger.error("failed  ", e);
