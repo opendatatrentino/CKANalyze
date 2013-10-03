@@ -73,7 +73,7 @@ public final class AnalysisMain {
 	public static void catalogAnalysis(String hostname, List<String> dss)
 			throws CKANException, CKAnalyzeException {
 		PersistencyManager.updateCatalog(hostname, true);
-		PersistencyManager.deleteifExists(hostname);
+		PersistencyManager.deleteCatalogIfExists(hostname);
 		Catalog catSave = new Catalog();
 		catSave.setUrl(hostname);
 		Client c = getCkanClient(hostname);

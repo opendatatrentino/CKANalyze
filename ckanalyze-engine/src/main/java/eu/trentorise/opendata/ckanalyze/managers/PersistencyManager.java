@@ -114,7 +114,7 @@ public final class PersistencyManager {
 		ss.close();
 	}
 	
-	public static void deleteifExists(String url)
+	public static void deleteCatalogIfExists(String url)
 	{
 		String hql = "FROM Catalog WHERE url = :name";
 		Session ss = PersistencyManager.getSessionFactory().openSession();
@@ -129,6 +129,27 @@ public final class PersistencyManager {
 			ss = PersistencyManager.getSessionFactory().openSession();
 			Transaction t = ss.beginTransaction();
 			ss.delete(cat);
+			ss.flush();
+			t.commit();
+		}
+		ss.close();
+	}
+	
+	public static void deleteResource(String url)
+	{
+		String hql = "FROM Resource WHERE ckanId = :name";
+		Session ss = PersistencyManager.getSessionFactory().openSession();
+		Query query = ss.createQuery(hql);
+		query.setParameter("name", url);
+		@SuppressWarnings("unchecked")
+		List<Resource> results = (List<Resource>) query.list();
+		if(!results.isEmpty())
+		{
+			Resource res = results.get(0);
+			ss.close();
+			ss = PersistencyManager.getSessionFactory().openSession();
+			Transaction t = ss.beginTransaction();
+			ss.delete(res);
 			ss.flush();
 			t.commit();
 		}
