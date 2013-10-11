@@ -64,6 +64,20 @@ public final class PersistencyManager {
 		}
 		return sf;
 	}
+	
+	public static Catalog getCatalogByName(String name) {
+		Session ss = PersistencyManager.getSessionFactory().openSession();
+		Query q = ss.createQuery(
+				"FROM Catalog c WHERE c.url = :name");
+		q.setParameter("name", name);
+		@SuppressWarnings("unchecked")
+		List<Catalog> toCheck = q.list();
+		ss.close();
+		if (!toCheck.isEmpty()) {
+			return toCheck.get(0);
+		}
+		return null;
+	}
 
 	/**
 	 * Configuration method, here you have to put your annotated class in order
@@ -103,6 +117,14 @@ public final class PersistencyManager {
 		ss.getTransaction().commit();
 		ss.close();
 	}
+	
+	public static void merge(Object o) {
+		Session ss = PersistencyManager.getSessionFactory().openSession();
+		ss.beginTransaction();
+		ss.merge(o);
+		ss.getTransaction().commit();
+		ss.close();
+	}
 
 	public static void insertInOneCommit(List<Object> os) {
 		Session ss = PersistencyManager.getSessionFactory().openSession();
@@ -135,24 +157,18 @@ public final class PersistencyManager {
 		ss.close();
 	}
 	
-	public static void deleteResource(String url)
+	/**
+	 * If the required resource exists it will be deleted
+	 * @param id the ckan id of the resource
+	 * @param catalogURL URL of the catalog wich contain the resource
+	 */
+	public static void delete(Object o)
 	{
-		String hql = "FROM Resource WHERE ckanId = :name";
 		Session ss = PersistencyManager.getSessionFactory().openSession();
-		Query query = ss.createQuery(hql);
-		query.setParameter("name", url);
-		@SuppressWarnings("unchecked")
-		List<Resource> results = (List<Resource>) query.list();
-		if(!results.isEmpty())
-		{
-			Resource res = results.get(0);
-			ss.close();
-			ss = PersistencyManager.getSessionFactory().openSession();
-			Transaction t = ss.beginTransaction();
-			ss.delete(res);
-			ss.flush();
-			t.commit();
-		}
+		Transaction t = ss.beginTransaction();
+		ss.delete(o);
+		ss.flush();
+		t.commit();
 		ss.close();
 	}
 	
@@ -176,7 +192,7 @@ public final class PersistencyManager {
 		ss.close();
 	}
 	
-	public static void updateCatalog(String catalogName, boolean status)
+	public static void isUpdatingCatalog(String catalogName, boolean status)
 	{
 		String hql = "FROM Configuration WHERE catalogHostName = :name";
 		Session ss = PersistencyManager.getSessionFactory().openSession();
@@ -189,6 +205,50 @@ public final class PersistencyManager {
 		ss.getTransaction().commit();
 		ss.close();
 		
+	}
+	
+	public static List<Resource> getAllResources(String catalogName)
+	{
+		String hql = "FROM Resource r JOIN r.catalog c WHERE c.url = :name";
+		Session ss = PersistencyManager.getSessionFactory().openSession();
+		Query query = ss.createQuery(hql);
+		query.setParameter("name", catalogName);
+		@SuppressWarnings("unchecked")
+		List<Resource> retval = (List<Resource>)query.list();
+		ss.close();
+		return retval;
+	}
+	
+	public static Resource getResourcesByCkanId(String ckanId,String catalogName)
+	{
+			Session ss = PersistencyManager.getSessionFactory().openSession();
+			Query q = ss.createQuery(
+			"SELECT r FROM Resource r JOIN r.catalog c WHERE r.ckanId = :ckanid AND r.catalog.url = :catalog");
+			q.setParameter("catalog", catalogName);
+			q.setParameter("ckanid", ckanId);
+			@SuppressWarnings("unchecked")
+			List<Resource> toCheck = q.list();
+			ss.close();
+			if (!toCheck.isEmpty()) {
+				return toCheck.get(0);
+			}
+			return null;
+	}
+	
+	public static void deleteAllStringDistributions(String catalogName)
+	{
+			Session ss = PersistencyManager.getSessionFactory().openSession();
+			Query q = ss.createQuery(
+			"SELECT s FROM CatalogStringDistribution s JOIN s.catalog c WHERE s.catalog.url = :catalog");
+			q.setParameter("catalog", catalogName);
+			@SuppressWarnings("unchecked")
+			List<CatalogStringDistribution> toCheck = q.list();
+			ss.close();
+			if (!toCheck.isEmpty()) {
+				for (CatalogStringDistribution csd : toCheck) {
+					delete(csd);
+				}
+			}
 	}
 	
 	public static Datatype getDatatypeByName(String name) {

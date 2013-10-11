@@ -41,6 +41,7 @@ import eu.trentorise.opendata.ckanalyze.jpa.CatalogStringDistribution;
 import eu.trentorise.opendata.ckanalyze.jpa.Configuration;
 import eu.trentorise.opendata.ckanalyze.jpa.ResourceDatatypesCount;
 import eu.trentorise.opendata.ckanalyze.jpa.ResourceStringDistribution;
+import eu.trentorise.opendata.ckanalyze.managers.AnalysisManager;
 import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
 
 /**
@@ -72,7 +73,9 @@ public final class AnalysisMain {
 
 	public static void catalogAnalysis(String hostname, List<String> dss)
 			throws CKANException, CKAnalyzeException {
-		PersistencyManager.updateCatalog(hostname, true);
+		AnalysisManager am = new AnalysisManager(tempdir, logger);
+		am.processCatalog(hostname, dss);
+		/*PersistencyManager.isUpdatingCatalog(hostname, true);
 		PersistencyManager.deleteCatalogIfExists(hostname);
 		Catalog catSave = new Catalog();
 		catSave.setUrl(hostname);
@@ -109,7 +112,7 @@ public final class AnalysisMain {
 			csd.setCatalog(catSave);
 			PersistencyManager.insert(csd);
 		}
-		PersistencyManager.updateCatalog(hostname, false);
+		PersistencyManager.isUpdatingCatalog(hostname, false);*/
 	}
 
 	private static void resourceAnalysis(Resource r, Catalog catSave) {

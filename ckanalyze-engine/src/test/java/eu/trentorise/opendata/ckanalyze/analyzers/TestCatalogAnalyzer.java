@@ -17,6 +17,7 @@
 */
 package eu.trentorise.opendata.ckanalyze.analyzers;
 
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,11 +27,13 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.WriterAppender;
+import org.ckan.CKANException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import eu.trentorise.opendata.ckanalyze.exceptions.CKAnalyzeException;
 import eu.trentorise.opendata.ckanalyze.jpa.Catalog;
 import eu.trentorise.opendata.ckanalyze.jpa.Configuration;
 import eu.trentorise.opendata.ckanalyze.jpa.Resource;
@@ -45,7 +48,7 @@ import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
 public class TestCatalogAnalyzer {
 	
 	@Test
-	public void analyzeDataset() {
+	public static void analyzeDataset() {
 		try {
 			if(!checkConfDatiTrentino())
 			{
@@ -102,6 +105,18 @@ public class TestCatalogAnalyzer {
 			assertTrue(false);
 		}		
 
+	}
+	
+	public static void main(String[] args) throws IOException, CKANException, CKAnalyzeException
+	{
+/*		Configuration conf = new Configuration();
+		conf.setCatalogHostName("http://dati.trentino.it");
+		conf.setLastUpdate(new Date());
+		PersistencyManager.addCatalogstoProcessList(conf);*/
+		List<String> dstest = new ArrayList<String>();
+		dstest.add("rendiconto-del-2005");
+		AnalysisMain.tempDirConfig();
+		AnalysisMain.catalogAnalysis("http://dati.trentino.it", dstest);
 	}
 	
 	private static boolean checkConfDatiTrentino()

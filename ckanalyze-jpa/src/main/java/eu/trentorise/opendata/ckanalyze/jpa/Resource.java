@@ -41,6 +41,8 @@ public class Resource {
 	@GeneratedValue(strategy=GenerationType.SEQUENCE)
 	private long resourceId;
 	@Column
+	private String fileSha;
+	@Column
 	private String ckanId;
 	@ManyToOne
 	@JoinColumn(name="catalogId")
@@ -146,6 +148,12 @@ public class Resource {
 	}
 	public void setFileSize(long fileSize) {
 		this.fileSize = fileSize;
+	}
+	public String getFileSha() {
+		return fileSha;
+	}
+	public void setFileSha(String fileSha) {
+		this.fileSha = fileSha;
 	}
 	
 }
