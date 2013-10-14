@@ -20,7 +20,9 @@ package eu.trentorise.opendata.ckanalyze.jpa;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,7 +41,8 @@ public class Datatype {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int datatypeId;
 	private String name;
-	@OneToMany(mappedBy="datatype")
+	
+	@OneToMany(mappedBy="datatype", fetch = FetchType.LAZY, cascade = { CascadeType.REMOVE }, orphanRemoval = true)
 	private Set<ResourceDatatypesCount> colsDataTypes;
 	public int getDatatypeId() {
 		return datatypeId;

@@ -58,7 +58,13 @@ public class AnalysisManager {
 
 	public void processCatalog(String hostname, List<String> dss)
 	{
-		PersistencyManager.isUpdatingCatalog(hostname, true);
+		//Security check for inconsistencies
+		if(PersistencyManager.isUpdatingCatalog(hostname))
+		{
+			PersistencyManager.deleteCatalogIfExists(hostname);
+		}
+		
+		PersistencyManager.setIsUpdatingCatalog(hostname, true);
 		Catalog catSave = PersistencyManager.getCatalogByName(hostname);
 		boolean updating = catSave != null;
 		if(!updating)
@@ -81,11 +87,15 @@ public class AnalysisManager {
 				catSave.setTotalResourcesCount(catSave.getTotalResourcesCount()
 						+ ds.getResources().size());
 				for (Resource r : ds.getResources()) {
+					String format = r.getFormat().toLowerCase();
+					if ((format.contains("csv")) || (format.contains("tsv")))
+					{
 					catSave.setTotalFileSizeCount(catSave
 							.getTotalFileSizeCount() + r.getSize());
 					PersistencyManager.update(catSave);
 					applicationLogger.info("%%ds:\t" + dsname + " res:" + r.getName());
 					processResource(r, catSave);
+					}
 				}
 			} catch (Exception e) {
 				applicationLogger.error("error in dataset {}", dsname, e.getMessage());
@@ -113,7 +123,7 @@ public class AnalysisManager {
 					PersistencyManager.insert(csd);
 			}
 		}
-		PersistencyManager.isUpdatingCatalog(hostname, false);
+		PersistencyManager.setIsUpdatingCatalog(hostname, false);
 	}
 	
 	private void processResource(Resource r, Catalog catSave) throws IOException
@@ -127,7 +137,6 @@ public class AnalysisManager {
 		{
 			if(!ResourcesUtility.computeSHA(downloadDirPath + dwn.getFilename()).equals(resSave.getFileSha()))
 			{
-				System.out.println("Entro1");
 				updatedResources = true;
 				PersistencyManager.delete(resSave);
 				analyzeResource(r, catSave, dwn);
@@ -135,9 +144,10 @@ public class AnalysisManager {
 		}
 		else
 		{
-			System.out.println("Entro2");
 			analyzeResource(r, catSave, dwn);
 		}
+		File f = new File(downloadDirPath + dwn.getFilename());
+		f.delete();
 	}
 	
 	private void analyzeResource(Resource r, Catalog catSave, Downloader dwn) throws IOException
@@ -154,7 +164,6 @@ public class AnalysisManager {
 			resSave.setCkanId(r.getId());
 			resSave.setColumnCount(ca.getColumnCount());
 			resSave.setFileFormat(r.getFormat());
-			resSave.setFileSha(ResourcesUtility.computeSHA(downloadDirPath + dwn.getFilename()));
 			resSave.setFileName(dwn.getFilename());
 			resSave.setFileSize(dwn.getSize());
 			resSave.setRowCount(ca.getRowCount());
@@ -182,11 +191,10 @@ public class AnalysisManager {
 				distr.setFreq(ca.getStringLengthDistribution().get(length));
 				PersistencyManager.insert(distr);
 			}
-			File f = new File(downloadDirPath + "/" + dwn.getFilename());
-			f.delete();
+			resSave.setFileSha(ResourcesUtility.computeSHA(downloadDirPath + dwn.getFilename()));
 		} catch (CKAnalyzeException e) {
 			applicationLogger.error("Error processing resource {}" + r.getName(), e);
-			File f = new File(downloadDirPath + "/" + dwn.getFilename());
+			File f = new File(downloadDirPath + dwn.getFilename());
 			f.delete();
 		}
 	}

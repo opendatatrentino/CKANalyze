@@ -26,21 +26,11 @@ import java.util.Properties;
 import org.ckan.CKANException;
 import org.ckan.Client;
 import org.ckan.Connection;
-import org.ckan.resource.impl.Dataset;
-import org.ckan.resource.impl.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.trentorise.opendata.ckanalyze.analyzers.CatalogAnalyzer;
-import eu.trentorise.opendata.ckanalyze.analyzers.resources.CSVAnalyzer;
-import eu.trentorise.opendata.ckanalyze.analyzers.resources.CSVAnalyzer.Datatype;
-import eu.trentorise.opendata.ckanalyze.downloader.Downloader;
 import eu.trentorise.opendata.ckanalyze.exceptions.CKAnalyzeException;
-import eu.trentorise.opendata.ckanalyze.jpa.Catalog;
-import eu.trentorise.opendata.ckanalyze.jpa.CatalogStringDistribution;
 import eu.trentorise.opendata.ckanalyze.jpa.Configuration;
-import eu.trentorise.opendata.ckanalyze.jpa.ResourceDatatypesCount;
-import eu.trentorise.opendata.ckanalyze.jpa.ResourceStringDistribution;
 import eu.trentorise.opendata.ckanalyze.managers.AnalysisManager;
 import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
 
@@ -75,100 +65,6 @@ public final class AnalysisMain {
 			throws CKANException, CKAnalyzeException {
 		AnalysisManager am = new AnalysisManager(tempdir, logger);
 		am.processCatalog(hostname, dss);
-		/*PersistencyManager.isUpdatingCatalog(hostname, true);
-		PersistencyManager.deleteCatalogIfExists(hostname);
-		Catalog catSave = new Catalog();
-		catSave.setUrl(hostname);
-		Client c = getCkanClient(hostname);
-		List<String> dsList = dss;
-		catSave.setTotalDatasetsCount(dsList.size());
-		catSave.setTotalResourcesCount(0);
-		catSave.setTotalFileSizeCount(0);
-		PersistencyManager.insert(catSave);
-		for (String dsname : dsList) {
-			try {
-				Dataset ds = c.getDataset(dsname);
-				catSave.setTotalResourcesCount(catSave.getTotalResourcesCount()
-						+ ds.getResources().size());
-				for (Resource r : ds.getResources()) {
-					catSave.setTotalFileSizeCount(catSave
-							.getTotalFileSizeCount() + r.getSize());
-					PersistencyManager.update(catSave);
-					logger.info("%%ds:\t" + dsname + " res:" + r.getName());
-					resourceAnalysis(r, catSave);
-				}
-			} catch (Exception e) {
-				logger.error("error in dataset {}", dsname, e.getMessage());
-			}
-		}
-		CatalogAnalyzer catanalyze = new CatalogAnalyzer();
-		catanalyze.analyze();
-		catSave.setAvgColumnCount(catanalyze.getAvgColumnCount());
-		catSave.setAvgRowCount(catanalyze.getAvgRowCount());
-		catSave.setAvgStringLength(catanalyze.getAvgStringLength());
-		PersistencyManager.update(catSave);
-		for (CatalogStringDistribution csd : catanalyze
-				.getCatalogStringDistribution()) {
-			csd.setCatalog(catSave);
-			PersistencyManager.insert(csd);
-		}
-		PersistencyManager.isUpdatingCatalog(hostname, false);*/
-	}
-
-	private static void resourceAnalysis(Resource r, Catalog catSave) {
-		eu.trentorise.opendata.ckanalyze.jpa.Resource resSave = new eu.trentorise.opendata.ckanalyze.jpa.Resource();
-		String format = r.getFormat().toLowerCase();
-		if ((format.contains("csv")) || (format.contains("tsv"))) {
-			Downloader dwn = Downloader.getInstance();
-			dwn.setFilepath(tempdir);
-			dwn.setUrl(r.getUrl());
-			dwn.download();
-			try {
-				if (dwn.getFilename().toLowerCase().trim().endsWith(".zip")) {
-					throw new CKAnalyzeException("ZIP File -- Skipped");
-				}
-				CSVAnalyzer ca = new CSVAnalyzer(tempdir + dwn.getFilename(),
-						r.getId());
-				ca.analyze();
-				resSave.setCatalog(catSave);
-				resSave.setCkanId(r.getId());
-				resSave.setColumnCount(ca.getColumnCount());
-				resSave.setFileFormat(r.getFormat());
-				resSave.setFileName(dwn.getFilename());
-				resSave.setFileSize(dwn.getSize());
-				resSave.setRowCount(ca.getRowCount());
-				resSave.setStringAvg(ca.getStringLengthAvg());
-				resSave.setUrl(dwn.getUrl());
-				PersistencyManager.insert(resSave);
-				for (Datatype dt : ca.getColsPerType().keySet()) {
-					eu.trentorise.opendata.ckanalyze.jpa.Datatype dtSave = PersistencyManager
-							.getDatatypeByName(dt.toString());
-					if (dtSave == null) {
-						dtSave = new eu.trentorise.opendata.ckanalyze.jpa.Datatype();
-						dtSave.setName(dt.toString());
-						PersistencyManager.insert(dtSave);
-					}
-					ResourceDatatypesCount dtc = new ResourceDatatypesCount();
-					dtc.setFreq(ca.getColsPerType().get(dt));
-					dtc.setResource(resSave);
-					dtc.setDatatype(dtSave);
-					PersistencyManager.insert(dtc);
-				}
-				for (Long length : ca.getStringLengthDistribution().keySet()) {
-					ResourceStringDistribution distr = new ResourceStringDistribution();
-					distr.setResource(resSave);
-					distr.setLength(length);
-					distr.setFreq(ca.getStringLengthDistribution().get(length));
-					PersistencyManager.insert(distr);
-				}
-				File f = new File(tempdir + "/" + dwn.getFilename());
-				f.delete();
-			} catch (CKAnalyzeException e) {
-				logger.error("Error processing resource {}" + r.getName(), e);
-				File f = new File(tempdir + "/" + dwn.getFilename());
-				f.delete();
-			}
-		}
 	}
 
 	public static void tempDirConfig() throws IOException {
@@ -186,7 +82,9 @@ public final class AnalysisMain {
 				System.exit(1);
 			}
 		}
-		tempdir = tempdir + "/";
+		if (!tempdir.endsWith("/")) {
+			tempdir = tempdir + "/";
+		}
 		new File(tempdir).mkdirs();
 	}
 
@@ -214,7 +112,8 @@ public final class AnalysisMain {
 				if ((catName == null)
 						|| (catName != null && catName.equals(conf
 								.getCatalogHostName()))) {
-					logger.info("Processing catalog using configuration "+conf.getCatalogHostName());
+					logger.info("Processing catalog using configuration "
+							+ conf.getCatalogHostName());
 					catalogAnalysis(conf.getCatalogHostName(),
 							getCkanClient(conf.getCatalogHostName())
 									.getDatasetList().result);

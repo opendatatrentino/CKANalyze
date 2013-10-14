@@ -24,8 +24,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 /**
  * 
  * @author Alberto Zanella <a.zanella@trentorise.eu>
@@ -39,9 +37,7 @@ public class ResourceDatatypesCount {
 	@ManyToOne
 	@JoinColumn(name="resourceId")
 	private Resource resource;
-	@SuppressWarnings("deprecation")
 	@ManyToOne()
-	@Cascade({CascadeType.SAVE_UPDATE, CascadeType.DELETE_ORPHAN})
 	@JoinColumn(name="datatypeId")
 	private Datatype datatype;
 	@Column

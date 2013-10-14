@@ -192,7 +192,7 @@ public final class PersistencyManager {
 		ss.close();
 	}
 	
-	public static void isUpdatingCatalog(String catalogName, boolean status)
+	public static void setIsUpdatingCatalog(String catalogName, boolean status)
 	{
 		String hql = "FROM Configuration WHERE catalogHostName = :name";
 		Session ss = PersistencyManager.getSessionFactory().openSession();
@@ -204,7 +204,23 @@ public final class PersistencyManager {
 		ss.update(conf);
 		ss.getTransaction().commit();
 		ss.close();
-		
+	}
+	
+	public static boolean isUpdatingCatalog(String catalogName)
+	{
+		String hql = "FROM Configuration WHERE catalogHostName = :name";
+		Session ss = PersistencyManager.getSessionFactory().openSession();
+		Query query = ss.createQuery(hql);
+		query.setParameter("name", catalogName);
+		@SuppressWarnings("rawtypes")
+		List result = query.list();
+		ss.close();
+		if(result.isEmpty())
+		{
+			return false;
+		}
+		eu.trentorise.opendata.ckanalyze.jpa.Configuration conf = (eu.trentorise.opendata.ckanalyze.jpa.Configuration) result.get(0);
+		return conf.isUpdating();
 	}
 	
 	public static List<Resource> getAllResources(String catalogName)

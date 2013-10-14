@@ -65,13 +65,10 @@ public class ResourcesUtility {
 	
 	public static String computeSHA(String filename) throws IOException
 	{
-		if(filename.endsWith("funzione-2005.csv"))
-		{
-			return "";
-		}
 		FileInputStream fis = new FileInputStream(new File(filename));
-		return org.apache.commons.codec.digest.DigestUtils.sha1Hex(fis);
-
+		String retval = org.apache.commons.codec.digest.DigestUtils.sha1Hex(fis);
+		fis.close();
+		return retval;
 	}
 
 }
