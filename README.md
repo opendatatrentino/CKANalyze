@@ -6,7 +6,7 @@ Tool to perform statistics on CKAN datasets written in Java. More info can be fo
 
 
 
-**Project status**: planning
+**Project status**: Version 0.1 released - Version 0.2 in progress.
 
 **Roadmap**: see [project issues](https://github.com/opendatatrentino/CKANalyze/issues)
 
