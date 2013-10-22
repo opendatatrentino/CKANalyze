@@ -61,9 +61,7 @@ public class AnalysisManager {
 		//Security check for inconsistencies
 		if(PersistencyManager.isUpdatingCatalog(hostname))
 		{
-			System.out.println("entro");
 			PersistencyManager.deleteCatalogIfExists(hostname);
-			System.out.println("esco");
 		}
 		
 		PersistencyManager.setIsUpdatingCatalog(hostname, true);
@@ -151,6 +149,7 @@ public class AnalysisManager {
 		}
 		else
 		{
+			updatedResources = true;
 			applicationLogger.info("Resource added");
 			analyzeResource(r, catSave, dwn);
 		}
