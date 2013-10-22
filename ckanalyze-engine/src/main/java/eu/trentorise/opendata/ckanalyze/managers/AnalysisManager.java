@@ -61,7 +61,9 @@ public class AnalysisManager {
 		//Security check for inconsistencies
 		if(PersistencyManager.isUpdatingCatalog(hostname))
 		{
+			System.out.println("entro");
 			PersistencyManager.deleteCatalogIfExists(hostname);
+			System.out.println("esco");
 		}
 		
 		PersistencyManager.setIsUpdatingCatalog(hostname, true);
@@ -140,10 +142,16 @@ public class AnalysisManager {
 				updatedResources = true;
 				PersistencyManager.delete(resSave);
 				analyzeResource(r, catSave, dwn);
+				applicationLogger.info("Resource Recomputed");
+			}
+			else
+			{
+				applicationLogger.info("Resource Skipped");
 			}
 		}
 		else
 		{
+			applicationLogger.info("Resource added");
 			analyzeResource(r, catSave, dwn);
 		}
 		File f = new File(downloadDirPath + dwn.getFilename());
@@ -169,6 +177,7 @@ public class AnalysisManager {
 			resSave.setRowCount(ca.getRowCount());
 			resSave.setStringAvg(ca.getStringLengthAvg());
 			resSave.setUrl(dwn.getUrl());
+			resSave.setFileSha(ResourcesUtility.computeSHA(downloadDirPath + dwn.getFilename()));
 			PersistencyManager.insert(resSave);
 			for (Datatype dt : ca.getColsPerType().keySet()) {
 				eu.trentorise.opendata.ckanalyze.jpa.Datatype dtSave = PersistencyManager
@@ -191,7 +200,6 @@ public class AnalysisManager {
 				distr.setFreq(ca.getStringLengthDistribution().get(length));
 				PersistencyManager.insert(distr);
 			}
-			resSave.setFileSha(ResourcesUtility.computeSHA(downloadDirPath + dwn.getFilename()));
 		} catch (CKAnalyzeException e) {
 			applicationLogger.error("Error processing resource {}" + r.getName(), e);
 			File f = new File(downloadDirPath + dwn.getFilename());
