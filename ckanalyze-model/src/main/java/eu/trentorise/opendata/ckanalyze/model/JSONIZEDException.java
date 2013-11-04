@@ -18,13 +18,13 @@
 
 package eu.trentorise.opendata.ckanalyze.model;
 
-import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * Object containing jsonized exception messages 
  * @author Alberto Zanella <a.zanella@trentorise.eu>
  *
  */
-@XmlRootElement
+
 public class JSONIZEDException {
 	private String errorDescription;
 

@@ -21,13 +21,13 @@ package eu.trentorise.opendata.ckanalyze.model.configuration;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * This class represents a schedule response. 
  * @author Alberto Zanella <a.zanella@trentorise.eu>
  *
  */
-@XmlRootElement
+
 public class ScheduleResponse implements Serializable {
 	/**
 	 * 

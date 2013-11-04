@@ -20,14 +20,13 @@ package eu.trentorise.opendata.ckanalyze.model;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlTransient;
+
 
 /**
  * 
  * @author Alberto Zanella <a.zanella@trentorise.eu>
  *
  */
-@XmlTransient
 public enum Types implements Serializable {
 	INT,
 	STRING,

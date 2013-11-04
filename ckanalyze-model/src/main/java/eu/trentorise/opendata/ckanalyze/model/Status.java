@@ -20,13 +20,12 @@ package eu.trentorise.opendata.ckanalyze.model;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * 
  * @author Alberto Zanella <a.zanella@trentorise.eu>
  *
  */
-@XmlRootElement
 public class Status implements Serializable {
 	/**
 	 * 

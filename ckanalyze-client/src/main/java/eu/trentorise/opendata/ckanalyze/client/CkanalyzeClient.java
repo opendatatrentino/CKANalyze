@@ -23,12 +23,15 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.jaxrs.JacksonJsonProvider;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 import eu.trentorise.opendata.ckanalyze.client.exceptions.CkanalyzeClientLocalException;
 import eu.trentorise.opendata.ckanalyze.client.exceptions.CkanalyzeClientRemoteException;
@@ -62,7 +65,9 @@ public class CkanalyzeClient {
 	public CkanalyzeClient(String basePath) {
 		super();
 		this.basePath = basePath + "/rest".replaceAll("//", "/");
-		this.client = Client.create();
+		ClientConfig cc = new DefaultClientConfig();
+		cc.getClasses().add(JacksonJsonProvider.class);
+		this.client = Client.create(cc);
 	}
 
 	private void closeClient() {
