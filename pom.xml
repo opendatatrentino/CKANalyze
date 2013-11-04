@@ -24,5 +24,6 @@
 		<module>ckanalyze-client</module>
 		<module>ckanalyze-engine</module>
 		<module>ckanalyze-tests</module>
+		<module>ckanalyze-web-proxy</module>
 	</modules>
 </project>
