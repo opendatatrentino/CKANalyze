@@ -14,7 +14,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.trentorise.opendata</groupId>
 	<artifactId>ckanalyze</artifactId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.1.1</version>
 	<packaging>pom</packaging>
 	<name>ckanalyze</name>
 	<modules>

@@ -6,7 +6,7 @@
 	<name>ckanalyze-engine</name>
 	<url>http://maven.apache.org</url>
 	<groupId>eu.trentorise.opendata</groupId>
-	<version>0.1.1-SNAPSHOT</version>
+	<version>0.1.1</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
