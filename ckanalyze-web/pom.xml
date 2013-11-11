@@ -14,7 +14,7 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.trentorise.opendata</groupId>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.2.0-SNAPSHOT</version>
 	<artifactId>ckanalyze-web</artifactId>
 	<packaging>war</packaging>
 	<name>ckanalyze-web</name>
@@ -23,12 +23,12 @@
 		<dependency>
 			<groupId>eu.trentorise.opendata</groupId>
 			<artifactId>ckanalyze-model</artifactId>
-			<version>0.1.1-SNAPSHOT</version>
+			<version>0.2.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>eu.trentorise.opendata</groupId>
 			<artifactId>ckanalyze-jpa</artifactId>
-			<version>0.1.1-SNAPSHOT</version>
+			<version>0.2.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

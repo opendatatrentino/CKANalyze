@@ -7,7 +7,7 @@
 	<!-- Next to 0.1 mapping -->
 	<rule>
 		<from>/([0-9]\.[0-9]+)?/rest/(.*)$</from>
-		<to type="proxy" encode="true" last="true">http://%{server-name}:%{port}/ckanalyze-web-$1/rest/$2</to>
+		<to type="proxy" encode="true" last="true">http://%{server-name}:%{port}/ckanalyze-web-$1/$1/rest/$2</to>
 	</rule>
 	
 	<!-- Version 0.1 mapping -->
