@@ -2,3 +2,5 @@
 *.properties
 hibernate.cfg.xml
 target
+#Only for internal tests
+TestMain.java
