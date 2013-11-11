@@ -64,7 +64,12 @@ public class CkanalyzeClient {
 	 */
 	public CkanalyzeClient(String basePath) {
 		super();
-		this.basePath = basePath + "/0.2/rest".replaceAll("//", "/");
+		this.basePath = basePath;
+		if(basePath.endsWith("/"))
+		{
+			this.basePath = basePath.substring(0, basePath.length()-2);
+		}
+		this.basePath = this.basePath + "/0.2/rest".replaceAll("//", "/");
 		ClientConfig cc = new DefaultClientConfig();
 		cc.getClasses().add(JacksonJsonProvider.class);
 		this.client = Client.create(cc);
