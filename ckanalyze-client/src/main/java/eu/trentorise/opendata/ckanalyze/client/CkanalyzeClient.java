@@ -84,7 +84,9 @@ public class CkanalyzeClient {
 
 	private void openClient() {
 		if (client == null) {
-			client = Client.create();
+			ClientConfig cc = new DefaultClientConfig();
+			cc.getClasses().add(JacksonJsonProvider.class);
+			client = Client.create(cc);
 		}
 	}
 
