@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
 import eu.trentorise.opendata.ckanalyze.model.Types;
 
@@ -135,6 +137,7 @@ public class CatalogStats implements Serializable {
 	 *         values . If a datatype is not present in the catalog it is not
 	 *         added into the Key Set.
 	 */
+	@JsonIgnore
 	public Map<Types, Long> getColsPerTypeMap() {
 		Map<Types, Long> retval = new HashMap<Types, Long>();
 		for (CatalogDatatypeCount cdc : colsPerType) {

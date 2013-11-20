@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import eu.trentorise.opendata.ckanalyze.model.StringDistribution;
 import eu.trentorise.opendata.ckanalyze.model.Types;
 
@@ -125,6 +127,8 @@ public class ResourceStats implements Serializable {
 	 *         a datatype is not present in the resource it is not added into
 	 *         the Key Set.
 	 */
+	
+	@JsonIgnore
 	public Map<Types, Integer> getColsPerTypeMap() {
 		Map<Types, Integer> retval = new HashMap<Types, Integer>();
 		for (ResourceDatatypeCount cdc : colsPerType) {
