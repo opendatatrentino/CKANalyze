@@ -25,16 +25,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-import org.ckan.Client;
-import org.ckan.resource.impl.Dataset;
-import org.ckan.resource.impl.Resource;
 import org.slf4j.Logger;
 
+import eu.trentorise.opendata.jackan.ckan.CkanClient;
+import eu.trentorise.opendata.jackan.ckan.CkanDataset;
+import eu.trentorise.opendata.jackan.ckan.CkanResource;
+
 public class ResourcesUtility {
-	private Client ckanClient;
+	private CkanClient ckanClient;
 	private List<String> datasetList;
 
-	public ResourcesUtility(Client ckanClient, List<String> datasetList) {
+	public ResourcesUtility(CkanClient ckanClient, List<String> datasetList) {
 		super();
 		this.ckanClient = ckanClient;
 		this.datasetList = datasetList;
@@ -45,12 +46,12 @@ public class ResourcesUtility {
 	 * @param logger Application logger
 	 * @return Return a list of supported resources (for now only *SV files are supported)
 	 */
-	public List<Resource> getResourceToProcess(Logger logger) {
-		List<Resource> retval = new ArrayList<Resource>();
+	public List<CkanResource> getResourceToProcess(Logger logger) {
+		List<CkanResource> retval = new ArrayList<CkanResource>();
 		for (String dsn : datasetList) {
 			try {
-				Dataset ds = ckanClient.getDataset(dsn);
-				for (Resource r : ds.getResources()) {
+				CkanDataset ds = ckanClient.getDataset(dsn);
+				for (CkanResource r : ds.getResources()) {
 					String format = r.getFormat().toLowerCase();
 					if ((format.contains("csv")) || (format.contains("tsv"))) {
 						retval.add(r);

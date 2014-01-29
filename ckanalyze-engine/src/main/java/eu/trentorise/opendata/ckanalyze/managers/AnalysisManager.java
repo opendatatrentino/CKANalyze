@@ -22,15 +22,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.ckan.Client;
-import org.ckan.Connection;
-import org.ckan.resource.impl.Dataset;
-import org.ckan.resource.impl.Resource;
 import org.slf4j.Logger;
 
 import eu.trentorise.opendata.ckanalyze.analyzers.CatalogAnalyzer;
 import eu.trentorise.opendata.ckanalyze.analyzers.resources.CSVAnalyzer;
-import eu.trentorise.opendata.ckanalyze.analyzers.resources.CSVAnalyzer.Datatype;
+import eu.trentorise.opendata.nlprise.DataTypeGuess.Datatype;
 import eu.trentorise.opendata.ckanalyze.downloader.Downloader;
 import eu.trentorise.opendata.ckanalyze.exceptions.CKAnalyzeException;
 import eu.trentorise.opendata.ckanalyze.jpa.Catalog;
@@ -38,6 +34,9 @@ import eu.trentorise.opendata.ckanalyze.jpa.CatalogStringDistribution;
 import eu.trentorise.opendata.ckanalyze.jpa.ResourceDatatypesCount;
 import eu.trentorise.opendata.ckanalyze.jpa.ResourceStringDistribution;
 import eu.trentorise.opendata.ckanalyze.utility.ResourcesUtility;
+import eu.trentorise.opendata.jackan.ckan.CkanClient;
+import eu.trentorise.opendata.jackan.ckan.CkanDataset;
+import eu.trentorise.opendata.jackan.ckan.CkanResource;
 
 /**
  * 
@@ -72,7 +71,7 @@ public class AnalysisManager {
 			catSave = new Catalog();
 		}
 		catSave.setUrl(hostname);
-		Client c = new Client(new Connection(hostname),null);
+		CkanClient c = new CkanClient(hostname);
 		List<String> dsList = dss;
 		catSave.setTotalDatasetsCount(dsList.size());
 		catSave.setTotalResourcesCount(0);
@@ -83,15 +82,15 @@ public class AnalysisManager {
 		}
 		for (String dsname : dsList) {
 			try {
-				Dataset ds = c.getDataset(dsname);
+				CkanDataset ds = c.getDataset(dsname);
 				catSave.setTotalResourcesCount(catSave.getTotalResourcesCount()
 						+ ds.getResources().size());
-				for (Resource r : ds.getResources()) {
+				for (CkanResource r : ds.getResources()) {
 					String format = r.getFormat().toLowerCase();
 					if ((format.contains("csv")) || (format.contains("tsv")))
 					{
 					catSave.setTotalFileSizeCount(catSave
-							.getTotalFileSizeCount() + r.getSize());
+							.getTotalFileSizeCount() + Long.parseLong(r.getSize()));
 					PersistencyManager.update(catSave);
 					applicationLogger.info("%%ds:\t" + dsname + " res:" + r.getName());
 					processResource(r, catSave);
@@ -126,7 +125,7 @@ public class AnalysisManager {
 		PersistencyManager.setIsUpdatingCatalog(hostname, false);
 	}
 	
-	private void processResource(Resource r, Catalog catSave) throws IOException
+	private void processResource(CkanResource r, Catalog catSave) throws IOException
 	{
 		Downloader dwn = Downloader.getInstance();
 		dwn.setFilepath(downloadDirPath);
@@ -157,7 +156,7 @@ public class AnalysisManager {
 		f.delete();
 	}
 	
-	private void analyzeResource(Resource r, Catalog catSave, Downloader dwn) throws IOException
+	private void analyzeResource(CkanResource r, Catalog catSave, Downloader dwn) throws IOException
 	{
 		try {
 			if (dwn.getFilename().toLowerCase().trim().endsWith(".zip")) {

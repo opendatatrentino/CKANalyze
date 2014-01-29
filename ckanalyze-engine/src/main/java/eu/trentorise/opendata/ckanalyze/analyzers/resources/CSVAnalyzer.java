@@ -1,20 +1,20 @@
 /**
-* *****************************************************************************
-* Copyright 2012-2013 Trento Rise (www.trentorise.eu/)
-*
-* All rights reserved. This program and the accompanying materials are made
-* available under the terms of the GNU Lesser General Public License (LGPL)
-* version 2.1 which accompanies this distribution, and is available at
-*
-* http://www.gnu.org/licenses/lgpl-2.1.html
-*
-* This library is distributed in the hope that it will be useful, but WITHOUT
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-* FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
-* details.
-*
-*******************************************************************************
-*/
+ * *****************************************************************************
+ * Copyright 2012-2013 Trento Rise (www.trentorise.eu/)
+ *
+ * All rights reserved. This program and the accompanying materials are made
+ * available under the terms of the GNU Lesser General Public License (LGPL)
+ * version 2.1 which accompanies this distribution, and is available at
+ *
+ * http://www.gnu.org/licenses/lgpl-2.1.html
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ *
+ *******************************************************************************
+ */
 package eu.trentorise.opendata.ckanalyze.analyzers.resources;
 
 import java.io.File;
@@ -31,7 +31,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.trentorise.opendata.nlprise.identifiers.date.DateIdentifier;
+import eu.trentorise.opendata.nlprise.DataTypeGuess;
+import eu.trentorise.opendata.nlprise.DataTypeGuess.Datatype;
 import eu.trentorise.opendata.ckanalyze.exceptions.CKAnalyzeException;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -45,16 +46,6 @@ import au.com.bytecode.opencsv.CSVReader;
  */
 public class CSVAnalyzer {
 	private static Logger logger = LoggerFactory.getLogger("ckanalyze");
-	private static final int MAX_DATE_SIZE = 30; 
-	/**
-	 * Defines supported data types
-	 * 
-	 * @author Alberto Zanella <a.zanella@trentorise.eu> Last modified by
-	 *         azanella On 11/lug/2013
-	 */
-	public enum Datatype {
-		INT, FLOAT, DATE, STRING, GEOJSON, EMPTY;
-	}
 
 	private Map<Long, Long> stringLengthDistribution;
 	private File file;
@@ -79,7 +70,7 @@ public class CSVAnalyzer {
 		alternativeSeparators.add(';');
 		alternativeSeparators.add('\t');
 		alternativeSeparators.add('|');
-		colsPerType = new HashMap<CSVAnalyzer.Datatype, Integer>();
+		colsPerType = new HashMap<Datatype, Integer>();
 		this.file = new File(filename);
 		try {
 			if (!file.exists()) {
@@ -135,11 +126,11 @@ public class CSVAnalyzer {
 			computeStringMetrics(retval, strColumnsPos);
 			reader.close();
 		} catch (FileNotFoundException e) {
-			throw new CKAnalyzeException("File Not Found",e);
+			throw new CKAnalyzeException("File Not Found", e);
 		} catch (IOException e) {
-			throw new CKAnalyzeException("Can't read resource file",e);
+			throw new CKAnalyzeException("Can't read resource file", e);
 		} catch (IndexOutOfBoundsException e) {
-			throw new CKAnalyzeException("Malformed CSV file",e);
+			throw new CKAnalyzeException("Malformed CSV file", e);
 		}
 
 	}
@@ -164,7 +155,7 @@ public class CSVAnalyzer {
 	 */
 	private void processColsWhithoutHeader(String field, int cellIndex,
 			List<ColumnType> colsTypes, int toAdd) {
-		Datatype cellVal = parse(field);
+		Datatype cellVal = DataTypeGuess.guessType(field);
 		if (!colsTypes.get(cellIndex).getConfidenceTypes().containsKey(cellVal)) {
 			colsTypes.get(cellIndex).getConfidenceTypes().put(cellVal, 1);
 		}
@@ -197,7 +188,7 @@ public class CSVAnalyzer {
 				.containsKey(Datatype.DATE)
 				&& (colsTypes.get(cellIndex).getConfidenceTypes()
 						.get(Datatype.DATE) > 1)) {
-			Datatype cellVal = parse(field);
+			Datatype cellVal = DataTypeGuess.guessType(field);
 			int toadd = 1;
 			if (cellVal.equals(Datatype.DATE)) {
 				toadd = 2;
@@ -249,9 +240,9 @@ public class CSVAnalyzer {
 			// different heuristics for sure date identification
 			boolean condition = (tp.equals("anno"));
 			condition = condition || (tp.equals("anni"));
-			condition = condition	|| (tp.contains("year"));
+			condition = condition || (tp.contains("year"));
 			condition = condition || (tp.equals("mese"));
-			condition = condition	|| (tp.equals("mesi"));
+			condition = condition || (tp.equals("mesi"));
 			condition = condition || (tp.contains("month"));
 			if (condition) {
 				ct.setGuessByHeader(true);
@@ -302,64 +293,6 @@ public class CSVAnalyzer {
 				colsPerType.put(retval, colsPerType.get(retval) + 1);
 			}
 		}
-	}
-
-	// Try to parse the field and returns a Datatype value
-	private Datatype parse(String str) {
-		if (checkEmpty(str)) {
-			return Datatype.EMPTY;
-		}
-		if (checkInt(str)) {
-			return Datatype.INT;
-		}
-		if (checkFloat(str)) {
-			return Datatype.FLOAT;
-		}
-		if (checkDate(str)) {
-			return Datatype.DATE;
-		}
-		return Datatype.STRING;
-	}
-
-	private boolean checkEmpty(String str) {
-		String tocheck = str.replaceAll(" ", "");
-		return tocheck.isEmpty();
-	}
-
-	private boolean checkInt(String str) {
-		try {
-			Long.parseLong(str);
-			return true;
-		} catch (NumberFormatException e) {
-			return false;
-		}
-	}
-
-	private boolean checkFloat(String str) {
-		try {
-			String toCheck = str;
-			if (toCheck.contains(".") && (toCheck.contains(","))
-					&& (toCheck.lastIndexOf(',') < toCheck.lastIndexOf('.'))) {
-				{
-					toCheck = toCheck.replace(",", "");
-				}
-			}
-			Double.parseDouble(toCheck);
-			return true;
-		} catch (NumberFormatException e) {
-			return false;
-		} catch (Exception e) {
-			return false;
-		}
-
-	}
-
-	private boolean checkDate(String str) {
-		if (str.length() > MAX_DATE_SIZE) {
-			return false;
-		}
-		String toCheck = str.replaceAll("[^\\w\\s]", "");
-		return (DateIdentifier.isADate(toCheck).getResult());
 	}
 
 	private boolean moreThanOneColumn(List<String[]> check) {

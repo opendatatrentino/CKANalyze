@@ -23,9 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import org.ckan.CKANException;
-import org.ckan.Client;
-import org.ckan.Connection;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +31,8 @@ import eu.trentorise.opendata.ckanalyze.exceptions.CKAnalyzeException;
 import eu.trentorise.opendata.ckanalyze.jpa.Configuration;
 import eu.trentorise.opendata.ckanalyze.managers.AnalysisManager;
 import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
+import eu.trentorise.opendata.jackan.JackanException;
+import eu.trentorise.opendata.jackan.ckan.CkanClient;
 
 /**
  * This main class performs the analysis of a catalog specified into the
@@ -49,20 +49,18 @@ public final class AnalysisMain {
 	}
 
 	private static Logger logger = LoggerFactory.getLogger("ckanalyze");
-	private static Connection connection = null;
-	private static Client client = null;
+	private static CkanClient client = null;
 	private static String tempdir = ".";
 
-	public static synchronized Client getCkanClient(String hostname) {
+	public static synchronized CkanClient getCkanClient(String hostname) {
 		if (client == null) {
-			connection = new Connection(hostname);
+			client = new CkanClient(hostname);
 		}
-		client = new Client(connection, null);
 		return client;
 	}
 
 	public static void catalogAnalysis(String hostname, List<String> dss)
-			throws CKANException, CKAnalyzeException {
+			throws JackanException, CKAnalyzeException {
 		AnalysisManager am = new AnalysisManager(tempdir, logger);
 		am.processCatalog(hostname, dss);
 	}
@@ -116,7 +114,7 @@ public final class AnalysisMain {
 							+ conf.getCatalogHostName());
 					catalogAnalysis(conf.getCatalogHostName(),
 							getCkanClient(conf.getCatalogHostName())
-									.getDatasetList().result);
+									.getDatasetList());
 					conf.setLastUpdate(new Date());
 					conf.setUpdating(false);
 					PersistencyManager.addCatalogstoProcessList(conf);

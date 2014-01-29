@@ -27,7 +27,7 @@ import org.apache.log4j.PatternLayout;
 import org.apache.log4j.WriterAppender;
 import org.junit.Test;
 
-import eu.trentorise.opendata.ckanalyze.analyzers.resources.CSVAnalyzer.Datatype;
+import eu.trentorise.opendata.nlprise.DataTypeGuess.Datatype;
 import eu.trentorise.opendata.ckanalyze.exceptions.CKAnalyzeException;
 
 /**
