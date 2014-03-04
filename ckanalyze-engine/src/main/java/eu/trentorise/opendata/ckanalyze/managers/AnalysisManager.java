@@ -89,14 +89,13 @@ public class AnalysisManager {
 					String format = r.getFormat().toLowerCase();
 					if ((format.contains("csv")) || (format.contains("tsv")))
 					{
-					catSave.setTotalFileSizeCount(catSave
-							.getTotalFileSizeCount() + Long.parseLong(r.getSize()));
-					PersistencyManager.update(catSave);
 					applicationLogger.info("%%ds:\t" + dsname + " res:" + r.getName());
 					processResource(r, catSave);
 					}
 				}
 			} catch (Exception e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
 				applicationLogger.error("error in dataset {}", dsname, e.getMessage());
 			}
 		}
@@ -131,6 +130,10 @@ public class AnalysisManager {
 		dwn.setFilepath(downloadDirPath);
 		dwn.setUrl(r.getUrl());
 		dwn.download();
+		catSave.setTotalFileSizeCount(catSave
+				.getTotalFileSizeCount() + dwn.getSize());
+		PersistencyManager.update(catSave);
+		
 		eu.trentorise.opendata.ckanalyze.jpa.Resource resSave = PersistencyManager.getResourcesByCkanId(r.getId(),catSave.getUrl());
 		if(resSave != null)
 		{

@@ -28,10 +28,5 @@ import java.io.Serializable;
  *
  */
 public enum Types implements Serializable {
-	INT,
-	STRING,
-	FLOAT,
-	DATE,
-	GEOJSON,
-	EMPTY;
+	INT, FLOAT, DATE, STRING, GEOJSON, XML, JSON, LIST, NL_STRING , EMPTY
 }

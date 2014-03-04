@@ -42,7 +42,7 @@ import au.com.bytecode.opencsv.CSVReader;
  * to start the analysis
  * 
  * @author Alberto Zanella <a.zanella@trentorise.eu>
- * @since Last modified by azanella On 17/lug/2013
+ * @since Last modified by azanella On 29/gen/2014
  */
 public class CSVAnalyzer {
 	private static Logger logger = LoggerFactory.getLogger("ckanalyze");
@@ -97,14 +97,18 @@ public class CSVAnalyzer {
 			}
 			// Initialize colsTypes to the column dimension and tries to
 			// identify data types from column headers
-			processHeader(retval.remove(0), colsTypes);
+			String[] headers = retval.remove(0);
+			processHeader(headers, colsTypes);
 
 			// If only one column is identified, tries with other separators
-			while ((!moreThanOneColumn(retval))
-					&& (alternativeSeparators.isEmpty())) {
+			while ((!moreThanOneColumn(headers))
+					&& (!alternativeSeparators.isEmpty())) {
 				reader = new CSVReader(new FileReader(file),
 						alternativeSeparators.remove(0));
 				retval = reader.readAll();
+				colsTypes = new ArrayList<CSVAnalyzer.ColumnType>();
+				headers = retval.remove(0);
+				processHeader(headers, colsTypes);
 			}
 			// Extract rows and columns number (without heading line)
 			rowCount = retval.size();
@@ -295,8 +299,8 @@ public class CSVAnalyzer {
 		}
 	}
 
-	private boolean moreThanOneColumn(List<String[]> check) {
-		return check.get(0).length > 1;
+	private boolean moreThanOneColumn(String[] check) {
+		return check.length > 1;
 	}
 
 	// Getters methods
