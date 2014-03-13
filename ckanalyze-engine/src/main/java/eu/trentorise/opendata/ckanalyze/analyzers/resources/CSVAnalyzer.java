@@ -91,10 +91,6 @@ public class CSVAnalyzer {
 			reader = new CSVReader(new FileReader(file));
 			List<String[]> retval = reader.readAll();
 			ArrayList<ColumnType> colsTypes = new ArrayList<ColumnType>();
-			if ((retval.size()) <= 1) {
-				reader.close();
-				throw new CKAnalyzeException("Empty resource");
-			}
 			// Initialize colsTypes to the column dimension and tries to
 			// identify data types from column headers
 			String[] headers = retval.remove(0);
@@ -103,12 +99,17 @@ public class CSVAnalyzer {
 			// If only one column is identified, tries with other separators
 			while ((!moreThanOneColumn(headers))
 					&& (!alternativeSeparators.isEmpty())) {
+				reader.close();
 				reader = new CSVReader(new FileReader(file),
 						alternativeSeparators.remove(0));
 				retval = reader.readAll();
 				colsTypes = new ArrayList<CSVAnalyzer.ColumnType>();
 				headers = retval.remove(0);
 				processHeader(headers, colsTypes);
+			}
+			if ((retval.size()) < 1) {
+				reader.close();
+				throw new CKAnalyzeException("Empty resource");
 			}
 			// Extract rows and columns number (without heading line)
 			rowCount = retval.size();
@@ -131,11 +132,17 @@ public class CSVAnalyzer {
 			reader.close();
 		} catch (FileNotFoundException e) {
 			throw new CKAnalyzeException("File Not Found", e);
+		} catch (IndexOutOfBoundsException e) {
+			try {
+				reader.close();
+			} catch (IOException e1) {
+				throw new CKAnalyzeException("Can't read resource file", e);
+			}
+			throw new CKAnalyzeException("Malformed CSV file", e);
 		} catch (IOException e) {
 			throw new CKAnalyzeException("Can't read resource file", e);
-		} catch (IndexOutOfBoundsException e) {
-			throw new CKAnalyzeException("Malformed CSV file", e);
 		}
+			
 
 	}
 

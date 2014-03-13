@@ -62,7 +62,6 @@ public class AnalysisManager {
 		{
 			PersistencyManager.deleteCatalogIfExists(hostname);
 		}
-		
 		PersistencyManager.setIsUpdatingCatalog(hostname, true);
 		Catalog catSave = PersistencyManager.getCatalogByName(hostname);
 		boolean updating = catSave != null;

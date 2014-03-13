@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.trentorise.opendata.ckanalyze.exceptions.CKAnalyzeException;
 import eu.trentorise.opendata.ckanalyze.jpa.Configuration;
-import eu.trentorise.opendata.ckanalyze.managers.AnalysisManager;
+import eu.trentorise.opendata.ckanalyze.managers.MultiThreadAnalysisManager;
 import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
 import eu.trentorise.opendata.jackan.JackanException;
 import eu.trentorise.opendata.jackan.ckan.CkanClient;
@@ -61,7 +61,7 @@ public final class AnalysisMain {
 
 	public static void catalogAnalysis(String hostname, List<String> dss)
 			throws JackanException, CKAnalyzeException {
-		AnalysisManager am = new AnalysisManager(tempdir, logger);
+		MultiThreadAnalysisManager am = new MultiThreadAnalysisManager(tempdir, logger);
 		am.processCatalog(hostname, dss);
 	}
 
