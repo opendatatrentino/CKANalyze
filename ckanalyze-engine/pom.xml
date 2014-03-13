@@ -92,7 +92,7 @@
 		</dependency>
 		<dependency>
 			<groupId>eu.trentorise.opendata</groupId>
-			<artifactId>Jackan</artifactId>
+			<artifactId>jackan</artifactId>
 			<version>0.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>

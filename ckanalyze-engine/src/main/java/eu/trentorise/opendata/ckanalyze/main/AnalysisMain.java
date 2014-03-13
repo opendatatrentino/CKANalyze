@@ -113,8 +113,7 @@ public final class AnalysisMain {
 					logger.info("Processing catalog using configuration "
 							+ conf.getCatalogHostName());
 					catalogAnalysis(conf.getCatalogHostName(),
-							getCkanClient(conf.getCatalogHostName())
-									.getDatasetList());
+							getCkanClient(conf.getCatalogHostName()).getDatasetList(10000, 0));
 					conf.setLastUpdate(new Date());
 					conf.setUpdating(false);
 					PersistencyManager.addCatalogstoProcessList(conf);

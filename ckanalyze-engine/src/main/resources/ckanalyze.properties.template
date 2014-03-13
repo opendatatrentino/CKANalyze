@@ -16,3 +16,5 @@
 tmpdir=temp/dir
 #You can process a single catalog name using this parameter:
 catalog.name=specify-a-catalog-optional
+#Number of threads
+threads.count=10
