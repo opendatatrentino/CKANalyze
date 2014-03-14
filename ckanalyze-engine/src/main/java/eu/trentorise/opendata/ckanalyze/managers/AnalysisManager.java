@@ -22,7 +22,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.slf4j.Logger;
+import org.apache.log4j.Logger;
+
 
 import eu.trentorise.opendata.ckanalyze.analyzers.CatalogAnalyzer;
 import eu.trentorise.opendata.ckanalyze.analyzers.resources.CSVAnalyzer;
@@ -95,7 +96,7 @@ public class AnalysisManager {
 			} catch (Exception e) {
 				System.out.println(e.getMessage());
 				e.printStackTrace();
-				applicationLogger.error("error in dataset {}", dsname, e.getMessage());
+				applicationLogger.error("error in dataset {}" + dsname + e.getMessage());
 			}
 		}
 		if(updatedResources || 	(!updating))

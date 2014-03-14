@@ -42,7 +42,7 @@ import au.com.bytecode.opencsv.CSVReader;
  * to start the analysis
  * 
  * @author Alberto Zanella <a.zanella@trentorise.eu>
- * @since Last modified by azanella On 29/gen/2014
+ * Last modified by azanella On 14/mar/2014
  */
 public class CSVAnalyzer {
 	private static Logger logger = LoggerFactory.getLogger("ckanalyze");
@@ -295,7 +295,7 @@ public class CSVAnalyzer {
 				}
 			}
 			logger.debug("%%%%%%%%%%%");
-			if (retval.equals(Datatype.STRING)) {
+			if ((retval.equals(Datatype.STRING)) || (retval.equals(Datatype.NL_STRING))) {
 				strPos.add(i);
 			}
 			if (!colsPerType.containsKey(retval)) {
