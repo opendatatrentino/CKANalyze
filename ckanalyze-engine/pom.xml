@@ -13,16 +13,6 @@
 	</properties>
 
 	<repositories>
-		<!--Local repository -->
-		<repository>
-			<id>project.local</id>
-			<name>project</name>
-			<url>file:${project.basedir}/repo</url>
-		</repository>
-		<repository>
-			<id>github</id>
-			<url>https://raw.github.com/opendatatrentino/TrCkanClient/master/mvn-repo</url>
-		</repository>
 		<repository>
 			<id>sonatype-nexus-snapshots</id>
 			<name>project</name>
@@ -92,7 +82,7 @@
 		</dependency>
 		<dependency>
 			<groupId>eu.trentorise.opendata</groupId>
-			<artifactId>Jackan</artifactId>
+			<artifactId>jackan</artifactId>
 			<version>0.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
@@ -122,30 +112,35 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>eu.trentorise.opendata.ckanalyze.main.AnalysisMain</mainClass>
-						</manifest>
-					</archive>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-				<version>2.4</version>
-			</plugin>
-		</plugins>
-	</build>
+	        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>1.4</version>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>shade</goal>
+                    </goals>
+                    <configuration>
+                        <transformers>
+                            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <!-- Main class -->
+                                <mainClass>eu.trentorise.opendata.ckanalyze.main.AnalysisMain</mainClass>
+                             </transformer>
+                        </transformers>
+                        <filters>
+                            <filter>
+                                <artifact>eu.trentorise.opendata.jackan</artifact>
+                                <excludes>
+                                    <exclude>log4j.properties</exclude>
+                                </excludes>
+                            </filter>
+                        </filters>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
 </project>
