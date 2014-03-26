@@ -20,8 +20,10 @@ package eu.trentorise.opendata.ckanalyze.managers;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -102,7 +104,7 @@ public class MultiThreadAnalysisManager {
 			PersistencyManager.insert(catSave);
 		}
 		ExecutorService ex = Executors.newFixedThreadPool(threadCount);
-		
+		List<Callable<Object>> tasks = new ArrayList<Callable<Object>>();
 		for (String dsname : dsList) {
 			try {
 				CkanDataset ds = c.getDataset(dsname);
@@ -112,7 +114,7 @@ public class MultiThreadAnalysisManager {
 					String format = r.getFormat().toLowerCase();
 					if ((format.contains("csv")) || (format.contains("tsv"))) {
 						AnalyzerPerformer am = new AnalyzerPerformer(catSave, r);
-						ex.execute(am);
+						tasks.add(am);
 					}
 				}
 			} catch (Exception e) {
@@ -123,9 +125,9 @@ public class MultiThreadAnalysisManager {
 			}
 		}
 		try {
-			ex.wait();
+			ex.invokeAll(tasks);
 		} catch (InterruptedException e) {
-			applicationLogger.error("error", e);
+			applicationLogger.error("error",e);
 		}
 		
 		
@@ -152,7 +154,7 @@ public class MultiThreadAnalysisManager {
 
 
 
-	private class AnalyzerPerformer implements Runnable {
+	private class AnalyzerPerformer implements Callable<Object> {
 		Catalog catSave;
 		CkanResource r;
 
@@ -166,9 +168,7 @@ public class MultiThreadAnalysisManager {
 		private void processResource() {
 			getApplicationLogger().info("res:"
 					+ r.getName());
-			Downloader dwn = Downloader.getInstance();
-			dwn.setFilepath(downloadDirPath);
-			dwn.setUrl(r.getUrl());
+			Downloader dwn = new Downloader(r.getUrl(), downloadDirPath);
 			dwn.download();
 			catSave.setTotalFileSizeCount(catSave.getTotalFileSizeCount()
 					+ dwn.getSize());
@@ -194,9 +194,17 @@ public class MultiThreadAnalysisManager {
 				}
 				File f = new File(downloadDirPath + dwn.getFilename());
 				f.delete();
-			} catch (IOException e) {
+			} catch (Exception e) {
 				getApplicationLogger().error(
 						"Error processing resource {}" + r.getName(), e);
+				File f = new File(downloadDirPath + dwn.getFilename());
+				f.delete();
+			} catch(OutOfMemoryError e)
+			{
+				getApplicationLogger().error(
+						"Error processing resource {}" + r.getName(), e);
+				File f = new File(downloadDirPath + dwn.getFilename());
+				f.delete();
 			}
 		}
 
@@ -206,10 +214,11 @@ public class MultiThreadAnalysisManager {
 		 * @see java.lang.Runnable#run()
 		 */
 		@Override
-		public void run() {
+		public Object call() {
 			processResource();
+			return null;
 		}
-
+		
 		private void analyzeResource(Downloader dwn) throws IOException {
 			try {
 				if (dwn.getFilename().toLowerCase().trim().endsWith(".zip")) {

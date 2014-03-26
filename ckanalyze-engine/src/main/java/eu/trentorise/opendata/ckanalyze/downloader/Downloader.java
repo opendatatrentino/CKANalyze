@@ -62,9 +62,6 @@ public class Downloader {
 	public Downloader(String url, String filepath) {
 		this.filepath = filepath;
 		this.url = url;
-		if (instance == null) {
-			instance = this;
-		}
 	}
 
 	private Downloader() {

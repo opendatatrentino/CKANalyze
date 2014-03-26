@@ -23,13 +23,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 
 
 import eu.trentorise.opendata.ckanalyze.exceptions.CKAnalyzeException;
 import eu.trentorise.opendata.ckanalyze.jpa.Configuration;
-import eu.trentorise.opendata.ckanalyze.managers.AnalysisManager;
+import eu.trentorise.opendata.ckanalyze.managers.MultiThreadAnalysisManager;
 import eu.trentorise.opendata.ckanalyze.managers.PersistencyManager;
 import eu.trentorise.opendata.jackan.JackanException;
 import eu.trentorise.opendata.jackan.ckan.CkanClient;
@@ -48,7 +51,7 @@ public final class AnalysisMain {
 		// TODO Auto-generated constructor stub
 	}
 
-	private static Logger logger = Logger.getLogger("ckanalyze");
+	private static Logger logger = LoggerFactory.getLogger("ckanalyze");
 	private static CkanClient client = null;
 	private static String tempdir = ".";
 
@@ -61,7 +64,7 @@ public final class AnalysisMain {
 
 	public static void catalogAnalysis(String hostname, List<String> dss)
 			throws JackanException, CKAnalyzeException {
-		AnalysisManager am = new AnalysisManager(tempdir, logger);
+		MultiThreadAnalysisManager am = new MultiThreadAnalysisManager(tempdir, logger);
 		am.processCatalog(hostname, dss);
 	}
 
